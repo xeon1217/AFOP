@@ -1,0 +1,87 @@
+<resources>
+    <string name="app_name">AFOP</string>
+
+    <string name="invalid_email">이메일 양식에 맞지 않습니다.</string>
+    <string name="invalid_void_email">이메일 입력칸이 비어있습니다.</string>
+    <string name="invalid_void_name">이름 입력칸이 비어있습니다.</string>
+    <string name="invalid_password">패스워드는 최소 8자리 이상 입력해주세요.</string>
+    <string name="invalid_void_password">패스워드 입력칸이 비어있습니다.</string>
+    <string name="invalid_void_password_verify">패스워드 재입력칸이 비어있습니다.</string>
+    <string name="invalid_not_equal_password">패스워드 입력칸과 재입력칸이 서로 다릅니다.</string>
+    <string name="invalid_void_nickname">닉네임 입력칸이 비어있습니다.</string>
+    <string name="invalid_void_auth_code">인증코드 입력칸이 비어있습니다.</string>
+
+    <string name="error_invalid_empty">입력칸이 비어있습니다.</string>
+    <string name="error_invalid_blank">공백이 포함되어있습니다.</string>
+    <string name="error_invalid_email">이메일 양식에 맞지 않습니다.</string>
+    <string name="error_invalid_password_length">패스워드는 최소 8자리 이상 입력해주세요.</string>
+    <string name="error_invalid_password_not_equal">패스워드와 패스워드 확인칸이 일치하지 않습니다.</string>
+
+    <string name="prompt_email">이메일</string>
+    <string name="prompt_name">이름</string>
+    <string name="prompt_new_password">새 패스워드</string>
+    <string name="prompt_password">패스워드</string>
+    <string name="prompt_password_verify">패스워드를 한 번 더 입력하세요.</string>
+    <string name="prompt_nickname">닉네임</string>
+    <string name="prompt_auth_code">인증코드</string>
+
+    <string name="action_confirm">확인</string>
+    <string name="action_cancel">취소</string>
+    <string name="action_yes">네</string>
+    <string name="action_no">아니오</string>
+    <string name="action_find">찾기</string>
+    <string name="action_no_find">찾지 않기</string>
+    <string name="action_use">사용하기</string>
+    <string name="action_not_use">사용하지 않기</string>
+    <string name="action_sign_up">가입하기</string>
+    <string name="action_not_sign_up">가입하지 않기</string>
+    <string name="action_sign_in">로그인</string>
+    <string name="action_sign_out">로그아웃</string>
+    <string name="action_find_email">아이디 찾기</string>
+    <string name="action_find_password">패스워드 변경하기</string>
+    <string name="action_change_password">패스워드 변경하기</string>
+    <string name="action_double_check_email">이메일 중복확인</string>
+    <string name="action_go_to_first">처음으로</string>
+    <string name="action_go_to_sign_in">로그인 하러가기</string>
+    <string name="action_go_to_auth">인증하기</string>
+    <string name="action_found">찾았습니다!</string>
+    <string name="action_not_found">찾지 못했습니다..</string>
+    <string name="action_finding">찾는 중..</string>
+    <string name="action_submit_form">회원가입하기</string>
+    <string name="action_submit_auth_code">인증코드 전송</string>
+    <string name="action_submit_password">패스워드 전송</string>
+    <string name="action_exit">\'뒤로\'버튼을 한 번 더 누르면 앱이 종료됩니다.</string>
+
+    <string name="action_find_account">로그인 과정에 문제가 있으신가요?</string>
+    <string name="action_first_sign_up">로그인이 처음이신가요?</string>
+
+    <string name="title_sign_up_check_email">회원가입</string>
+    <string name="title_sign_up_form">회원정보 입력</string>
+    <string name="title_sign_up_auth_code">인증코드 입력</string>
+    <string name="title_account_find_email">아이디 찾기</string>
+    <string name="title_account_find_password">패스워드 찾기</string>
+    <string name="title_account_find_account">회원정보 찾기</string>
+    <string name="title_waiting_server_response">서버의 응답을 기다리는 중..</string>
+
+    <!--
+    <string name="title_sign_up_check_email">회원가입\n(이메일 중복 검사)</string>
+    <string name="title_sign_up_form">회원가입\n(회원 정보 작성)</string>
+    <string name="title_sign_up_auth_code">회원가입\n(인증코드 입력)</string>
+
+    <string name="action_find_email">아이디 찾기</string>
+    <string name="action_find_password">패스워드 찾기</string>
+    -->
+
+    <string name="do_sign_up_email_hint">아이디로 사용됩니다.</string>
+    <string name="sign_up_name_hint">패스워드 찾기시 사용됩니다.</string>
+    <string name="password_input_role">특수문자와 숫자를 포함하여 8자 이상 입력해주세요.</string>
+    <string name="password_verify">패스워드를 한 번 더 입력해주세요.</string>
+    <string name="email_double_check_auth_code">이메일로 전송된 인증코드를 입력해주세요.</string>
+
+    <string name="server_connection_failed_title_msg">서버에 연결하지 못했습니다.</string>
+    <string name="server_connection_failed_do_msg">오류로 인해 서버에 연결하지 못했습니다.\n나중에 다시 시도해주세요.</string>
+
+    <string name="msg_token_fmt">asd</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
