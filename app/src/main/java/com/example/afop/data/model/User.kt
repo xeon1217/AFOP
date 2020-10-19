@@ -11,6 +11,7 @@ class User {
 
     data class ModelUser (
             var uid: String? = null,
+            var fcmToken: String? = null,
             var userId: String? = null,
             var name: String? = null,
             var nickName: String? = null

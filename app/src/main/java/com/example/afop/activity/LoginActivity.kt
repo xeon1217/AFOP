@@ -13,7 +13,7 @@ class LoginActivity : MyActivity() {
         super.onCreate(savedInstanceState)
 
         User.auth = FirebaseAuth.getInstance()
-        //User.databaseReference = FirebaseDatabase.getInstance()
+        User.databaseReference = FirebaseDatabase.getInstance()
 
         setContentView(R.layout.activity_login)
         if (savedInstanceState == null) {
