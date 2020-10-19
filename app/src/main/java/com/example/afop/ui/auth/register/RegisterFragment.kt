@@ -115,28 +115,25 @@ class RegisterFragment : Fragment() {
                     setCancelable(false)
                     when (task.exception) {
                         is FirebaseAuthInvalidUserException -> {
-                            setTitle("사용 가능")
-                            setMessage("")
-                            setPositiveButton("사용하기") { _, _ ->
+                            setMessage(getString(R.string.dialog_message_can_email))
+                            setPositiveButton(getString(R.string.action_use)) { _, _ ->
                                 registerEmailTextInputEditText.isEnabled = false
                                 registerDoubleCheckButton.visibility = View.GONE
                                 registerFormLayout.visibility = View.VISIBLE
                             }
-                            setNegativeButton("사용하지 않기") { _, _ ->
+                            setNegativeButton(getString(R.string.action_not_use)) { _, _ ->
                                 registerEmailTextInputEditText.setText("")
                             }
                         }
                         is FirebaseAuthInvalidCredentialsException -> {
-                            setTitle("")
-                            setMessage("누군가 사용중인 이메일 주소입니다.\n다른 이메일 주소를 입력해주세요.")
-                            setPositiveButton("확인") { _, _ ->
+                            setMessage(getString(R.string.dialog_message_cant_email))
+                            setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                                 registerEmailTextInputEditText.setText("")
                             }
                         }
                         else -> {
-                            setTitle("오류가 발생했습니다.")
-                            setMessage("")
-                            setPositiveButton("확인") { _, _ ->
+                            setMessage(getString(R.string.dialog_message_unknown_error))
+                            setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                                 Log.d("reg", "${task.exception}")
                                 mActivity.finish()
                             }
@@ -153,13 +150,12 @@ class RegisterFragment : Fragment() {
     private fun formCheck() {
         AlertDialog.Builder(mActivity).apply {
             setCancelable(false)
-            setTitle("")
-            setMessage("")
-            setPositiveButton(getString(R.string.action_yes)) { _, _ ->
+            setMessage("${getString(R.string.dialog_message_submit_register_form)}\nEmail : ${registerEmailTextInputEditText.text.toString()}")
+            setPositiveButton(getString(R.string.action_register)) { _, _ ->
                 register()
             }
-            setNegativeButton(getString(R.string.action_no)) { _, _ ->
-                registerEmailTextInputEditText.setText("")
+            setNegativeButton(getString(R.string.action_cancel)) { _, _ ->
+                mActivity.finish()
             }
             show()
         }
@@ -174,21 +170,21 @@ class RegisterFragment : Fragment() {
                 registerPasswordTextInputEditText.text.toString()
             ).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    mActivity.disableBlock()
                     User.auth.currentUser?.sendEmailVerification()
                     User.auth.currentUser?.apply {
-                        //User.databaseReference.reference.child("Users").child(uid).child("name").setValue(registerNameTextInputEditText.text.toString())
-                        //User.databaseReference.reference.child("Users").child(uid).child("nickName").setValue(registerNickNameTextInputEditText.text.toString())
-                        //User.databaseReference.reference.child("Users").child(uid).child("registerDate").setValue(Date().time)
+                        User.databaseReference.reference.child("Users").child(uid).child("name").setValue(registerNameTextInputEditText.text.toString())
+                        User.databaseReference.reference.child("Users").child(uid).child("nickName").setValue(registerNickNameTextInputEditText.text.toString())
+                        User.databaseReference.reference.child("Users").child(uid).child("registerDate").setValue(Date().time)
                     }
-                    setTitle("성공")
-                    setMessage("이메일 확인 ㄱㄱ")
+                    setMessage("${getString(R.string.dialog_message_success_request)}\n${getString(R.string.dialog_message_register_email_verify)}")
                     setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                         mActivity.finish()
                     }
                     show()
                 } else {
-                    setTitle("")
-                    setMessage("")
+                    mActivity.disableBlock()
+                    setMessage(getString(R.string.dialog_message_fail_request))
                     setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                         mActivity.finish()
                     }
@@ -196,7 +192,6 @@ class RegisterFragment : Fragment() {
                 }
             }
         }
-        mActivity.disableBlock()
     }
 
     companion object {

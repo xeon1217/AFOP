@@ -68,7 +68,7 @@ class LoginFragment : Fragment() {
             login()
         }
         resetPasswordButton.setOnClickListener {
-            //mActivity.startActivity(Intent(mActivity, ResetPasswordActivity::class.java))
+            mActivity.startActivity(Intent(mActivity, ResetPasswordActivity::class.java))
         }
         registerButton.setOnClickListener {
             mActivity.startActivity(Intent(mActivity, RegisterActivity::class.java))
@@ -97,8 +97,7 @@ class LoginFragment : Fragment() {
                 } else {
                     AlertDialog.Builder(mActivity).apply {
                         setCancelable(false)
-                        setTitle("")
-                        setMessage("이메일 인증이 필요합니다.")
+                        setMessage(getString(R.string.dialog_message_need_email_verify))
                         setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                         }
                         show()
@@ -107,8 +106,7 @@ class LoginFragment : Fragment() {
             } else {
                 AlertDialog.Builder(mActivity).apply {
                     setCancelable(false)
-                    setTitle("")
-                    setMessage("로그인에 실패했습니다.")
+                    setMessage(getString(R.string.dialog_message_error_login_fail))
                     setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                         loginEmailTextInputEditText.setText("")
                         loginPasswordTextInputEditText.setText("")

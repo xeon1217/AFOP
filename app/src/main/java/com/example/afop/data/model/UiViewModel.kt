@@ -22,7 +22,7 @@ open class UiViewModel : ViewModel() {
     //문자열이 비어있지 않은가?
     fun isEmptyValid(str: String): Int? {
         return if(str.isNotBlank()) {
-            R.string.error_invalid_empty
+            R.string.invalid_void_prompt
         } else {
             null
         }
@@ -31,11 +31,11 @@ open class UiViewModel : ViewModel() {
     //이메일 양식인가?
     fun isEmailValid(email: String): Int? {
         return if (email.isBlank()) { // 입력이 비어 있는가?
-            R.string.error_invalid_empty
+            R.string.invalid_void_prompt
         } else if (email.contains(" ")) {
-            R.string.error_invalid_blank
+            R.string.invalid_special_character
         } else if (!email.contains("@").and(Patterns.EMAIL_ADDRESS.matcher(email).matches())) {
-            R.string.error_invalid_email
+            R.string.invalid_email
         } else {
             null
         }
@@ -43,9 +43,9 @@ open class UiViewModel : ViewModel() {
 
     fun isNameValid(name: String): Int? {
         return if (name.isBlank()) {
-            R.string.error_invalid_empty
+            R.string.invalid_void_prompt
         } else if (name.contains(" ")) {
-            R.string.error_invalid_blank
+            R.string.invalid_special_character
         } else {
             null
         }
@@ -53,11 +53,11 @@ open class UiViewModel : ViewModel() {
 
     fun isPasswordValid(password: String): Int? {
         return if (password.isBlank()) {
-            R.string.error_invalid_empty
+            R.string.invalid_void_prompt
         } else if (password.contains(" ")) {
-            R.string.error_invalid_blank
+            R.string.invalid_blank_character
         } else if(password.length < MIN_PASSWORD_LENGTH) {
-            R.string.error_invalid_password_length
+            R.string.invalid_password_length
         } else {
             null
         }
@@ -65,11 +65,11 @@ open class UiViewModel : ViewModel() {
 
     fun isVerifyPasswordValid(password: String, verifyPassword: String): Int? {
         return if(verifyPassword.isBlank()) {
-            R.string.error_invalid_empty
+            R.string.invalid_void_prompt
         } else if (verifyPassword.contains(" ")) {
-            R.string.error_invalid_blank
+            R.string.invalid_blank_character
         } else if (password != verifyPassword) {
-            R.string.error_invalid_password_not_equal
+            R.string.invalid_not_equal_password
         } else {
             null
         }
@@ -77,9 +77,9 @@ open class UiViewModel : ViewModel() {
 
     fun isNickNameValid(nickName: String): Int? {
         return if(nickName.isBlank()) {
-            R.string.error_invalid_empty
+            R.string.invalid_void_prompt
         } else if (nickName.contains(" ")) {
-            R.string.error_invalid_blank
+            R.string.invalid_blank_character
         } else {
             null
         }
