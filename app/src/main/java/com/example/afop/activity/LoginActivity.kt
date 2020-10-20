@@ -23,9 +23,7 @@ class LoginActivity : MyActivity() {
 
         setContentView(R.layout.activity_login)
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, LoginFragment.newInstance())
-                .commitNow()
+            switchFragment(LoginFragment.newInstance())
         }
     }
 }

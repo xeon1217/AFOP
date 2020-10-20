@@ -65,7 +65,8 @@ class LoginFragment : Fragment() {
         loginEmailTextInputEditText.addTextChangedListener(afterTextChangedListener)
         loginPasswordTextInputEditText.addTextChangedListener(afterTextChangedListener)
         loginButton.setOnClickListener {
-            login()
+            mActivity.showLoding()
+            viewModel.login(loginEmailTextInputEditText.text.toString(), loginPasswordTextInputEditText.text.toString())
         }
         resetPasswordButton.setOnClickListener {
             mActivity.startActivity(Intent(mActivity, ResetPasswordActivity::class.java))
@@ -85,37 +86,31 @@ class LoginFragment : Fragment() {
                 loginPasswordTextInputLayout.error = passwordError?.let { getString(it) }
             }
         })
-    }
 
-    private fun login() {/*
-        mActivity.enableBlock()
-        User.auth.signInWithEmailAndPassword(loginEmailTextInputEditText.text.toString(), loginPasswordTextInputEditText.text.toString()).addOnCompleteListener { task ->
-            mActivity.disableBlock()
-            if(task.isSuccessful) {
-                if (User.auth.currentUser?.isEmailVerified!!) {
-                    mActivity.startActivity(Intent(mActivity, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-                } else {
-                    AlertDialog.Builder(mActivity).apply {
-                        setCancelable(false)
-                        setMessage(getString(R.string.dialog_message_need_email_verify))
-                        setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                        }
-                        show()
-                    }
-                }
-            } else {
+        viewModel.result.observe(viewLifecycleOwner, Observer { result ->
+            if(result == null) {
+                return@Observer
+            }
+            result.apply {
+                mActivity.hideLoding()
                 AlertDialog.Builder(mActivity).apply {
                     setCancelable(false)
-                    setMessage(getString(R.string.dialog_message_error_login_fail))
-                    setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                        loginEmailTextInputEditText.setText("")
-                        loginPasswordTextInputEditText.setText("")
+                    (state as LoginResult).apply {
+                        mActivity.startActivity(Intent(mActivity, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
                     }
-                    show()
-                }
+                    error?.apply {
+                        when(this) {
+                            else -> {
+                                setMessage(getString(R.string.dialog_message_unknown_error))
+                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                    Log.d("reg", "$error")
+                                }
+                            }
+                        }
+                    }
+                }.show() //로그인시 오류발생 가능성있음
             }
-        }
-        */
+        })
     }
 
     companion object {
