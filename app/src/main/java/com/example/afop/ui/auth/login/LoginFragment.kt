@@ -87,7 +87,7 @@ class LoginFragment : Fragment() {
         })
     }
 
-    private fun login() {
+    private fun login() {/*
         mActivity.enableBlock()
         User.auth.signInWithEmailAndPassword(loginEmailTextInputEditText.text.toString(), loginPasswordTextInputEditText.text.toString()).addOnCompleteListener { task ->
             mActivity.disableBlock()
@@ -115,6 +115,7 @@ class LoginFragment : Fragment() {
                 }
             }
         }
+        */
     }
 
     companion object {
