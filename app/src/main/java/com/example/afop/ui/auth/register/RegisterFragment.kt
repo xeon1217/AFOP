@@ -8,21 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.afop.R
 import com.example.afop.activity.MyActivity
-import com.example.afop.data.model.User
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
-import kotlinx.android.synthetic.main.fragment_login.*
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import kotlinx.android.synthetic.main.fragment_register.*
-import java.lang.Exception
-import java.util.*
 
 class RegisterFragment : Fragment() {
     private lateinit var viewModel: RegisterViewModel
@@ -53,14 +45,13 @@ class RegisterFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
-                viewModel.emailDataChanged(
-                    email = registerEmailTextInputEditText.text.toString()
-                )
-                viewModel.formDataChanged(
+                viewModel.registerStateChanged(
+                    email = registerEmailTextInputEditText.text.toString(),
                     name = registerNameTextInputEditText.text.toString(),
                     password = registerPasswordTextInputEditText.text.toString(),
                     verifyPassword = registerVerifyPasswordTextInputEditText.text.toString(),
-                    nickName = registerNickNameTextInputEditText.text.toString()
+                    nickName = registerNickNameTextInputEditText.text.toString(),
+                    state = registerCheckEmailButton
                 )
             }
         }
@@ -71,32 +62,27 @@ class RegisterFragment : Fragment() {
         registerPasswordTextInputEditText.addTextChangedListener(afterTextChangedListener)
         registerVerifyPasswordTextInputEditText.addTextChangedListener(afterTextChangedListener)
         registerNickNameTextInputEditText.addTextChangedListener(afterTextChangedListener)
-        registerDoubleCheckButton.setOnClickListener {
-            doubleCheckEmail()
+        registerCheckEmailButton.setOnClickListener {
+            mActivity.showLoding()
+            viewModel.checkEmail(registerEmailTextInputEditText.text.toString())
         }
         registerSubmitButton.setOnClickListener {
-            formCheck()
+            checkForm()
         }
         registerEmailTextInputEditText.setOnClickListener {
-
+            mActivity.showLoding()
         }
 
         //관찰자 등록
-        viewModel.emailState.observe(viewLifecycleOwner, Observer { state ->
+        viewModel.registerState.observe(viewLifecycleOwner, Observer { state ->
             if (state == null) {
                 return@Observer
             }
             state.apply {
-                registerDoubleCheckButton.isEnabled = isDataValid
+                registerCheckEmailButton.isEnabled = isEmailDataValid
                 registerEmailTextInputLayout.error = emailError?.let { getString(it) }
-            }
-        })
-        viewModel.formState.observe(viewLifecycleOwner, Observer { state ->
-            if (state == null) {
-                return@Observer
-            }
-            state.apply {
-                registerSubmitButton.isEnabled = isDataValid
+
+                registerSubmitButton.isEnabled = isFormDataValid
                 registerNameTextInputLayout.error = nameError?.let { getString(it) }
                 registerPasswordTextInputLayout.error = passwordError?.let { getString(it) }
                 registerVerifyPasswordTextInputLayout.error =
@@ -104,93 +90,95 @@ class RegisterFragment : Fragment() {
                 registerNickNameTextInputLayout.error = nickNameError?.let { getString(it) }
             }
         })
-    }
 
-    private fun doubleCheckEmail() {
-        mActivity.enableBlock()
-        User.auth.signInWithEmailAndPassword(registerEmailTextInputEditText.text.toString(), "0")
-            .addOnCompleteListener { task ->
-                mActivity.disableBlock()
-                AlertDialog.Builder(mActivity).apply {
-                    setCancelable(false)
-                    when (task.exception) {
-                        is FirebaseAuthInvalidUserException -> {
-                            setMessage(getString(R.string.dialog_message_can_email))
-                            setPositiveButton(getString(R.string.action_use)) { _, _ ->
-                                registerEmailTextInputEditText.isEnabled = false
-                                registerDoubleCheckButton.visibility = View.GONE
-                                registerFormLayout.visibility = View.VISIBLE
+        viewModel.result.observe(viewLifecycleOwner, Observer { result ->
+            if (result == null) {
+                return@Observer
+            } else {
+                result.apply {
+                    mActivity.hideLoding()
+                    AlertDialog.Builder(mActivity).apply {
+                        setCancelable(false)
+                        (state as RegisterResult).apply {
+                            isCheckEmail?.let {
+                                if (it) {
+                                    setMessage(getString(R.string.dialog_message_can_email))
+                                    setPositiveButton(getString(R.string.action_use)) { _, _ ->
+                                        registerEmailTextInputEditText.isEnabled = false
+                                        registerCheckEmailButton.visibility = View.GONE
+                                        registerFormLayout.visibility = View.VISIBLE
+                                    }
+                                    setNegativeButton(getString(R.string.action_not_use)) { _, _ ->
+                                        registerEmailTextInputEditText.setText("")
+                                    }
+                                } else {
+                                    setMessage(getString(R.string.dialog_message_cant_email))
+                                    setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                        registerEmailTextInputEditText.setText("")
+                                    }
+                                }
                             }
-                            setNegativeButton(getString(R.string.action_not_use)) { _, _ ->
-                                registerEmailTextInputEditText.setText("")
+                            isCheckNickName?.let {
+                                if (!it) {
+                                    setMessage(getString(R.string.dialog_message_cant_nickname))
+                                    setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                        registerNickNameTextInputEditText.setText("")
+                                    }
+                                }
+                            }
+                            isRegister?.let {
+                                if (it) {
+                                    setMessage("${getString(R.string.dialog_message_success_request)}\n${getString(R.string.dialog_message_register_email_verify)}")
+                                    setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                        mActivity.finish()
+                                    }
+                                }
                             }
                         }
-                        is FirebaseAuthInvalidCredentialsException -> {
-                            setMessage(getString(R.string.dialog_message_cant_email))
-                            setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                                registerEmailTextInputEditText.setText("")
+                        error?.apply {
+                            when(this) {
+                                is FirebaseAuthUserCollisionException -> {
+                                    setMessage(getString(R.string.dialog_message_unknown_error))
+                                    setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                        Log.d("reg", "$error")
+                                    }
+                                }
+                                else -> {
+                                    setMessage(getString(R.string.dialog_message_unknown_error))
+                                    setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                        Log.d("reg", "$error")
+                                        mActivity.finish()
+                                    }
+                                }
                             }
                         }
-                        else -> {
-                            setMessage(getString(R.string.dialog_message_unknown_error))
-                            setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                                Log.d("reg", "${task.exception}")
-                                mActivity.finish()
-                            }
-                        }
+                        show()
                     }
-                    show()
                 }
             }
-        //FirebaseAuthInvalidUserException -> 해당 유저 없음
-        //FirebaseAuthInvalidCredentialsException -> 패스워드 맞지 않음
+        })
     }
 
-    //회원가입시 블럭!!
-    private fun formCheck() {
+    private fun checkForm() {
         AlertDialog.Builder(mActivity).apply {
-            setCancelable(false)
-            setMessage("${getString(R.string.dialog_message_submit_register_form)}\nEmail : ${registerEmailTextInputEditText.text.toString()}")
+            setMessage(
+                "${getString(R.string.dialog_message_submit_register_form)}\n" +
+                        "Email : ${registerEmailTextInputEditText.text.toString()}"
+            )
             setPositiveButton(getString(R.string.action_register)) { _, _ ->
-                register()
+                mActivity.showLoding()
+                viewModel.register(
+                    email = registerEmailTextInputEditText.text.toString(),
+                    name = registerNameTextInputEditText.text.toString(),
+                    password = registerPasswordTextInputEditText.text.toString(),
+                    verifyPassword = registerVerifyPasswordTextInputEditText.text.toString(),
+                    nickName = registerNickNameTextInputEditText.text.toString()
+                )
             }
             setNegativeButton(getString(R.string.action_cancel)) { _, _ ->
                 mActivity.finish()
             }
             show()
-        }
-    }
-
-    private fun register() {
-        mActivity.enableBlock()
-        AlertDialog.Builder(mActivity).apply {
-            setCancelable(false)
-            User.auth.createUserWithEmailAndPassword(
-                registerEmailTextInputEditText.text.toString(),
-                registerPasswordTextInputEditText.text.toString()
-            ).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    mActivity.disableBlock()
-                    User.auth.currentUser?.sendEmailVerification()
-                    User.auth.currentUser?.apply {
-                        User.databaseReference.reference.child("Users").child(uid).child("name").setValue(registerNameTextInputEditText.text.toString())
-                        User.databaseReference.reference.child("Users").child(uid).child("nickName").setValue(registerNickNameTextInputEditText.text.toString())
-                        User.databaseReference.reference.child("Users").child(uid).child("registerDate").setValue(Date().time)
-                    }
-                    setMessage("${getString(R.string.dialog_message_success_request)}\n${getString(R.string.dialog_message_register_email_verify)}")
-                    setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                        mActivity.finish()
-                    }
-                    show()
-                } else {
-                    mActivity.disableBlock()
-                    setMessage(getString(R.string.dialog_message_fail_request))
-                    setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                        mActivity.finish()
-                    }
-                    show()
-                }
-            }
         }
     }
 
