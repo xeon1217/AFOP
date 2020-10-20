@@ -18,7 +18,10 @@ import com.example.afop.activity.MyActivity
 import com.example.afop.activity.RegisterActivity
 import com.example.afop.activity.ResetPasswordActivity
 import com.example.afop.data.model.User
+import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_register.*
@@ -96,10 +99,40 @@ class LoginFragment : Fragment() {
                 AlertDialog.Builder(mActivity).apply {
                     setCancelable(false)
                     (state as LoginResult).apply {
-                        mActivity.startActivity(Intent(mActivity, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+                        isLogin?.let {
+                            if(it) {
+                                mActivity.startActivity(Intent(mActivity, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+                            } else {
+                                setMessage(error?.let { message -> getString(message) })
+                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                }
+                            }
+                        }
                     }
                     error?.apply {
+                        Log.d("LoginException", "$this")
                         when(this) {
+                            is FirebaseAuthInvalidCredentialsException -> { // 아이디 혹은 패스워드 틀림
+                                setMessage(getString(R.string.dialog_message_error_login_fail))
+                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                    loginEmailTextInputEditText.setText("")
+                                    loginPasswordTextInputEditText.setText("")
+                                }
+                            }
+                            is FirebaseAuthInvalidUserException -> { // 사용자 존재하지 않음
+                                setMessage(getString(R.string.dialog_message_error_login_fail))
+                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                    loginEmailTextInputEditText.setText("")
+                                    loginPasswordTextInputEditText.setText("")
+                                }
+                            }
+                            is FirebaseTooManyRequestsException -> { // 너무 많은 로그인을 시도함!
+                                setMessage(getString(R.string.dialog_message_error_login_fail))
+                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                    loginEmailTextInputEditText.setText("")
+                                    loginPasswordTextInputEditText.setText("")
+                                }
+                            }
                             else -> {
                                 setMessage(getString(R.string.dialog_message_unknown_error))
                                 setPositiveButton(getString(R.string.action_confirm)) { _, _ ->

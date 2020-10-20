@@ -70,7 +70,7 @@ class RegisterFragment : Fragment() {
             checkForm()
         }
         registerEmailTextInputEditText.setOnClickListener {
-            mActivity.showLoding()
+            //mActivity.showLoding()
         }
 
         //관찰자 등록
@@ -94,67 +94,71 @@ class RegisterFragment : Fragment() {
         viewModel.result.observe(viewLifecycleOwner, Observer { result ->
             if (result == null) {
                 return@Observer
-            } else {
-                result.apply {
-                    mActivity.hideLoding()
-                    AlertDialog.Builder(mActivity).apply {
-                        setCancelable(false)
-                        (state as RegisterResult).apply {
-                            isCheckEmail?.let {
-                                if (it) {
-                                    setMessage(getString(R.string.dialog_message_can_email))
-                                    setPositiveButton(getString(R.string.action_use)) { _, _ ->
-                                        registerEmailTextInputEditText.isEnabled = false
-                                        registerCheckEmailButton.visibility = View.GONE
-                                        registerFormLayout.visibility = View.VISIBLE
-                                    }
-                                    setNegativeButton(getString(R.string.action_not_use)) { _, _ ->
-                                        registerEmailTextInputEditText.setText("")
-                                    }
-                                } else {
-                                    setMessage(getString(R.string.dialog_message_cant_email))
-                                    setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                                        registerEmailTextInputEditText.setText("")
-                                    }
+            }
+            result.apply {
+                mActivity.hideLoding()
+                AlertDialog.Builder(mActivity).apply {
+                    setCancelable(false)
+                    (state as RegisterResult).apply {
+                        isCheckEmail?.let {
+                            if (it) {
+                                setMessage(getString(R.string.dialog_message_can_email))
+                                setPositiveButton(getString(R.string.action_use)) { _, _ ->
+                                    registerEmailTextInputEditText.isEnabled = false
+                                    registerCheckEmailButton.visibility = View.GONE
+                                    registerFormLayout.visibility = View.VISIBLE
                                 }
-                            }
-                            isCheckNickName?.let {
-                                if (!it) {
-                                    setMessage(getString(R.string.dialog_message_cant_nickname))
-                                    setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                                        registerNickNameTextInputEditText.setText("")
-                                    }
+                                setNegativeButton(getString(R.string.action_not_use)) { _, _ ->
+                                    registerEmailTextInputEditText.setText("")
                                 }
-                            }
-                            isRegister?.let {
-                                if (it) {
-                                    setMessage("${getString(R.string.dialog_message_success_request)}\n${getString(R.string.dialog_message_register_email_verify)}")
-                                    setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                                        mActivity.finish()
-                                    }
+                            } else {
+                                setMessage(getString(R.string.dialog_message_cant_email))
+                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                    registerEmailTextInputEditText.setText("")
                                 }
                             }
                         }
-                        error?.apply {
-                            when(this) {
-                                is FirebaseAuthUserCollisionException -> {
-                                    setMessage(getString(R.string.dialog_message_unknown_error))
-                                    setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                                        Log.d("reg", "$error")
-                                    }
-                                }
-                                else -> {
-                                    setMessage(getString(R.string.dialog_message_unknown_error))
-                                    setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                                        Log.d("reg", "$error")
-                                        mActivity.finish()
-                                    }
+                        isCheckNickName?.let {
+                            if (!it) {
+                                setMessage(getString(R.string.dialog_message_cant_nickname))
+                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                    registerNickNameTextInputEditText.setText("")
                                 }
                             }
                         }
-                        show()
+                        isRegister?.let {
+                            if (it) {
+                                setMessage(
+                                    "${getString(R.string.dialog_message_success_request)}\n${
+                                        getString(
+                                            R.string.dialog_message_register_email_verify
+                                        )
+                                    }"
+                                )
+                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                    mActivity.finish()
+                                }
+                            }
+                        }
                     }
-                }
+                    error?.apply {
+                        when (this) {
+                            is FirebaseAuthUserCollisionException -> {
+                                setMessage(getString(R.string.dialog_message_cant_email))
+                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                    Log.d("reg", "$error")
+                                }
+                            }
+                            else -> {
+                                setMessage(getString(R.string.dialog_message_unknown_error))
+                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                    Log.d("reg", "$error")
+                                    mActivity.finish()
+                                }
+                            }
+                        }
+                    }
+                }.show()
             }
         })
     }
@@ -163,7 +167,9 @@ class RegisterFragment : Fragment() {
         AlertDialog.Builder(mActivity).apply {
             setMessage(
                 "${getString(R.string.dialog_message_submit_register_form)}\n" +
-                        "Email : ${registerEmailTextInputEditText.text.toString()}"
+                        "Email : ${registerEmailTextInputEditText.text.toString()}\n" +
+                        "Name : ${registerNameTextInputEditText.text.toString()}\n" +
+                        "NickName : ${registerNickNameTextInputEditText.text.toString()}"
             )
             setPositiveButton(getString(R.string.action_register)) { _, _ ->
                 mActivity.showLoding()
