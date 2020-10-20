@@ -2,6 +2,7 @@ package com.example.afop.activity
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +14,7 @@ open class MyActivity : AppCompatActivity() {
     fun switchFragment(fragment: Fragment, bundle: Bundle? = null) {
         supportFragmentManager.beginTransaction()
             .replace(this.container.id, fragment)
-            .commit()
+            .commitNow()
     }
 
     fun showLoding() {
