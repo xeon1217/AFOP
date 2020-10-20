@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menuItemHome"
+        android:title="홈"/>
+    <item
+        android:id="@+id/menuItemCommunity"
+        android:title="커뮤니티"/>
+    <item
+        android:id="@+id/menuItemMarket"
+        android:title="벼룩시장"/>
+    <item
+        android:id="@+id/menuItemInformation"
+        android:title="혼족 정보" />
+    <item
+        android:id="@+id/menuItemMember"
+        android:title="더보기" />
+</menu>
