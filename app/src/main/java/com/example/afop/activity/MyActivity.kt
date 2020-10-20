@@ -1,9 +1,12 @@
 package com.example.afop.activity
 
+import android.app.Activity
 import android.os.Bundle
+import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.afop.Utility.Common
+import com.example.afop.Utility.UI
 import kotlinx.android.synthetic.main.activity_login.*
 
 open class MyActivity : AppCompatActivity() {
@@ -13,12 +16,24 @@ open class MyActivity : AppCompatActivity() {
             .commit()
     }
 
-    fun enableBlock() {
-        Common.enableBlock(this)
+    fun showLoding() {
+        this.progressDialog.visibility = View.VISIBLE
+        this.progressBackground.visibility = View.VISIBLE
+        this.window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
+        this.window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+        )
     }
 
-    fun disableBlock() {
-        Common.disableBlock(this)
+    fun hideLoding() {
+        this.progressDialog.visibility = View.GONE
+        this.progressBackground.visibility = View.GONE
+        this.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        this.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
     }
 
     fun changeTitle(_title: Int) {
