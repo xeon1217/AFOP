@@ -30,9 +30,15 @@ class MainActivity : MyActivity() {
                 R.id.menuItemCommunity -> {
                     switchFragment(CommunityFragment.newInstance())
                 } // 커뮤니티
-                R.id.menuItemMarket -> switchFragment(MarketFragment.newInstance()) // 매칭
-                R.id.menuItemInformation -> switchFragment(InformationFragment.newInstance()) // 혼족 정보
-                R.id.menuItemMember -> switchFragment(MemberFragment.newInstance()) // 더보기
+                R.id.menuItemMarket -> {
+                    switchFragment(MarketFragment.newInstance())
+                } // 매칭
+                R.id.menuItemInformation -> {
+                    switchFragment(InformationFragment.newInstance())
+                } // 혼족 정보
+                R.id.menuItemMember -> {
+                    switchFragment(MemberFragment.newInstance())
+                } // 더보기
             }
             true
         }
