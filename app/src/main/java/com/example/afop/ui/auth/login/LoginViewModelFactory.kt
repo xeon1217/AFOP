@@ -2,7 +2,7 @@ package com.example.afop.ui.auth.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.afop.data.dataSource.LoginDataSource
+import com.example.afop.data.dataSource.DataSource
 import com.example.afop.data.repository.LoginRepository
 
 class LoginViewModelFactory : ViewModelProvider.Factory {
@@ -10,7 +10,7 @@ class LoginViewModelFactory : ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             return LoginViewModel(
                     repository = LoginRepository(
-                    dataSource = LoginDataSource()
+                    dataSource = DataSource()
                 )
             ) as T
         }

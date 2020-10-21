@@ -1,13 +1,9 @@
 package com.example.afop.data.repository
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import com.example.afop.data.dataSource.RegisterDataSource
+import com.example.afop.data.dataSource.DataSource
 import com.example.afop.data.model.Result
-import com.example.afop.ui.auth.register.RegisterResult
-import com.example.afop.util.IO
 
-class RegisterRepository(private val dataSource: RegisterDataSource) {
+class RegisterRepository(private val dataSource: DataSource) {
     fun checkEmail(email: String, callback: (Result<*>) -> Unit) {
         dataSource.checkEmail(email) { result ->
             callback(result)
