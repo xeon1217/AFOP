@@ -52,7 +52,7 @@ class DataSource {
 
     fun checkEmail(email: String, callback: (Result<RegisterResult>) -> Unit) {
         try {
-            dbRefUsers.whereEqualTo("Email", email).get().addOnSuccessListener { documents ->
+            dbRefUsers.whereEqualTo("Email", email).get().addOnSuccessListener { documents -> //서버에 저장된 이메일이 있는지 확인 (이메일 중복 확인)
                 if (documents.size() == 0) {
                     callback(Result(state = RegisterResult(isCheckEmail = true)))
                 } else {
@@ -66,7 +66,7 @@ class DataSource {
 
     fun checkNickName(nickName: String, callback: (Result<RegisterResult>) -> Unit) {
         try {
-            dbRefUsers.whereEqualTo("NickName", nickName).get().addOnSuccessListener { documents ->
+            dbRefUsers.whereEqualTo("NickName", nickName).get().addOnSuccessListener { documents -> //서버에 저장된 닉네임이 있는지 확인 (닉네임 중복 확인)
                 if (documents.size() == 0) {
                     callback(Result(state = RegisterResult(isCheckNickName = true)))
                 } else {
@@ -79,18 +79,18 @@ class DataSource {
     }
 
     fun register(email: String, name: String, password: String, verifyPassword: String, nickName: String, callback: (Result<RegisterResult>) -> Unit) {
-        dbRefUsers.whereEqualTo("NickName", nickName).get().addOnCompleteListener { task ->
+        dbRefUsers.whereEqualTo("NickName", nickName).get().addOnCompleteListener { task -> //서버에 저장된 닉네임이 있는지 확인 (닉네임 중복 확인)
             if (task.result?.size() != 0) {
                 callback(Result(state = RegisterResult(isCheckNickName = false), error = task.exception))
                 return@addOnCompleteListener
             }
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task -> //파라미터로 받은 이메일과 패스워드를 이용해 회원가입을 시도함
                 if (task.exception != null) {
                     callback(Result(state = RegisterResult(isRegister = false), error = task.exception))
                     return@addOnCompleteListener
                 }
-                auth.currentUser?.sendEmailVerification()
-                dbRefUsers.document("${auth.uid}").set(
+                auth.currentUser?.sendEmailVerification() //이메일 인증코드를 발송하도록 함
+                dbRefUsers.document("${auth.uid}").set( //회원 정보를 Firestore DB에 저장되도록 함
                     hashMapOf(
                         "Email" to email,
                         "Name" to name,
