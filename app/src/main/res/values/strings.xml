@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AFOP</string>
+    <string name="app_name">함무보까</string>
 
     <string name="invalid_void_prompt">입력칸이 비어있습니다.</string>
     <string name="invalid_email">이메일 양식에 맞지 않습니다.</string>
@@ -36,6 +36,11 @@
     <string name="title_account_find_password">패스워드 찾기</string>
     <string name="title_account_find_account">회원정보 찾기</string>
     <string name="title_waiting_server_response">서버의 응답을 기다리는 중..</string>
+    <string name="title_home">홈</string>
+    <string name="title_community">커뮤니티</string>
+    <string name="title_market">벼룩시장</string>
+    <string name="title_information">혼족정보</string>
+    <string name="title_member">내 정보보기</string>
 
     <string name="dialog_title_fail">실패</string>
     <string name="dialog_title_success">성공</string>

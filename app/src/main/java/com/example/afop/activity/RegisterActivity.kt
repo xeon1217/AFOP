@@ -9,27 +9,27 @@ import kotlinx.android.synthetic.main.activity_register.*
 class RegisterActivity : MyActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_register)
         if (savedInstanceState == null) {
-            initToolbar()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, RegisterFragment.newInstance())
-                .commitNow()
+            switchFragment(RegisterFragment.newInstance())
+        }
+        initToolbar()
+    }
+
+    //툴바 관련
+    private fun initToolbar() {
+        setSupportActionBar(registerToolbar)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = ""
         }
     }
-//툴바 관련
-private fun initToolbar() {
-    setSupportActionBar(registerToolbar)
-    supportActionBar?.apply {
-        setDisplayHomeAsUpEnabled(true)
-        title = ""
-    }
-}
 
-override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-        android.R.id.home -> finish()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
-    return super.onOptionsItemSelected(item)
-}
 }

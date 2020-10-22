@@ -14,9 +14,7 @@ class ChatActivity : MyActivity() {
 
         setContentView(R.layout.activity_chat)
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, ChatFragment.newInstance())
-                    .commitNow()
+            switchFragment(ChatFragment.newInstance())
         }
     }
 }

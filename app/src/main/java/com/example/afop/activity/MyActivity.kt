@@ -7,7 +7,6 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.afop.Utility.UI
 import kotlinx.android.synthetic.main.activity_login.*
 
 open class MyActivity : AppCompatActivity() {
@@ -39,7 +38,6 @@ open class MyActivity : AppCompatActivity() {
 
     fun changeTitle(_title: Int) {
         supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
             title = getString(_title)
         }
     }

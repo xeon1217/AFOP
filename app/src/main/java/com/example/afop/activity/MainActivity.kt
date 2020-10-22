@@ -9,6 +9,7 @@ import com.example.afop.ui.main.infomation.InformationFragment
 import com.example.afop.ui.main.market.MarketFragment
 import com.example.afop.ui.main.member.MemberFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_register.*
 import kotlin.system.exitProcess
 
 class MainActivity : MyActivity() {
@@ -21,6 +22,7 @@ class MainActivity : MyActivity() {
         if (savedInstanceState == null) {
             switchFragment(HomeFragment.newInstance())
         }
+        initToolbar()
 
         mainBottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -36,11 +38,17 @@ class MainActivity : MyActivity() {
                 R.id.menuItemInformation -> {
                     switchFragment(InformationFragment.newInstance())
                 } // 혼족 정보
-                R.id.menuItemMember -> {
-                    switchFragment(MemberFragment.newInstance())
-                } // 더보기
             }
             true
+        }
+    }
+
+    //툴바 관련
+    private fun initToolbar() {
+        setSupportActionBar(mainToolbar)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(false)
+            title = getString(R.string.app_name)
         }
     }
 
