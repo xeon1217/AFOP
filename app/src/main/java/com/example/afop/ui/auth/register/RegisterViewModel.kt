@@ -18,8 +18,8 @@ class RegisterViewModel(private val repository: RegisterRepository) : UiViewMode
     private val _registerState = MutableLiveData<RegisterState>()
     val registerState: LiveData<RegisterState> = _registerState
 
-    private var _result = MutableLiveData<Result<*>>()
-    val result: LiveData<Result<*>> = _result
+    private var _result = MutableLiveData<Result<RegisterResult>>()
+    val result: LiveData<Result<RegisterResult>> = _result
 
     fun checkEmail(email: String) {
         repository.checkEmail(email) { result ->

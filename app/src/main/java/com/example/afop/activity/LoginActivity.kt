@@ -18,19 +18,6 @@ class LoginActivity : MyActivity() {
         DataSource.db = FirebaseFirestore.getInstance()
         DataSource.fcm = FirebaseInstanceId.getInstance()
 
-        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                return@OnCompleteListener
-            }
-
-            // Get new Instance ID token
-            val token = task.result?.token
-
-            // Log and toast
-            val msg = token
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-        })
-
         setContentView(R.layout.activity_login)
         if (savedInstanceState == null) {
             switchFragment(LoginFragment.newInstance())

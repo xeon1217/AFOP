@@ -11,8 +11,8 @@ class LoginViewModel(private val repository: LoginRepository) : UiViewModel() {
     private val _loginPrompt = MutableLiveData<LoginState>()
     val state: LiveData<LoginState> = _loginPrompt
 
-    private var _result = MutableLiveData<Result<*>>()
-    val result: LiveData<Result<*>> = _result
+    private var _result = MutableLiveData<Result<LoginResult>>()
+    val result: LiveData<Result<LoginResult>> = _result
 
     fun login(email: String, password: String) {
         repository.login(email = email, password = password) { result ->
