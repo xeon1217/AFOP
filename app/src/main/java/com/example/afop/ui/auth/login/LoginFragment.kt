@@ -105,7 +105,8 @@ class LoginFragment : Fragment() {
                             } else {
                                 setMessage(error?.let { message -> getString(message) })
                                 setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                                }
+
+                                }.show()
                             }
                         }
                     }
@@ -139,9 +140,9 @@ class LoginFragment : Fragment() {
                                     Log.d("reg", "$error")
                                 }
                             }
-                        }
+                        }.show()
                     }
-                }.show() //로그인시 오류발생 가능성있음
+                }
             }
         })
     }
