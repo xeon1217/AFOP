@@ -3,13 +3,12 @@ package com.example.afop.activity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.afop.R
+import com.example.afop.data.dataSource.DataSource
 import com.example.afop.ui.main.community.CommunityFragment
 import com.example.afop.ui.main.home.HomeFragment
 import com.example.afop.ui.main.infomation.InformationFragment
-import com.example.afop.ui.main.market.MarketFragment
-import com.example.afop.ui.main.member.MemberFragment
+import com.example.afop.ui.main.market.marketList.MarketListFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_register.*
 import kotlin.system.exitProcess
 
 class MainActivity : MyActivity() {
@@ -33,7 +32,7 @@ class MainActivity : MyActivity() {
                     switchFragment(CommunityFragment.newInstance())
                 } // 커뮤니티
                 R.id.menuItemMarket -> {
-                    switchFragment(MarketFragment.newInstance())
+                    switchFragment(MarketListFragment.newInstance())
                 } // 매칭
                 R.id.menuItemInformation -> {
                     switchFragment(InformationFragment.newInstance())
@@ -54,6 +53,9 @@ class MainActivity : MyActivity() {
 
     override fun onBackPressed() {
         if (System.currentTimeMillis() - lastTimeBackPressed < 2000) {
+            if (DataSource.auth.currentUser != null) {
+                DataSource.auth.signOut()
+            }
             finishAffinity()
             System.runFinalization()
             exitProcess(0)

@@ -1,5 +1,6 @@
 package com.example.afop.data.dataSource
 
+import android.preference.PreferenceManager
 import android.util.Log
 import com.example.afop.R
 import com.example.afop.data.model.Result
@@ -9,6 +10,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
+import java.util.prefs.Preferences
 
 class DataSource {
     companion object {
@@ -21,6 +23,25 @@ class DataSource {
     private val fcm = FirebaseInstanceId.getInstance()
 
     //인증 관련
+    fun autoLogin(callback: (Result<LoginResult>) -> Unit) {
+        fcm.instanceId.addOnCompleteListener(OnCompleteListener { fcmTask -> //FCMToken 갱신
+            if(!fcmTask.isSuccessful) {
+                callback(Result(state = LoginResult(isLogin = false), error = fcmTask.exception))
+                return@OnCompleteListener
+            }
+            auth.uid?.let { user ->
+                dbRefUsers.document(user).update(mapOf("FCMToken" to fcmTask.result?.token)) //DB에 FCMToken 정보를 갱신함
+                dbRefUsers.document(user).get().addOnCompleteListener { task -> //유저 정보를 가져오는 역할
+                    if (!task.isSuccessful) {
+                        callback(Result(state = LoginResult(isLogin = false), error = task.exception))
+                        return@addOnCompleteListener
+                    }
+                    callback(Result(state = LoginResult(isLogin = true)))
+                }
+            }
+        })
+    }
+
     fun login(email: String, password: String, callback: (Result<LoginResult>) -> Unit) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task -> //사용자 아이디와 패스워드로 로그인 요청을 함
             if(!task.isSuccessful) {
@@ -33,8 +54,8 @@ class DataSource {
                     return@addOnSuccessListener
                 }
                 fcm.instanceId.addOnCompleteListener(OnCompleteListener { fcmTask -> //FCMToken 갱신
-                    if(!task.isSuccessful) {
-                        callback(Result(state = LoginResult(isLogin = false), error = task.exception))
+                    if(!fcmTask.isSuccessful) {
+                        callback(Result(state = LoginResult(isLogin = false), error = fcmTask.exception))
                         return@OnCompleteListener
                     }
                     dbRefUsers.document(auth.user!!.uid).update(mapOf("FCMToken" to fcmTask.result?.token)) //DB에 FCMToken 정보를 갱신함
@@ -103,6 +124,12 @@ class DataSource {
     }
 
     //마켓 관련
+    //판매글 쓰기
+    fun writeMarketContent() {
+
+    }
+    //판매글 읽어오기
+    //내가 올린 글 읽어오기
 
     //채팅 관련
 
