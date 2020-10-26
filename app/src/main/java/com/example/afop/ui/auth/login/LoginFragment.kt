@@ -17,6 +17,7 @@ import com.example.afop.activity.MainActivity
 import com.example.afop.activity.MyActivity
 import com.example.afop.activity.RegisterActivity
 import com.example.afop.activity.ResetPasswordActivity
+import com.example.afop.data.dataSource.DataSource
 import com.example.afop.data.model.User
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
@@ -62,6 +63,12 @@ class LoginFragment : Fragment() {
                     password = loginPasswordTextInputEditText.text.toString()
                 )
             }
+        }
+
+        Log.d("Login", "${DataSource.auth.currentUser}")
+        if(DataSource.auth.currentUser != null) {
+            mActivity.showLoding()
+            viewModel.autoLogin()
         }
 
         //리스너 등록

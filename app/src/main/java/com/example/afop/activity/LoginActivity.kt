@@ -1,9 +1,11 @@
 package com.example.afop.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import com.example.afop.R
 import com.example.afop.data.dataSource.DataSource
+import com.example.afop.service.ForcedTerminationService
 import com.example.afop.ui.auth.login.LoginFragment
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +19,8 @@ class LoginActivity : MyActivity() {
         DataSource.auth = FirebaseAuth.getInstance()
         DataSource.db = FirebaseFirestore.getInstance()
         DataSource.fcm = FirebaseInstanceId.getInstance()
+
+        startService(Intent(this, ForcedTerminationService::class.java))
 
         setContentView(R.layout.activity_login)
         if (savedInstanceState == null) {

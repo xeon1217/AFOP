@@ -10,4 +10,10 @@ class LoginRepository(private val dataSource: DataSource) {
             callback(result)
         }
     }
+
+    fun autoLogin(callback: (Result<LoginResult>) -> Unit) {
+        dataSource.autoLogin() { result ->
+            callback(result)
+        }
+    }
 }

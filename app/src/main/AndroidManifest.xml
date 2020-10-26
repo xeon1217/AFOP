@@ -10,6 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AFOP">
+        <activity android:name=".activity.MarketActivity"></activity>
         <activity android:name=".activity.ResetPasswordActivity" />
         <activity
             android:name=".activity.RegisterActivity"
@@ -27,13 +28,20 @@
             </intent-filter>
         </activity>
 
+        <!-- Firebase 관련 Service -->
         <service
-            android:name=".data.service.CustomFirebaseMessagingService"
+            android:name=".service.CustomFirebaseMessagingService"
             android:stopWithTask="false">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
+        </service>
+
+        <!-- 앱 종료 및 태스크에서 제거되었을 때 관련 Service -->
+        <service
+            android:name=".service.ForcedTerminationService"
+            android:stopWithTask="false">
         </service>
     </application>
 

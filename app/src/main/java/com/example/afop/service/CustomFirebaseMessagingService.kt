@@ -1,4 +1,4 @@
-package com.example.afop.data.service
+package com.example.afop.service
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -14,11 +14,9 @@ import com.example.afop.activity.LoginActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
-
 class CustomFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token);
-
         Log.d("FCM_TEST", token);
     }
 
