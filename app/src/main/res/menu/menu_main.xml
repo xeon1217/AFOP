@@ -2,14 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menuItemHome"
-        android:title="홈"/>
+        android:title="@string/title_menu_home"/>
     <item
         android:id="@+id/menuItemCommunity"
-        android:title="커뮤니티"/>
+        android:title="@string/title_menu_community"/>
     <item
         android:id="@+id/menuItemMarket"
-        android:title="벼룩시장"/>
+        android:title="@string/title_menu_market"/>
     <item
         android:id="@+id/menuItemInformation"
-        android:title="혼족정보" />
+        android:title="@string/title_menu_information" />
+    <item
+        android:id="@+id/menuItemPreferences"
+        android:title="@string/title_menu_preferences" />
 </menu>

@@ -17,7 +17,7 @@ class CommunityFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mActivity = activity as MyActivity
-        mActivity.changeTitle(R.string.title_community)
+        mActivity.changeTitle(R.string.title_menu_community)
     }
 
     companion object {

@@ -13,7 +13,7 @@ open class MyActivity : AppCompatActivity() {
     fun switchFragment(fragment: Fragment, bundle: Bundle? = null) {
         supportFragmentManager.beginTransaction()
             .replace(this.container.id, fragment)
-            .commitNow()
+            .commit()
     }
 
     fun showLoding() {
@@ -39,6 +39,12 @@ open class MyActivity : AppCompatActivity() {
     fun changeTitle(_title: Int) {
         supportActionBar?.apply {
             title = getString(_title)
+        }
+    }
+
+    fun changeTitle(_title: String) {
+        supportActionBar?.apply {
+            title = _title
         }
     }
 }

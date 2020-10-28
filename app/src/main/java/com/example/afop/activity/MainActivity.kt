@@ -8,6 +8,7 @@ import com.example.afop.ui.main.community.CommunityFragment
 import com.example.afop.ui.main.home.HomeFragment
 import com.example.afop.ui.main.infomation.InformationFragment
 import com.example.afop.ui.main.market.marketList.MarketListFragment
+import com.example.afop.ui.main.member.MemberFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.system.exitProcess
 
@@ -37,6 +38,9 @@ class MainActivity : MyActivity() {
                 R.id.menuItemInformation -> {
                     switchFragment(InformationFragment.newInstance())
                 } // 혼족 정보
+                R.id.menuItemPreferences -> {
+                    switchFragment(MemberFragment.newInstance())
+                }
             }
             true
         }
@@ -53,9 +57,7 @@ class MainActivity : MyActivity() {
 
     override fun onBackPressed() {
         if (System.currentTimeMillis() - lastTimeBackPressed < 2000) {
-            if (DataSource.auth.currentUser != null) {
-                DataSource.auth.signOut()
-            }
+            DataSource.exit()
             finishAffinity()
             System.runFinalization()
             exitProcess(0)

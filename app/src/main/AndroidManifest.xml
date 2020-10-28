@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.afop">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AFOP">
-        <activity android:name=".activity.MarketActivity"></activity>
+        <activity android:name=".activity.MemberActivity" />
+        <activity android:name=".activity.MarketActivity" />
         <activity android:name=".activity.ResetPasswordActivity" />
         <activity
             android:name=".activity.RegisterActivity"
@@ -23,12 +28,9 @@
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Firebase 관련 Service -->
+        </activity> <!-- Firebase 관련 Service -->
         <service
             android:name=".service.CustomFirebaseMessagingService"
             android:stopWithTask="false">
@@ -36,13 +38,10 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service>
-
-        <!-- 앱 종료 및 태스크에서 제거되었을 때 관련 Service -->
+        </service> <!-- 앱 종료 및 태스크에서 제거되었을 때 관련 Service -->
         <service
             android:name=".service.ForcedTerminationService"
-            android:stopWithTask="false">
-        </service>
+            android:stopWithTask="false" />
     </application>
 
 </manifest>

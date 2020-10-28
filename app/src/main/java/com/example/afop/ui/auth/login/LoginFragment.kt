@@ -49,11 +49,9 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //변수 초기화
-        viewModel = ViewModelProvider(
-            viewModelStore,
-            LoginViewModelFactory()
-        ).get(LoginViewModel::class.java)
+        viewModel = ViewModelProvider(viewModelStore, LoginViewModelFactory()).get(LoginViewModel::class.java)
         mActivity = activity as MyActivity
+        loginAutoLoginCheckBox.isChecked = DataSource.isAutoLogin()
         val afterTextChangedListener = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
@@ -65,8 +63,8 @@ class LoginFragment : Fragment() {
             }
         }
 
-        Log.d("Login", "${DataSource.auth.currentUser}")
-        if(DataSource.auth.currentUser != null) {
+        Log.d("Login", "${DataSource.isAutoLogin()}")
+        if(DataSource.isAutoLogin()) {
             mActivity.showLoding()
             viewModel.autoLogin()
         }
@@ -77,6 +75,11 @@ class LoginFragment : Fragment() {
         loginButton.setOnClickListener {
             mActivity.showLoding()
             viewModel.login(loginEmailTextInputEditText.text.toString(), loginPasswordTextInputEditText.text.toString())
+        }
+        loginAutoLoginCheckBox.setOnClickListener {
+            viewModel.setAutoLogin(loginAutoLoginCheckBox.isChecked)
+            Log.d("Login", "${loginAutoLoginCheckBox.isChecked}")
+            Log.d("Login", "${DataSource.isAutoLogin()}")
         }
         resetPasswordButton.setOnClickListener {
             mActivity.startActivity(Intent(mActivity, ResetPasswordActivity::class.java))
@@ -109,11 +112,6 @@ class LoginFragment : Fragment() {
                         isLogin?.let {
                             if(it) {
                                 mActivity.startActivity(Intent(mActivity, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-                            } else {
-                                setMessage(error?.let { message -> getString(message) })
-                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-
-                                }.show()
                             }
                         }
                     }
@@ -121,6 +119,7 @@ class LoginFragment : Fragment() {
                         Log.d("LoginException", "$this")
                         when(this) {
                             is FirebaseAuthInvalidCredentialsException -> { // 아이디 혹은 패스워드 틀림
+                                setTitle(getString(R.string.dialog_title_login_fail))
                                 setMessage(getString(R.string.dialog_message_error_login_fail))
                                 setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                                     loginEmailTextInputEditText.setText("")
@@ -128,6 +127,7 @@ class LoginFragment : Fragment() {
                                 }
                             }
                             is FirebaseAuthInvalidUserException -> { // 사용자 존재하지 않음
+                                setTitle(getString(R.string.dialog_title_login_fail))
                                 setMessage(getString(R.string.dialog_message_error_login_fail))
                                 setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                                     loginEmailTextInputEditText.setText("")
@@ -135,6 +135,7 @@ class LoginFragment : Fragment() {
                                 }
                             }
                             is FirebaseTooManyRequestsException -> { // 너무 많은 로그인을 시도함!
+                                setTitle(getString(R.string.dialog_title_login_fail))
                                 setMessage(getString(R.string.dialog_message_error_login_fail))
                                 setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                                     loginEmailTextInputEditText.setText("")
@@ -142,6 +143,7 @@ class LoginFragment : Fragment() {
                                 }
                             }
                             else -> {
+                                setTitle(getString(R.string.dialog_title_login_fail))
                                 setMessage(getString(R.string.dialog_message_unknown_error))
                                 setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                                     Log.d("reg", "$error")

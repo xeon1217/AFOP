@@ -113,6 +113,7 @@ class RegisterFragment : Fragment() {
                                     registerEmailTextInputEditText.setText("")
                                 }
                             } else {
+                                setTitle(getString(R.string.dialog_title_register_fail))
                                 setMessage(getString(R.string.dialog_message_cant_email))
                                 setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                                     registerEmailTextInputEditText.setText("")
@@ -121,6 +122,7 @@ class RegisterFragment : Fragment() {
                         }
                         isCheckNickName?.let {
                             if (!it) {
+                                setTitle(getString(R.string.dialog_title_register_fail))
                                 setMessage(getString(R.string.dialog_message_cant_nickname))
                                 setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                                     registerNickNameTextInputEditText.setText("")
@@ -145,12 +147,14 @@ class RegisterFragment : Fragment() {
                     error?.apply {
                         when (this) {
                             is FirebaseAuthUserCollisionException -> {
+                                setTitle(getString(R.string.dialog_title_register_fail))
                                 setMessage(getString(R.string.dialog_message_cant_email))
                                 setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                                     Log.d("reg", "$error")
                                 }
                             }
                             else -> {
+                                setTitle(getString(R.string.dialog_title_register_fail))
                                 setMessage(getString(R.string.dialog_message_unknown_error))
                                 setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                                     Log.d("reg", "$error")

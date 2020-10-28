@@ -1,7 +1,10 @@
 package com.example.afop.data.dataSource
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.example.afop.R
 import com.example.afop.data.model.Result
 import com.example.afop.ui.auth.login.LoginResult
@@ -14,13 +17,32 @@ import java.util.prefs.Preferences
 
 class DataSource {
     companion object {
-        lateinit var auth: FirebaseAuth
-        lateinit var db: FirebaseFirestore
-        lateinit var fcm: FirebaseInstanceId
+        private lateinit var auth: FirebaseAuth
+        private lateinit var db: FirebaseFirestore
+        private lateinit var fcm: FirebaseInstanceId
+        private lateinit var preferences: SharedPreferences
+
+        fun init(context: Context) {
+            auth = FirebaseAuth.getInstance()
+            db = FirebaseFirestore.getInstance()
+            fcm = FirebaseInstanceId.getInstance()
+            preferences = context.getSharedPreferences("preferences", AppCompatActivity.MODE_PRIVATE)
+        }
+
+        fun exit() {
+            if(!isAutoLogin()) {
+                auth.signOut()
+            }
+        }
+
+        fun isAutoLogin(): Boolean {
+            return preferences.getBoolean("auto_login", false) && auth.currentUser != null
+        }
     }
 
     private val dbRefUsers = db.collection("Users")
     private val fcm = FirebaseInstanceId.getInstance()
+    private val preferencesEdit = preferences.edit()
 
     //인증 관련
     fun autoLogin(callback: (Result<LoginResult>) -> Unit) {
@@ -68,6 +90,18 @@ class DataSource {
                     }
                 })
             }
+        }
+    }
+
+    fun setAutoLogin(value: Boolean) {
+        preferencesEdit.putBoolean("auto_login", value)
+        preferencesEdit.apply()
+    }
+
+    fun logout() {
+        setAutoLogin(false)
+        if(auth.currentUser != null) {
+            auth.signOut()
         }
     }
 

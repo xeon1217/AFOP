@@ -14,9 +14,7 @@ class ForcedTerminationService : Service() {
     override fun onTaskRemoved(rootIntent: Intent?) {
         Log.d("termination Service", "onTaskRemoved!")
         try {
-            if (DataSource.auth.currentUser != null) {
-                DataSource.auth.signOut()
-            }
+            DataSource.exit()
         } catch (e: Exception) { }
     }
 

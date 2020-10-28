@@ -17,7 +17,7 @@ class InformationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mActivity = activity as MyActivity
-        mActivity.changeTitle(R.string.title_information)
+        mActivity.changeTitle(R.string.title_menu_information)
     }
 
     companion object {

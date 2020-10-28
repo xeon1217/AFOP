@@ -16,10 +16,7 @@ class LoginActivity : MyActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        DataSource.auth = FirebaseAuth.getInstance()
-        DataSource.db = FirebaseFirestore.getInstance()
-        DataSource.fcm = FirebaseInstanceId.getInstance()
-
+        DataSource.init(this)
         startService(Intent(this, ForcedTerminationService::class.java))
 
         setContentView(R.layout.activity_login)

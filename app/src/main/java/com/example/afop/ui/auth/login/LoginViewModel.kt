@@ -26,6 +26,10 @@ class LoginViewModel(private val repository: LoginRepository) : UiViewModel() {
         }
     }
 
+    fun setAutoLogin(value: Boolean) {
+        repository.setAutoLogin(value)
+    }
+
     fun loginDataChanged(email: String, password: String) {
         if(isEmailValid(email) != null) {
             _loginPrompt.value = LoginState(emailError = isEmailValid(email))

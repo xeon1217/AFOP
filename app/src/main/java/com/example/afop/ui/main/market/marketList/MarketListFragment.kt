@@ -19,7 +19,7 @@ class MarketListFragment : Fragment() {
 
         //변수 초기화
         mActivity = activity as MyActivity
-        mActivity.changeTitle(R.string.title_market)
+        mActivity.changeTitle(R.string.title_menu_market)
     }
 
     companion object {

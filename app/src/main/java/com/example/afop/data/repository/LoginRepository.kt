@@ -16,4 +16,8 @@ class LoginRepository(private val dataSource: DataSource) {
             callback(result)
         }
     }
+
+    fun setAutoLogin(value: Boolean) {
+        dataSource.setAutoLogin(value)
+    }
 }
