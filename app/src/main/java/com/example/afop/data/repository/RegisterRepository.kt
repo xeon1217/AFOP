@@ -4,6 +4,9 @@ import com.example.afop.data.dataSource.DataSource
 import com.example.afop.data.model.Result
 import com.example.afop.ui.auth.register.RegisterResult
 
+/**
+ * 회원가입 관련 레포지토리
+ */
 class RegisterRepository(private val dataSource: DataSource) {
     fun checkEmail(email: String, callback: (Result<RegisterResult>) -> Unit) {
         dataSource.checkEmail(email) { result ->
