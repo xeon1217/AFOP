@@ -14,6 +14,9 @@
     <string name="prompt_password">패스워드</string>
     <string name="prompt_password_verify">패스워드를 한 번 더 입력하세요.</string>
     <string name="prompt_nickname">닉네임</string>
+    <string name="prompt_title">제목</string>
+    <string name="prompt_content">내용</string>
+    <string name="prompt_price">가격</string>
 
     <string name="action_confirm">확인</string>
     <string name="action_cancel">취소</string>
@@ -29,6 +32,7 @@
     <string name="action_find_account">로그인 과정에 문제가 있으신가요?</string>
     <string name="action_first_sign_up">로그인이 처음이신가요?</string>
     <string name="action_auto_login">자동 로그인</string>
+    <string name="action_selling">판매하기</string>
 
     <string name="title_register">회원가입</string>
     <string name="title_register_check_email">회원가입\n(이메일 중복 검사)</string>
@@ -42,6 +46,9 @@
     <string name="title_menu_market">벼룩시장</string>
     <string name="title_menu_information">혼족정보</string>
     <string name="title_menu_preferences">환경설정</string>
+    <string name="title_menu_market_list">판매글 보기</string>
+    <string name="title_menu_market_my_sale">내가 쓴 글 보기</string>
+    <string name="title_menu_market_chat">거래중인 글 보기</string>
 
     <string name="dialog_title_fail">실패</string>
     <string name="dialog_title_success">성공</string>
