@@ -10,15 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.afop.R
-import com.example.afop.activity.MainActivity
-import com.example.afop.activity.MyActivity
-import com.example.afop.activity.RegisterActivity
-import com.example.afop.activity.ResetPasswordActivity
+import com.example.afop.activity.*
 import com.example.afop.data.dataSource.DataSource
-import com.example.afop.data.model.User
+import com.example.afop.databinding.FragmentLoginBinding
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -28,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_register.*
 
 class LoginFragment : Fragment() {
+    private lateinit var binding: FragmentLoginBinding
     private lateinit var viewModel: LoginViewModel
     private lateinit var mActivity: MyActivity
 
@@ -42,7 +41,9 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,7 +53,9 @@ class LoginFragment : Fragment() {
         viewModel = ViewModelProvider(viewModelStore, LoginViewModelFactory()).get(LoginViewModel::class.java)
         mActivity = activity as MyActivity
         loginAutoLoginCheckBox.isChecked = DataSource.isAutoLogin()
-        val afterTextChangedListener = object : TextWatcher {
+
+        binding.fragment = this
+        binding.textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
@@ -67,25 +70,6 @@ class LoginFragment : Fragment() {
         if(DataSource.isAutoLogin()) {
             mActivity.showLoding()
             viewModel.autoLogin()
-        }
-
-        //리스너 등록
-        loginEmailTextInputEditText.addTextChangedListener(afterTextChangedListener)
-        loginPasswordTextInputEditText.addTextChangedListener(afterTextChangedListener)
-        loginButton.setOnClickListener {
-            mActivity.showLoding()
-            viewModel.login(loginEmailTextInputEditText.text.toString(), loginPasswordTextInputEditText.text.toString())
-        }
-        loginAutoLoginCheckBox.setOnClickListener {
-            viewModel.setAutoLogin(loginAutoLoginCheckBox.isChecked)
-            Log.d("Login", "${loginAutoLoginCheckBox.isChecked}")
-            Log.d("Login", "${DataSource.isAutoLogin()}")
-        }
-        resetPasswordButton.setOnClickListener {
-            mActivity.startActivity(Intent(mActivity, ResetPasswordActivity::class.java))
-        }
-        registerButton.setOnClickListener {
-            mActivity.startActivity(Intent(mActivity, RegisterActivity::class.java))
         }
 
         //관찰자 등록
@@ -154,6 +138,23 @@ class LoginFragment : Fragment() {
                 }
             }
         })
+    }
+
+    fun login(view: View) {
+        mActivity.showLoding()
+        viewModel.login(loginEmailTextInputEditText.text.toString(), loginPasswordTextInputEditText.text.toString())
+    }
+
+    fun autoLogin(view: View) {
+        viewModel.setAutoLogin(loginAutoLoginCheckBox.isChecked)
+    }
+
+    fun register(view: View) {
+        mActivity.startActivity(Intent(mActivity, RegisterActivity::class.java))
+    }
+
+    fun resetPassword(view: View) {
+        mActivity.startActivity(Intent(mActivity, ResetPasswordActivity::class.java))
     }
 
     companion object {

@@ -8,15 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.afop.R
 import com.example.afop.activity.MyActivity
+import com.example.afop.databinding.FragmentRegisterBinding
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import kotlinx.android.synthetic.main.fragment_register.*
 
 class RegisterFragment : Fragment() {
+    private lateinit var binding: FragmentRegisterBinding
     private lateinit var viewModel: RegisterViewModel
     private lateinit var mActivity: MyActivity
 
@@ -31,18 +34,20 @@ class RegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         //변수 초기화
-        viewModel =
-            ViewModelProvider(this, RegisterViewModelFactory()).get(RegisterViewModel::class.java)
+        viewModel = ViewModelProvider(this, RegisterViewModelFactory()).get(RegisterViewModel::class.java)
         mActivity = activity as MyActivity
         mActivity.changeTitle(R.string.title_register)
-        val afterTextChangedListener = object : TextWatcher {
+
+        binding.fragment = this
+        binding.textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
@@ -55,23 +60,6 @@ class RegisterFragment : Fragment() {
                     state = registerCheckEmailButton
                 )
             }
-        }
-
-        //리스너 등록
-        registerEmailTextInputEditText.addTextChangedListener(afterTextChangedListener)
-        registerNameTextInputEditText.addTextChangedListener(afterTextChangedListener)
-        registerPasswordTextInputEditText.addTextChangedListener(afterTextChangedListener)
-        registerVerifyPasswordTextInputEditText.addTextChangedListener(afterTextChangedListener)
-        registerNickNameTextInputEditText.addTextChangedListener(afterTextChangedListener)
-        registerCheckEmailButton.setOnClickListener {
-            mActivity.showLoding()
-            viewModel.checkEmail(registerEmailTextInputEditText.text.toString())
-        }
-        registerSubmitButton.setOnClickListener {
-            checkForm()
-        }
-        registerEmailTextInputEditText.setOnClickListener {
-            //mActivity.showLoding()
         }
 
         //관찰자 등록
@@ -168,7 +156,12 @@ class RegisterFragment : Fragment() {
         })
     }
 
-    private fun checkForm() {
+    fun checkEmail(view: View) {
+        mActivity.showLoding()
+        viewModel.checkEmail(registerEmailTextInputEditText.text.toString())
+    }
+
+    fun checkForm(view: View) {
         AlertDialog.Builder(mActivity).apply {
             setMessage(
                 "${getString(R.string.dialog_message_submit_register_form)}\n" +
