@@ -9,6 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_login.*
 
+/**
+ * 액티비티들의 공통 클래스
+ * 공통된 동작을 상속하기위해 사용됨
+ */
 open class MyActivity : AppCompatActivity() {
     fun switchFragment(fragment: Fragment, bundle: Bundle? = null) {
         supportFragmentManager.beginTransaction()

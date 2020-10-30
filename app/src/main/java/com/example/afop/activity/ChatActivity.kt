@@ -8,6 +8,9 @@ import com.example.afop.ui.main.chat.ChatFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
+/***
+ * 채팅 관련 액티비티
+ */
 class ChatActivity : MyActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

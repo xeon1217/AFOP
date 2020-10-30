@@ -6,6 +6,9 @@ import com.example.afop.R
 import com.example.afop.ui.auth.ResetPassword.ResetPasswordFragment
 import com.example.afop.ui.auth.login.LoginFragment
 
+/**
+ * 패스워드 초기화 관련 액티비티
+ */
 class ResetPasswordActivity : MyActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

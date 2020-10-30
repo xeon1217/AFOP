@@ -6,6 +6,9 @@ import com.example.afop.R
 import com.example.afop.ui.auth.register.RegisterFragment
 import kotlinx.android.synthetic.main.activity_register.*
 
+/**
+ * 회원가입 관련 액티비티
+ */
 class RegisterActivity : MyActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
