@@ -1,4 +1,4 @@
-package com.example.afop.data.Adapter
+package com.example.afop.ui.main.market.marketList
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,12 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.afop.R
-import com.example.afop.data.model.MarketListVO
-import java.security.AccessControlContext
+import com.example.afop.data.model.MarketVO
 
-class MarketRecyclerAdapter(val context: Context, val data: ArrayList<MarketListVO>) : RecyclerView.Adapter<MarketRecyclerAdapter.ViewHolder>() {
+class MarketListRecyclerAdapter(val context: Context, val data: ArrayList<MarketVO>) : RecyclerView.Adapter<MarketListRecyclerAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_market_list, parent, false))
+        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_market_summary, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
