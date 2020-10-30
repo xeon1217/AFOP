@@ -1,32 +1,32 @@
 package com.example.afop.data.dataSource
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.preference.PreferenceManager
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import com.example.afop.R
+import com.example.afop.data.model.MarketVO
 import com.example.afop.data.model.Result
 import com.example.afop.ui.auth.login.LoginResult
 import com.example.afop.ui.auth.register.RegisterResult
+import com.example.afop.ui.main.market.marketSale.MarketSaleResult
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
-import java.util.prefs.Preferences
+import java.util.*
 
+/**
+ * 각종 데이터 입/출력을 책임지는 클래스
+ */
 class DataSource {
     companion object {
         private lateinit var auth: FirebaseAuth
         private lateinit var db: FirebaseFirestore
         private lateinit var fcm: FirebaseInstanceId
-        private lateinit var preferences: SharedPreferences
 
         fun init(context: Context) {
             auth = FirebaseAuth.getInstance()
             db = FirebaseFirestore.getInstance()
             fcm = FirebaseInstanceId.getInstance()
-            preferences = context.getSharedPreferences("preferences", AppCompatActivity.MODE_PRIVATE)
+            PreferenceManager.init(context)
         }
 
         fun exit() {
@@ -36,32 +36,20 @@ class DataSource {
         }
 
         fun isAutoLogin(): Boolean {
-            return preferences.getBoolean("auto_login", false) && auth.currentUser != null
+            return PreferenceManager.getBoolean("auto_login") && auth.currentUser != null
         }
     }
 
     private val dbRefUsers = db.collection("Users")
+    private val dbRefMarket = db.collection("Market")
     private val fcm = FirebaseInstanceId.getInstance()
-    private val preferencesEdit = preferences.edit()
 
-    //인증 관련
-    fun autoLogin(callback: (Result<LoginResult>) -> Unit) {
-        fcm.instanceId.addOnCompleteListener(OnCompleteListener { fcmTask -> //FCMToken 갱신
-            if(!fcmTask.isSuccessful) {
-                callback(Result(state = LoginResult(isLogin = false), error = fcmTask.exception))
-                return@OnCompleteListener
-            }
-            auth.uid?.let { user ->
-                dbRefUsers.document(user).update(mapOf("FCMToken" to fcmTask.result?.token)) //DB에 FCMToken 정보를 갱신함
-                dbRefUsers.document(user).get().addOnCompleteListener { task -> //유저 정보를 가져오는 역할
-                    if (!task.isSuccessful) {
-                        callback(Result(state = LoginResult(isLogin = false), error = task.exception))
-                        return@addOnCompleteListener
-                    }
-                    callback(Result(state = LoginResult(isLogin = true)))
-                }
-            }
-        })
+    //유저 관련
+    fun logout() {
+        setAutoLogin(false)
+        if(auth.currentUser != null) {
+            auth.signOut()
+        }
     }
 
     fun login(email: String, password: String, callback: (Result<LoginResult>) -> Unit) {
@@ -93,16 +81,27 @@ class DataSource {
         }
     }
 
-    fun setAutoLogin(value: Boolean) {
-        preferencesEdit.putBoolean("auto_login", value)
-        preferencesEdit.apply()
+    fun autoLogin(callback: (Result<LoginResult>) -> Unit) {
+        fcm.instanceId.addOnCompleteListener(OnCompleteListener { fcmTask -> //FCMToken 갱신
+            if(!fcmTask.isSuccessful) {
+                callback(Result(state = LoginResult(isLogin = false), error = fcmTask.exception))
+                return@OnCompleteListener
+            }
+            auth.uid?.let { user ->
+                dbRefUsers.document(user).update(mapOf("FCMToken" to fcmTask.result?.token)) //DB에 FCMToken 정보를 갱신함
+                dbRefUsers.document(user).get().addOnCompleteListener { task -> //유저 정보를 가져오는 역할
+                    if (!task.isSuccessful) {
+                        callback(Result(state = LoginResult(isLogin = false), error = task.exception))
+                        return@addOnCompleteListener
+                    }
+                    callback(Result(state = LoginResult(isLogin = true)))
+                }
+            }
+        })
     }
 
-    fun logout() {
-        setAutoLogin(false)
-        if(auth.currentUser != null) {
-            auth.signOut()
-        }
+    fun setAutoLogin(value: Boolean) {
+        PreferenceManager.setBoolean("auto_login", value)
     }
 
     fun checkEmail(email: String, callback: (Result<RegisterResult>) -> Unit) {
@@ -158,12 +157,18 @@ class DataSource {
     }
 
     //마켓 관련
-    //판매글 쓰기
-    fun writeMarketContent() {
-
+    //판매글 올리기
+    fun sale(content: MarketVO, callback: (Result<MarketSaleResult>) -> Unit) {
+        content.sellerUID = auth.uid
+        content.lookUpCount = 0
+        content.timeStamp = Date().time
+        dbRefMarket.document().set(
+            content
+        )
     }
     //판매글 읽어오기
-    //내가 올린 글 읽어오기
+    //내가 쓴 글 확인하기
+    //
 
     //채팅 관련
 
