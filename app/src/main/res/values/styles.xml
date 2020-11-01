@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="MyTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:textSize">20sp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="errorEnabled">true</item>
     </style>
 
 </resources>

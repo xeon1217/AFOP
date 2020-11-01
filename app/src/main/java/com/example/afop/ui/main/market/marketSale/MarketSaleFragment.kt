@@ -33,9 +33,9 @@ class MarketSaleFragment: Fragment() {
         marketSaleSellButton.setOnClickListener {
             viewModel.sale(
                 MarketVO(
-                    title = marketSaleTitleTextInputEditText.text.toString(),
-                    content = marketSaleContentTextInputEditText.text.toString(),
-                    price = marketSalePriceEditTextText.text.toString()
+                    title = marketSaleTitleEditText.text.toString(),
+                    content = marketSaleContentTextView.text.toString(),
+                    price = marketSalePriceEditText.text.toString()
                 )
             )
             mActivity.finish()
