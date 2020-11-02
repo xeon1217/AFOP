@@ -15,15 +15,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.afop.R
 import com.example.afop.activity.*
+import com.example.afop.data.exception.EmailVerifiedException
 import com.example.afop.data.dataSource.DataSource
 import com.example.afop.databinding.FragmentLoginBinding
 import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
-import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_register.*
 
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
@@ -50,7 +48,10 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //변수 초기화
-        viewModel = ViewModelProvider(viewModelStore, LoginViewModelFactory()).get(LoginViewModel::class.java)
+        viewModel = ViewModelProvider(
+            viewModelStore,
+            LoginViewModelFactory()
+        ).get(LoginViewModel::class.java)
         mActivity = activity as MyActivity
         loginAutoLoginCheckBox.isChecked = DataSource.isAutoLogin()
 
@@ -66,8 +67,7 @@ class LoginFragment : Fragment() {
             }
         }
 
-        Log.d("Login", "${DataSource.isAutoLogin()}")
-        if(DataSource.isAutoLogin()) {
+        if (DataSource.isAutoLogin()) {
             mActivity.showLoding()
             viewModel.autoLogin()
         }
@@ -85,23 +85,31 @@ class LoginFragment : Fragment() {
         })
 
         viewModel.result.observe(viewLifecycleOwner, Observer { result ->
-            if(result == null) {
+            if (result == null) {
                 return@Observer
             }
             result.apply {
                 mActivity.hideLoding()
                 AlertDialog.Builder(mActivity).apply {
                     setCancelable(false)
-                    (state as LoginResult).apply {
-                        isLogin?.let {
-                            if(it) {
+                    result.result?.let {
+                        (it as LoginResult).apply {
+                            isLogin?.let {
                                 mActivity.startActivity(Intent(mActivity, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
                             }
                         }
                     }
                     error?.apply {
                         Log.d("LoginException", "$this")
-                        when(this) {
+                        when (this) {
+                            is EmailVerifiedException -> {
+                                setTitle(getString(R.string.dialog_title_login_fail))
+                                setMessage(R.string.dialog_message_need_email_verify)
+                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                    loginEmailTextInputEditText.setText("")
+                                    loginPasswordTextInputEditText.setText("")
+                                }
+                            }
                             is FirebaseAuthInvalidCredentialsException -> { // 아이디 혹은 패스워드 틀림
                                 setTitle(getString(R.string.dialog_title_login_fail))
                                 setMessage(getString(R.string.dialog_message_error_login_fail))
@@ -142,7 +150,10 @@ class LoginFragment : Fragment() {
 
     fun login(view: View) {
         mActivity.showLoding()
-        viewModel.login(loginEmailTextInputEditText.text.toString(), loginPasswordTextInputEditText.text.toString())
+        viewModel.login(
+            loginEmailTextInputEditText.text.toString(),
+            loginPasswordTextInputEditText.text.toString()
+        )
     }
 
     fun autoLogin(view: View) {

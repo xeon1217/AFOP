@@ -21,27 +21,23 @@ class RegisterViewModel(private val repository: RegisterRepository) : UiViewMode
     private var _result = MutableLiveData<Result<RegisterResult>>()
     val result: LiveData<Result<RegisterResult>> = _result
 
+
     fun checkEmail(email: String) {
         repository.checkEmail(email) { result ->
-            _result.value = result
+            _result.postValue(result)
         }
     }
 
     fun checkNickName(nickName: String) {
         repository.checkNickName(nickName) { result ->
-            _result.value = result
+            _result.postValue(result)
         }
     }
 
     fun register(email: String, name: String, password: String, verifyPassword: String, nickName: String) {
-        repository.register(
-            email = email,
-            name = name,
-            password = password,
-            verifyPassword = verifyPassword,
-            nickName = nickName
+        repository.register(email = email, name = name, password = password, verifyPassword = verifyPassword, nickName = nickName
         ) { result ->
-            _result.value = result
+            _result.postValue(result)
         }
     }
 

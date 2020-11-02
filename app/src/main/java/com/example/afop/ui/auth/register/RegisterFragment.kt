@@ -14,6 +14,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.afop.R
 import com.example.afop.activity.MyActivity
+import com.example.afop.data.exception.EmailCheckFailedException
+import com.example.afop.data.exception.NickNameCheckFailedException
 import com.example.afop.databinding.FragmentRegisterBinding
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import kotlinx.android.synthetic.main.fragment_register.*
@@ -42,7 +44,8 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //변수 초기화
-        viewModel = ViewModelProvider(this, RegisterViewModelFactory()).get(RegisterViewModel::class.java)
+        viewModel =
+            ViewModelProvider(this, RegisterViewModelFactory()).get(RegisterViewModel::class.java)
         mActivity = activity as MyActivity
         mActivity.changeTitle(R.string.title_register)
 
@@ -74,8 +77,7 @@ class RegisterFragment : Fragment() {
                 registerSubmitButton.isEnabled = isFormDataValid
                 registerNameTextInputLayout.error = nameError?.let { getString(it) }
                 registerPasswordTextInputLayout.error = passwordError?.let { getString(it) }
-                registerVerifyPasswordTextInputLayout.error =
-                    verifyPasswordError?.let { getString(it) }
+                registerVerifyPasswordTextInputLayout.error = verifyPasswordError?.let { getString(it) }
                 registerNickNameTextInputLayout.error = nickNameError?.let { getString(it) }
             }
         })
@@ -88,9 +90,9 @@ class RegisterFragment : Fragment() {
                 mActivity.hideLoding()
                 AlertDialog.Builder(mActivity).apply {
                     setCancelable(false)
-                    (state as RegisterResult).apply {
-                        isCheckEmail?.let {
-                            if (it) {
+                    result.result?.let {
+                        (it as RegisterResult).apply {
+                            isCheckEmail?.let {
                                 setMessage(getString(R.string.dialog_message_can_email))
                                 setPositiveButton(getString(R.string.action_use)) { _, _ ->
                                     registerEmailTextInputEditText.isEnabled = false
@@ -100,30 +102,18 @@ class RegisterFragment : Fragment() {
                                 setNegativeButton(getString(R.string.action_not_use)) { _, _ ->
                                     registerEmailTextInputEditText.setText("")
                                 }
-                            } else {
-                                setTitle(getString(R.string.dialog_title_register_fail))
-                                setMessage(getString(R.string.dialog_message_cant_email))
-                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                                    registerEmailTextInputEditText.setText("")
-                                }
                             }
-                        }
-                        isCheckNickName?.let {
-                            if (!it) {
+                            isCheckNickName?.let {
                                 setTitle(getString(R.string.dialog_title_register_fail))
                                 setMessage(getString(R.string.dialog_message_cant_nickname))
                                 setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                                     registerNickNameTextInputEditText.setText("")
                                 }
                             }
-                        }
-                        isRegister?.let {
-                            if (it) {
+                            isRegister?.let {
                                 setMessage(
                                     "${getString(R.string.dialog_message_success_request)}\n${
-                                        getString(
-                                            R.string.dialog_message_register_email_verify
-                                        )
+                                        getString(R.string.dialog_message_register_email_verify)
                                     }"
                                 )
                                 setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
@@ -134,6 +124,20 @@ class RegisterFragment : Fragment() {
                     }
                     error?.apply {
                         when (this) {
+                            is EmailCheckFailedException -> {
+                                setTitle(getString(R.string.dialog_title_register_fail))
+                                setMessage(getString(R.string.dialog_message_cant_email))
+                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                    registerEmailTextInputEditText.setText("")
+                                }
+                            }
+                            is NickNameCheckFailedException -> {
+                                setTitle(getString(R.string.dialog_title_register_fail))
+                                setMessage(getString(R.string.dialog_message_cant_nickname))
+                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                    registerNickNameTextInputEditText.setText("")
+                                }
+                            }
                             is FirebaseAuthUserCollisionException -> {
                                 setTitle(getString(R.string.dialog_title_register_fail))
                                 setMessage(getString(R.string.dialog_message_cant_email))
@@ -179,9 +183,7 @@ class RegisterFragment : Fragment() {
                     nickName = registerNickNameTextInputEditText.text.toString()
                 )
             }
-            setNegativeButton(getString(R.string.action_cancel)) { _, _ ->
-                mActivity.finish()
-            }
+            setNegativeButton(getString(R.string.action_cancel)) { _, _ -> }
             show()
         }
     }

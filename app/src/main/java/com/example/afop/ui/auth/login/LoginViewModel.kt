@@ -16,13 +16,13 @@ class LoginViewModel(private val repository: LoginRepository) : UiViewModel() {
 
     fun login(email: String, password: String) {
         repository.login(email = email, password = password) { result ->
-            _result.value = result
+            _result.postValue(result)
         }
     }
 
     fun autoLogin() {
-        repository.autoLogin(){ result ->
-            _result.value = result
+        repository.autoLogin { result ->
+            _result.postValue(result)
         }
     }
 
