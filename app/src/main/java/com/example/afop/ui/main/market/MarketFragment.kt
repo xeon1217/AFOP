@@ -7,12 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import com.example.afop.R
 import com.example.afop.activity.MarketActivity
 import com.example.afop.activity.MyActivity
 import com.example.afop.ui.main.market.marketList.MarketListFragment
-import com.example.afop.ui.main.market.marketSale.MarketSaleFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_market.*
@@ -34,6 +32,7 @@ class MarketFragment: Fragment() {
             mActivity.startActivity(Intent(mActivity, MarketActivity::class.java))
         }
 
+        /*
         marketViewPager.adapter = MarketViewPagerAdapter(this)
         TabLayoutMediator(marketTabLayout, marketViewPager) { tab, position ->
             when(position) {
@@ -64,6 +63,8 @@ class MarketFragment: Fragment() {
                 else -> MarketListFragment.newInstance()
             }
         }
+    }
+         */
     }
     companion object {
         fun newInstance() =
