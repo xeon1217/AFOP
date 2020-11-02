@@ -1,4 +1,4 @@
-package com.example.afop.ui.main.market.marketSale
+package com.example.afop.ui.main.market.marketSell
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,12 +6,10 @@ import com.example.afop.data.model.MarketVO
 import com.example.afop.data.model.Result
 import com.example.afop.data.model.UiViewModel
 import com.example.afop.data.repository.MarketRepository
-import com.example.afop.ui.auth.login.LoginResult
-import com.example.afop.ui.auth.register.RegisterResult
 
-class MarketSaleViewModel (private val repository: MarketRepository) : UiViewModel() {
-    private var _result = MutableLiveData<Result<MarketSaleResult>>()
-    val result: LiveData<Result<MarketSaleResult>> = _result
+class MarketSellViewModel (private val repository: MarketRepository) : UiViewModel() {
+    private var _result = MutableLiveData<Result<MarketSellResult>>()
+    val result: LiveData<Result<MarketSellResult>> = _result
 
     fun sale(content: MarketVO) {
         repository.sale(content) { result ->

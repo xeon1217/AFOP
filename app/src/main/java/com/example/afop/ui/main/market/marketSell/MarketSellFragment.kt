@@ -1,4 +1,4 @@
-package com.example.afop.ui.main.market.marketSale
+package com.example.afop.ui.main.market.marketSell
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,19 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.afop.R
 import com.example.afop.activity.MyActivity
-import com.example.afop.data.dataSource.DataSource
 import com.example.afop.data.model.MarketVO
-import com.example.afop.data.model.User
-import com.example.afop.ui.auth.login.LoginViewModel
-import com.example.afop.ui.auth.login.LoginViewModelFactory
-import kotlinx.android.synthetic.main.fragment_market_sale.*
+import kotlinx.android.synthetic.main.fragment_market_sell.*
 
-class MarketSaleFragment: Fragment() {
-    private lateinit var viewModel: MarketSaleViewModel
+class MarketSellFragment: Fragment() {
+    private lateinit var viewModel: MarketSellViewModel
     private lateinit var mActivity: MyActivity
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_market_sale, container, false)
+        return inflater.inflate(R.layout.fragment_market_sell, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -28,14 +24,14 @@ class MarketSaleFragment: Fragment() {
 
         //변수 초기화
         mActivity = activity as MyActivity
-        viewModel = ViewModelProvider(viewModelStore, MarketSaleViewModelFactory()).get(MarketSaleViewModel::class.java)
+        viewModel = ViewModelProvider(viewModelStore, MarketSellViewModelFactory()).get(MarketSellViewModel::class.java)
 
-        marketSaleSellButton.setOnClickListener {
+        marketSellButton.setOnClickListener {
             viewModel.sale(
                 MarketVO(
-                    title = marketSaleTitleEditText.text.toString(),
-                    content = marketSaleContentTextView.text.toString(),
-                    price = marketSalePriceEditText.text.toString()
+                    title = marketSellTitleTextInputEditText.text.toString(),
+                    price = marketSellPriceTextInputEditText.text.toString(),
+                    content = marketSellContentTextInputEditText.text.toString()
                 )
             )
             mActivity.finish()
@@ -44,7 +40,7 @@ class MarketSaleFragment: Fragment() {
 
     companion object {
         fun newInstance() =
-            MarketSaleFragment().apply {
+            MarketSellFragment().apply {
                 arguments = Bundle().apply {
                 }
             }
