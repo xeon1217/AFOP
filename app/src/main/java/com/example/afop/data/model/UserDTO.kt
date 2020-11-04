@@ -7,7 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 /**
  * 유저 데이터를 사용하기 위한 데이터 모델
  */
-class User (
+class UserDTO (
         var uid: String? = null, //서버에서 제공되는 유저의 Key
         var fcmToken: String? = null, //서버에서 제공되는 유저의 FCM Token
         var userId: String? = null, //유저의 이메일 주소

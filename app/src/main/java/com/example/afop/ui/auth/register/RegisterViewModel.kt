@@ -1,26 +1,18 @@
 package com.example.afop.ui.auth.register
 
-import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.afop.R
 import com.example.afop.data.model.Result
 import com.example.afop.data.model.UiViewModel
-import com.example.afop.data.model.User
 import com.example.afop.data.repository.RegisterRepository
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
-import kotlinx.android.synthetic.main.fragment_register.*
 
 class RegisterViewModel(private val repository: RegisterRepository) : UiViewModel() {
     private val _registerState = MutableLiveData<RegisterState>()
-    val registerState: LiveData<RegisterState> = _registerState
+    val state: LiveData<RegisterState> = _registerState
 
-    private var _result = MutableLiveData<Result<RegisterResult>>()
-    val result: LiveData<Result<RegisterResult>> = _result
-
+    private var _result = MutableLiveData<Result<*>>()
+    val result: LiveData<Result<*>> = _result
 
     fun checkEmail(email: String) {
         repository.checkEmail(email) { result ->

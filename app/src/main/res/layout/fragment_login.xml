@@ -91,7 +91,8 @@
                 android:background="#00FFFFFF"
                 android:onClick="@{fragment::resetPassword}"
                 android:text="@string/action_find_account"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/registerButton"

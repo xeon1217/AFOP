@@ -6,15 +6,13 @@ import com.example.afop.data.model.Result
 import com.example.afop.ui.auth.login.LoginResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 /**
  * 로그인 관련 레포지토리
  */
 class LoginRepository(private val dataSource: DataSource) {
-    fun login(email: String, password: String, callback: (Result<LoginResult>) -> Unit) {
+    fun login(email: String, password: String, callback: (Result<*>) -> Unit) {
         CoroutineScope(IO).launch {
             try {
                 val user = dataSource.manualLogin(email, password)
@@ -24,12 +22,12 @@ class LoginRepository(private val dataSource: DataSource) {
                 dataSource.getUser(user)
                 callback(Result(data = null, result = LoginResult(isLogin = true)))
             } catch (e : Exception) {
-                callback(Result(error = e))
+                callback(Result(data = null, error = e))
             }
         }
     }
 
-    fun autoLogin(callback: (Result<LoginResult>) -> Unit) {
+    fun autoLogin(callback: (Result<*>) -> Unit) {
         CoroutineScope(IO).launch {
             try {
                 val user = dataSource.autoLogin()
@@ -39,7 +37,7 @@ class LoginRepository(private val dataSource: DataSource) {
                 dataSource.getUser(user)
                 callback(Result(data = null, result = LoginResult(isLogin = true)))
             } catch (e : Exception) {
-                callback(Result(error = e))
+                callback(Result(data = null, error = e))
             }
         }
     }

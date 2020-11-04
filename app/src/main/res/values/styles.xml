@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="MyTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:paddingBottom">2dp</item>
+        <item name="android:paddingBottom">0dp</item>
         <item name="errorEnabled">true</item>
     </style>
 

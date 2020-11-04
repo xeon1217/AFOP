@@ -44,8 +44,7 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //변수 초기화
-        viewModel =
-            ViewModelProvider(this, RegisterViewModelFactory()).get(RegisterViewModel::class.java)
+        viewModel = ViewModelProvider(this, RegisterViewModelFactory()).get(RegisterViewModel::class.java)
         mActivity = activity as MyActivity
         mActivity.changeTitle(R.string.title_register)
 
@@ -66,7 +65,7 @@ class RegisterFragment : Fragment() {
         }
 
         //관찰자 등록
-        viewModel.registerState.observe(viewLifecycleOwner, Observer { state ->
+        viewModel.state.observe(viewLifecycleOwner, Observer { state ->
             if (state == null) {
                 return@Observer
             }

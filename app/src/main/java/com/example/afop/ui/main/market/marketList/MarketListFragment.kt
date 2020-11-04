@@ -14,6 +14,10 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_market.*
 import kotlinx.android.synthetic.main.fragment_market_list.*
 
+/**
+ * 마켓의 글을 읽어오는데 사용
+ * 전체 글, 내가 판매한 글, 내가 판매 중인 글, 내가 구매한 글
+ */
 class MarketListFragment : Fragment() {
     private lateinit var mActivity: MyActivity
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

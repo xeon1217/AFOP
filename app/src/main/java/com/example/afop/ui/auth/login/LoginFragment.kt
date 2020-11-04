@@ -48,10 +48,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //변수 초기화
-        viewModel = ViewModelProvider(
-            viewModelStore,
-            LoginViewModelFactory()
-        ).get(LoginViewModel::class.java)
+        viewModel = ViewModelProvider(viewModelStore, LoginViewModelFactory()).get(LoginViewModel::class.java)
         mActivity = activity as MyActivity
         loginAutoLoginCheckBox.isChecked = DataSource.isAutoLogin()
 

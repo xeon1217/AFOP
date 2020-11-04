@@ -4,11 +4,13 @@ import android.content.Context
 import com.example.afop.data.exception.EmailCheckFailedException
 import com.example.afop.data.exception.EmailVerifiedException
 import com.example.afop.data.exception.NickNameCheckFailedException
+import com.example.afop.data.model.MarketDTO
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.coroutines.tasks.await
 import org.imperiumlabs.geofirestore.GeoFirestore
+import java.util.*
 import kotlin.Exception
 
 /**
@@ -42,7 +44,11 @@ class DataSource {
     private val dbRefMarket = db.collection("Market")
     private val geoFirestore = GeoFirestore(dbRefUsers)
 
-    //유저 관련
+    /**
+     *  유저 관련
+     */
+
+    //로그아웃
     fun logout() {
         setAutoLogin(false)
         if (auth.currentUser != null) {
@@ -75,20 +81,23 @@ class DataSource {
         dbRefUsers.document(user.uid).update(mapOf("FCMToken" to token)).await()
     }
 
-    //유저 정보를 가져오는 역할
+    //유저 정보를 가져옴
     suspend fun getUser(user: FirebaseUser) {
         dbRefUsers.document(user.uid).get().await()
     }
 
+    //자동 로그인
     fun autoLogin(): FirebaseUser {
         return auth.currentUser ?:
         throw Exception() // 이 부분에 대해서 보완이 조금 필요할 것 같음
     }
 
+    //자동 로그인 설정
     fun setAutoLogin(value: Boolean) {
         PreferenceManager.setBoolean("auto_login", value)
     }
 
+    //이메일 중복 확인
     suspend fun checkEmail(email: String): Boolean {
         return if (dbRefUsers.whereEqualTo("Email", email).get().await().size() == 0) {
             true
@@ -97,6 +106,7 @@ class DataSource {
         }
     }
 
+    //닉네임 중복 확인
     suspend fun checkNickName(nickName: String): Boolean {
         return if (dbRefUsers.whereEqualTo("NickName", nickName).get().await().size() == 0) {
             true
@@ -105,6 +115,7 @@ class DataSource {
         }
     }
 
+    //회원가입
     suspend fun register(email: String, name: String, password: String, verifyPassword: String, nickName: String) {
         auth.createUserWithEmailAndPassword(email, password).await().user?.apply {
             sendEmailVerification() //이메일 인증코드를 발송하도록 함
@@ -118,26 +129,36 @@ class DataSource {
         }
     }
 
-    /*
-    //마켓 관련
-    //판매글 올리기
-    fun sale(content: MarketVO, callback: (Result<MarketSellResult>) -> Unit) {
-        content.sellerUID = auth.uid
-        content.lookUpCount = 0
-        content.timeStamp = Date().time
-        dbRefMarket.document().set(
-            content
-        )
+    /**
+     * 마켓 관련
+     */
+
+    //판매 글 쓰기
+    suspend fun marketPutItem(item: MarketDTO) {
+        item.sellerUID = auth.uid
+        item.timeStamp = Date().time
+        dbRefMarket.document().set(item).await()
     }
-    //판매글 읽어오기
-    //내가 쓴 글 확인하기
-    //
+
+    //글 목록 읽기 - 전체, 내가 판매한 것 or 판매 중인 것, 내가 구매 한 것
+    fun marketGetList(uid: String?) {
+
+    }
+
+    //글 한 개만 읽기
+    fun marketGetItem(marketID: String) {
+
+    }
 
     //채팅 관련
 
     //커뮤니티 관련
-    */
 }
+
+/*
+SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDateTime = dateFormat.format(new Date()); // Find todays date
+ */
 
 //https://firebase.google.com/docs/auth/android/manage-users#re-authenticate_a_user Firebase auth 보안 규칙
 //https://here4you.tistory.com/231 Firestore, https://firebase.google.com/docs/rules/basics?hl=ko#cloud-firestore_5 보안 규칙

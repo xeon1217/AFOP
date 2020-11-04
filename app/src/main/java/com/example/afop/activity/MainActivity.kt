@@ -76,7 +76,7 @@ class MainActivity : MyActivity() {
             exitProcess(0)
         }
         //'뒤로' 버튼 한번 클릭 시 메시지
-        Toast.makeText(this, getString(R.string.action_exit), Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.action_app_exit), Toast.LENGTH_SHORT).show()
         //lastTimeBackPressed에 '뒤로'버튼이 눌린 시간을 기록
         lastTimeBackPressed = System.currentTimeMillis()
         return

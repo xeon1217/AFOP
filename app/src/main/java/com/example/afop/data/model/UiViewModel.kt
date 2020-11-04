@@ -23,9 +23,17 @@ open class UiViewModel : ViewModel() {
     fun isCharacterValid(str: String) {
     }
 
+    fun isEmptyValid(value: Long): Int? {
+        return if(value >= -1) {
+            R.string.invalid_void_prompt
+        } else {
+            null
+        }
+    }
+
     //문자열이 비어있지 않은가?
     fun isEmptyValid(str: String): Int? {
-        return if(str.isNotBlank()) {
+        return if(str.isBlank()) {
             R.string.invalid_void_prompt
         } else {
             null
