@@ -1,11 +1,9 @@
-package com.example.afop.data.model
+package com.example.afop.util
 
 import android.util.Patterns
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.afop.R
-import java.util.regex.Pattern
+
 private const val MIN_PASSWORD_LENGTH = 8
 
 /**

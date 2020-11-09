@@ -1,35 +1,28 @@
-package com.example.afop.ui.main.member
+package com.example.afop.util
 
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceActivity
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.example.afop.R
-import com.example.afop.activity.LoginActivity
-import com.example.afop.activity.MainActivity
-import com.example.afop.activity.MyActivity
+import com.example.afop.ui.activity.LoginActivity
 import com.example.afop.data.dataSource.DataSource
-import com.example.afop.data.repository.RegisterRepository
-import com.example.afop.ui.auth.login.LoginResult
 
-class MemberFragment : PreferenceFragmentCompat() {
-    private lateinit var mActivity: MyActivity
+class PreferenceFragment : PreferenceFragmentCompat() {
+    private lateinit var mActivity: ActivityExtendFunction
+    private lateinit var dataSource: DataSource
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mActivity = activity as MyActivity
+        mActivity = activity as ActivityExtendFunction
         mActivity.changeTitle("사용자 이름")
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
-        val dataSource = DataSource()
+        dataSource = DataSource()
         val logoutPreference: Preference? = findPreference("logout")
 
         logoutPreference?.setOnPreferenceClickListener {
@@ -50,9 +43,10 @@ class MemberFragment : PreferenceFragmentCompat() {
 
     companion object {
         fun newInstance() =
-            MemberFragment().apply {
+            PreferenceFragment().apply {
                 arguments = Bundle().apply {
                 }
             }
+
     }
 }
