@@ -1,4 +1,4 @@
-package com.example.afop.ui.main.infomation
+package com.example.afop.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,23 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.afop.R
-import com.example.afop.activity.MyActivity
+import com.example.afop.util.ActivityExtendFunction
 
-class InformationFragment : Fragment() {
-    private lateinit var mActivity: MyActivity
+class MainCommunityFragment : Fragment() {
+    private lateinit var mActivity: ActivityExtendFunction
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_information, container, false)
+        return inflater.inflate(R.layout.fragment_main_community, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mActivity = activity as MyActivity
-        mActivity.changeTitle(R.string.title_menu_information)
+        mActivity = activity as ActivityExtendFunction
+        mActivity.changeTitle(R.string.title_menu_community)
     }
 
     companion object {
         fun newInstance() =
-            InformationFragment().apply {
+            MainCommunityFragment().apply {
                 arguments = Bundle().apply {
                 }
             }
