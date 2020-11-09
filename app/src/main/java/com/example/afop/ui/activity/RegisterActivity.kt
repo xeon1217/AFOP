@@ -1,18 +1,18 @@
-package com.example.afop.activity
+package com.example.afop.ui.activity
 
 import android.os.Bundle
 import android.view.MenuItem
 import com.example.afop.R
 import com.example.afop.ui.auth.register.RegisterFragment
+import com.example.afop.util.ActivityExtendFunction
 import kotlinx.android.synthetic.main.activity_register.*
 
 /**
  * 회원가입 관련 액티비티
  */
-class RegisterActivity : MyActivity() {
+class RegisterActivity : ActivityExtendFunction() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_register)
         if (savedInstanceState == null) {
             switchFragment(RegisterFragment.newInstance())

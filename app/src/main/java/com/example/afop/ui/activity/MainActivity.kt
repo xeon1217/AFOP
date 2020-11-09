@@ -1,28 +1,25 @@
-package com.example.afop.activity
+package com.example.afop.ui.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.example.afop.R
 import com.example.afop.data.dataSource.DataSource
 import com.example.afop.databinding.ActivityMainBinding
-import com.example.afop.ui.main.community.CommunityFragment
-import com.example.afop.ui.main.home.HomeFragment
-import com.example.afop.ui.main.infomation.InformationFragment
-import com.example.afop.ui.main.market.MarketFragment
+import com.example.afop.ui.main.MainCommunityFragment
+import com.example.afop.ui.main.MainHomeFragment
+import com.example.afop.ui.main.MainInformationFragment
 import com.example.afop.ui.main.market.marketList.MarketListFragment
-import com.example.afop.ui.main.member.MemberFragment
+import com.example.afop.util.PreferenceFragment
+import com.example.afop.util.ActivityExtendFunction
 import kotlinx.android.synthetic.main.activity_main.*
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.system.exitProcess
 
 /**
  * 메인 관련 액티비티
  * LoginActivity에서 로그인, 초기화를 마친 후 메인 액티비티가 됨
  */
-class MainActivity : MyActivity() {
+class MainActivity : ActivityExtendFunction() {
     private var lastTimeBackPressed: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,26 +30,28 @@ class MainActivity : MyActivity() {
         var binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         if (savedInstanceState == null) {
-            switchFragment(HomeFragment.newInstance())
+            switchFragment(MainHomeFragment.newInstance())
         }
         initToolbar()
 
         mainBottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.menuItemHome -> {
-                    switchFragment(HomeFragment.newInstance())
-                } // 홈
-                R.id.menuItemCommunity -> {
-                    switchFragment(CommunityFragment.newInstance())
-                } // 커뮤니티
-                R.id.menuItemMarket -> {
-                    switchFragment(MarketFragment.newInstance())
-                } // 매칭
-                R.id.menuItemInformation -> {
-                    switchFragment(InformationFragment.newInstance())
-                } // 혼족 정보
-                R.id.menuItemPreferences -> {
-                    switchFragment(MemberFragment.newInstance())
+            if(mainBottomNavigationView.selectedItemId != item.itemId) {
+                when (item.itemId) {
+                    R.id.menuItemHome -> {
+                        switchFragment(MainHomeFragment.newInstance())
+                    } // 홈
+                    R.id.menuItemCommunity -> {
+                        switchFragment(MainCommunityFragment.newInstance())
+                    } // 커뮤니티
+                    R.id.menuItemMarket -> {
+                        switchFragment(MarketListFragment.newInstance())
+                    } // 매칭
+                    R.id.menuItemInformation -> {
+                        switchFragment(MainInformationFragment.newInstance())
+                    } // 혼족 정보
+                    R.id.menuItemPreferences -> {
+                        switchFragment(PreferenceFragment.newInstance())
+                    }
                 }
             }
             true
