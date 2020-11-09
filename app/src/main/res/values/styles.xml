@@ -4,5 +4,4 @@
         <item name="android:paddingBottom">0dp</item>
         <item name="errorEnabled">true</item>
     </style>
-
 </resources>

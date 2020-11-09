@@ -5,11 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="item"
+            type="com.example.afop.data.model.MarketDTO" />
         <variable
             name="fragment"
             type="com.example.afop.ui.main.market.marketSell.MarketSellFragment" />
-
         <variable
             name="textWatcher"
             type="android.text.TextWatcher" />
@@ -53,6 +54,8 @@
                         android:layout_height="wrap_content"
                         android:addTextChangedListener="@{textWatcher}"
                         android:hint="@string/prompt_title"
+                        android:text="@{item == null ? null : item.title}"
+                        android:maxLength="24"
                         android:padding="8dp"
                         android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -68,6 +71,7 @@
 
                 <Spinner
                     android:id="@+id/marketSellCategorySpinner"
+                    style="@android:style/Widget.Material.Light.Spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:entries="@array/category"
@@ -107,8 +111,10 @@
                             android:layout_height="wrap_content"
                             android:addTextChangedListener="@{textWatcher}"
                             android:hint="@string/prompt_price"
-                            android:inputType="number"
 
+                            android:inputType="number"
+                            android:letterSpacing="0.2"
+                            android:maxLength="16"
                             android:padding="8dp"
                             android:singleLine="true" />
 
@@ -117,7 +123,7 @@
                     <CheckBox
                         android:id="@+id/marketSellNegotiationCheckBox"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
                         android:paddingRight="12dp"
                         android:text="@string/action_negotiation" />
@@ -127,7 +133,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorPrimary" />
+                    android:background="@color/colorPrimary"
+                    android:padding="16dp" />
 
                 <Space
                     android:layout_width="match_parent"
@@ -147,8 +154,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:addTextChangedListener="@{textWatcher}"
+                        android:gravity="top|left"
                         android:hint="@string/prompt_content"
+                        android:text="@{item == null ? null : item.marketID}"
                         android:lineSpacingMultiplier="1.5"
+                        android:minLines="4"
                         android:padding="8dp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -156,6 +166,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/colorPrimary" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
 
             </LinearLayout>
         </ScrollView>
@@ -165,6 +179,7 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:orientation="horizontal"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -188,8 +203,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:enabled="false"
-                android:onClick="@{fragment::sell}"
-                android:text="@string/action_selling" />
+                android:onClick="@{item == null ? fragment::sell : fragment::modify}"
+                android:text="@{item == null ? @string/action_selling : @string/action_modify}" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

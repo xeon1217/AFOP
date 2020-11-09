@@ -35,8 +35,10 @@
     <string name="action_auto_login">자동 로그인</string>
     <string name="action_selling">판매하기</string>
     <string name="action_negotiation">흥정가능</string>
+    <string name="action_modify">수정하기</string>
     <string name="action_exit">나가기</string>
     <string name="action_not_exit">나가지 않기</string>
+    <string name="action_select_market_spinner">카테고리를 선택해주세요!</string>
 
     <string name="title_register">회원가입</string>
     <string name="title_register_check_email">회원가입\n(이메일 중복 검사)</string>

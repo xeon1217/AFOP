@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="item"
+            type="com.example.afop.data.model.MarketDTO" />
+        <variable
+            name="viewModel"
+            type="com.example.afop.ui.main.market.marketDetail.MarketDetailViewModel" />
+        <variable
+            name="fragment"
+            type="com.example.afop.ui.main.market.marketDetail.MarketDetailFragment" />
+        <variable
+            name="util"
+            type="com.example.afop.util.Util" />
+    </data>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linearLayout3"
+    android:layout_width="0dp"
+    android:layout_height="48dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:orientation="horizontal"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent">
+
+    <!--
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="닫기" />
+            -->
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="#00000000"
+        android:scaleType="center"
+        app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+
+    <Space
+        android:layout_width="16dp"
+        android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:enabled="@{!item.sold}"
+        android:onClick="@{fragment::modify}"
+        android:text="글 수정하기"
+        android:visibility="@{item.sellerUID.equals(viewModel.getUID()) ? View.VISIBLE : View.GONE}" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="판매자와 대화"
+        android:visibility="@{item.sellerUID.equals(viewModel.getUID()) ? View.GONE : View.VISIBLE}" />
+</LinearLayout>
+</layout>

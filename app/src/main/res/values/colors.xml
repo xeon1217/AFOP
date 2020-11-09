@@ -13,4 +13,8 @@
     <color name="colorAccent">#6BB2FF</color>
     <color name="textColorPrimary">#ffffff</color>
     <color name="windowBackground">#ffffff</color>
+    <color name="colorLoading">#40000000</color>
+
+    <color name="colorTitle">#202020</color>
+    <color name="colorContent">#404040</color>
 </resources>
