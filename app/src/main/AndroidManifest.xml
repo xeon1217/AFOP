@@ -14,17 +14,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AFOP">
-        <activity android:name=".activity.MemberActivity" />
-        <activity android:name=".activity.MarketActivity" />
-        <activity android:name=".activity.ResetPasswordActivity" />
+        <activity android:name=".ui.activity.MarketActivity" />
+        <activity android:name=".ui.activity.MarketActivity" />
+        <activity android:name=".ui.activity.ResetPasswordActivity" />
         <activity
-            android:name=".activity.RegisterActivity"
+            android:name=".ui.activity.RegisterActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".ui.activity.LoginActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
