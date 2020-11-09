@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.afop.data.model.MarketDTO
 import com.example.afop.data.model.Result
-import com.example.afop.data.model.UiViewModel
+import com.example.afop.util.UiViewModel
 import com.example.afop.data.repository.MarketRepository
 
 class MarketSellViewModel (private val repository: MarketRepository) : UiViewModel() {
@@ -15,7 +15,13 @@ class MarketSellViewModel (private val repository: MarketRepository) : UiViewMod
     val result: LiveData<Result<*>> = _result
 
     fun sell(item: MarketDTO) {
-        repository.sell(item) {result ->
+        repository.sell(item) { result ->
+            _result.postValue(result)
+        }
+    }
+
+    fun modify(item: MarketDTO) {
+        repository.modify(item) { result ->
             _result.postValue(result)
         }
     }
@@ -24,6 +30,8 @@ class MarketSellViewModel (private val repository: MarketRepository) : UiViewMod
         if(isEmptyValid(title) != null) {
             _sellState.value = MarketSellState(titleError = isEmptyValid(title))
         } else if (isEmptyValid(price) != null) {
+            _sellState.value = MarketSellState(priceError = isEmptyValid(price))
+        } else if (price.length > 16) { // 오류부분 설계할 것
             _sellState.value = MarketSellState(priceError = isEmptyValid(price))
         } else if (isEmptyValid(content) != null) {
             _sellState.value = MarketSellState(contentError = isEmptyValid(content))

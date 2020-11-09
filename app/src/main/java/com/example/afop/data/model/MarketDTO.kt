@@ -17,7 +17,7 @@ data class MarketDTO (
     var reservation: Boolean? = false, //예약 상태
     var negotiation: Boolean? = false, //흥정 가능
     var timeStamp: Long? = null,
-    var lookUpCount: Int? = null, //조회횟수
-    //var category: ???
-    var photos: Array<String>? = null //사진, 10장까지
+    var lookUpCount: Long? = null, //조회횟수
+    var category: String? = null,
+    var photos: List<String>? = null //사진, 10장까지
 ) : Serializable

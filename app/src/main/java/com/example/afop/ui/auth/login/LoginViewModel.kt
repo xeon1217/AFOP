@@ -2,9 +2,8 @@ package com.example.afop.ui.auth.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.afop.data.model.Result
-import com.example.afop.data.model.UiViewModel
+import com.example.afop.util.UiViewModel
 import com.example.afop.data.repository.LoginRepository
 
 class LoginViewModel(private val repository: LoginRepository) : UiViewModel() {

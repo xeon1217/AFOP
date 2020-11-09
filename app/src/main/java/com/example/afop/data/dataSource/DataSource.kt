@@ -1,12 +1,16 @@
 package com.example.afop.data.dataSource
 
 import android.content.Context
+import android.util.Log
 import com.example.afop.data.exception.EmailCheckFailedException
 import com.example.afop.data.exception.EmailVerifiedException
 import com.example.afop.data.exception.NickNameCheckFailedException
 import com.example.afop.data.model.MarketDTO
+import com.example.afop.data.model.UserDTO
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.coroutines.tasks.await
 import org.imperiumlabs.geofirestore.GeoFirestore
@@ -21,6 +25,7 @@ class DataSource {
         private lateinit var auth: FirebaseAuth
         private lateinit var db: FirebaseFirestore
         private lateinit var fcm: FirebaseInstanceId
+        private lateinit var user: UserDTO
 
         fun init(context: Context) {
             auth = FirebaseAuth.getInstance()
@@ -42,7 +47,10 @@ class DataSource {
 
     private val dbRefUsers = db.collection("Users")
     private val dbRefMarket = db.collection("Market")
+    private val dbRefLocation = db.collection("Location")
     private val geoFirestore = GeoFirestore(dbRefUsers)
+
+    private val limit: Long = 10
 
     /**
      *  유저 관련
@@ -56,15 +64,28 @@ class DataSource {
         }
     }
 
+    fun getUID(): String {
+        return auth.uid ?: throw Exception()
+    }
+
+    suspend fun getUser(_uid: String): UserDTO {
+        if (_uid == auth.uid) {
+            user = dbRefUsers.document(_uid).get().await().toObject(UserDTO::class.java)
+                ?: throw Exception()
+        }
+        return dbRefUsers.document(_uid).get().await().toObject(UserDTO::class.java)
+            ?: throw Exception()
+    }
+
     //사용자 아이디와 패스워드로 로그인 요청을 함
-    suspend fun manualLogin(email: String, password: String): FirebaseUser {
-        auth.signInWithEmailAndPassword(email, password).await()
+    suspend fun manualLogin(_email: String, _password: String): FirebaseUser {
+        auth.signInWithEmailAndPassword(_email, _password).await()
         return auth.currentUser ?: throw FirebaseAuthException("", "")
     }
 
     //로그인에 성공했을 때, 해당 사용자가 이메일 인증을 마친 상태인지 확인
-    fun isEmailVerified(user: FirebaseUser): Boolean? {
-        return if (user.isEmailVerified) {
+    fun isEmailVerified(_user: FirebaseUser): Boolean? {
+        return if (_user.isEmailVerified) {
             true
         } else {
             throw EmailVerifiedException()
@@ -77,29 +98,23 @@ class DataSource {
     }
 
     //DB에 FCMToken 정보를 갱신함
-    suspend fun refreshRemoteFCMToken(user: FirebaseUser, token: String) {
-        dbRefUsers.document(user.uid).update(mapOf("FCMToken" to token)).await()
-    }
-
-    //유저 정보를 가져옴
-    suspend fun getUser(user: FirebaseUser) {
-        dbRefUsers.document(user.uid).get().await()
+    suspend fun refreshRemoteFCMToken(_user: FirebaseUser, _token: String) {
+        dbRefUsers.document(_user.uid).update(mapOf("FCMToken" to _token)).await()
     }
 
     //자동 로그인
     fun autoLogin(): FirebaseUser {
-        return auth.currentUser ?:
-        throw Exception() // 이 부분에 대해서 보완이 조금 필요할 것 같음
+        return auth.currentUser ?: throw Exception() // 이 부분에 대해서 보완이 조금 필요할 것 같음
     }
 
     //자동 로그인 설정
-    fun setAutoLogin(value: Boolean) {
-        PreferenceManager.setBoolean("auto_login", value)
+    fun setAutoLogin(_value: Boolean) {
+        PreferenceManager.setBoolean("auto_login", _value)
     }
 
     //이메일 중복 확인
-    suspend fun checkEmail(email: String): Boolean {
-        return if (dbRefUsers.whereEqualTo("Email", email).get().await().size() == 0) {
+    suspend fun checkEmail(_email: String): Boolean {
+        return if (dbRefUsers.whereEqualTo("email", _email).get().await().size() == 0) {
             true
         } else {
             throw EmailCheckFailedException()
@@ -107,8 +122,8 @@ class DataSource {
     }
 
     //닉네임 중복 확인
-    suspend fun checkNickName(nickName: String): Boolean {
-        return if (dbRefUsers.whereEqualTo("NickName", nickName).get().await().size() == 0) {
+    suspend fun checkNickName(_nickName: String): Boolean {
+        return if (dbRefUsers.whereEqualTo("nickName", _nickName).get().await().size() == 0) {
             true
         } else {
             throw NickNameCheckFailedException()
@@ -116,14 +131,20 @@ class DataSource {
     }
 
     //회원가입
-    suspend fun register(email: String, name: String, password: String, verifyPassword: String, nickName: String) {
-        auth.createUserWithEmailAndPassword(email, password).await().user?.apply {
+    suspend fun register(
+        _email: String,
+        _name: String,
+        _password: String,
+        _verifyPassword: String,
+        _nickName: String
+    ) {
+        auth.createUserWithEmailAndPassword(_email, _password).await().user?.apply {
             sendEmailVerification() //이메일 인증코드를 발송하도록 함
-            dbRefUsers.document("${auth.uid}").set( //회원 정보를 Firestore DB에 저장되도록 함
-                hashMapOf(
-                    "Email" to email,
-                    "Name" to name,
-                    "NickName" to nickName
+            dbRefUsers.add(
+                UserDTO(
+                    email = _email,
+                    name = _name,
+                    nickName = _nickName
                 )
             )
         }
@@ -134,25 +155,44 @@ class DataSource {
      */
 
     //판매 글 쓰기
-    suspend fun marketPutItem(item: MarketDTO) {
-        item.sellerUID = auth.uid
-        item.timeStamp = Date().time
-        dbRefMarket.document().set(item).await()
+    suspend fun marketPutItem(_item: MarketDTO) {
+        val timeStamp = Date().time
+        _item.sellerUID = auth.uid
+        _item.timeStamp = timeStamp
+        dbRefMarket.add(_item).await()
     }
 
-    //글 목록 읽기 - 전체, 내가 판매한 것 or 판매 중인 것, 내가 구매 한 것
-    fun marketGetList(uid: String?) {
+    suspend fun marketModifyItem(_item: MarketDTO) {
+        Log.d("asdasd", "${_item.marketID}")
+        _item.marketID?.let {
+            dbRefMarket.document(it)
+                .set(_item)
+                .await()
+        }
+    }
 
+    //글 목록 읽기 - 전체, 검색(제목, 내용, 상태), 내가 판매한 것 or 판매 중인 것, 내가 구매 한 것
+    suspend fun marketGetList(): QuerySnapshot {
+        return dbRefMarket
+            .orderBy("timeStamp", Query.Direction.DESCENDING)
+            .limit(limit)
+            .get()
+            .await()
     }
 
     //글 한 개만 읽기
-    fun marketGetItem(marketID: String) {
+    fun marketGetItem(_marketID: String) {
 
     }
 
     //채팅 관련
 
     //커뮤니티 관련
+
+    //위치 관련
+    suspend fun getLocationRoot(): QuerySnapshot { // 시/도
+        return dbRefLocation.get().await()
+    }
 }
 
 /*

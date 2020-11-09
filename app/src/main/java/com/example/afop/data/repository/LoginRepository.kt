@@ -15,13 +15,15 @@ class LoginRepository(private val dataSource: DataSource) {
     fun login(email: String, password: String, callback: (Result<*>) -> Unit) {
         CoroutineScope(IO).launch {
             try {
-                val user = dataSource.manualLogin(email, password)
-                dataSource.isEmailVerified(user)
-                val token = dataSource.refreshLocalFCMToken()
-                dataSource.refreshRemoteFCMToken(user, token)
-                dataSource.getUser(user)
+                dataSource.manualLogin(email, password).let { user ->
+                    dataSource.isEmailVerified(user)
+                    dataSource.getUser(user.uid)
+                    dataSource.refreshLocalFCMToken().let { token ->
+                        dataSource.refreshRemoteFCMToken(user, token)
+                    }
+                }
                 callback(Result(data = null, result = LoginResult(isLogin = true)))
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 callback(Result(data = null, error = e))
             }
         }
@@ -30,13 +32,15 @@ class LoginRepository(private val dataSource: DataSource) {
     fun autoLogin(callback: (Result<*>) -> Unit) {
         CoroutineScope(IO).launch {
             try {
-                val user = dataSource.autoLogin()
-                dataSource.isEmailVerified(user)
-                val token = dataSource.refreshLocalFCMToken()
-                dataSource.refreshRemoteFCMToken(user, token)
-                dataSource.getUser(user)
+                dataSource.autoLogin().let { user ->
+                    dataSource.isEmailVerified(user)
+                    dataSource.getUser(user.uid)
+                    dataSource.refreshLocalFCMToken().let { token ->
+                        dataSource.refreshRemoteFCMToken(user, token)
+                    }
+                }
                 callback(Result(data = null, result = LoginResult(isLogin = true)))
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 callback(Result(data = null, error = e))
             }
         }

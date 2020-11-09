@@ -14,10 +14,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.afop.R
-import com.example.afop.activity.*
 import com.example.afop.data.exception.EmailVerifiedException
 import com.example.afop.data.dataSource.DataSource
 import com.example.afop.databinding.FragmentLoginBinding
+import com.example.afop.util.ActivityExtendFunction
+import com.example.afop.ui.activity.MainActivity
+import com.example.afop.ui.activity.RegisterActivity
+import com.example.afop.ui.activity.ResetPasswordActivity
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -26,7 +29,7 @@ import kotlinx.android.synthetic.main.fragment_login.*
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private lateinit var viewModel: LoginViewModel
-    private lateinit var mActivity: MyActivity
+    private lateinit var mActivity: ActivityExtendFunction
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +52,7 @@ class LoginFragment : Fragment() {
 
         //변수 초기화
         viewModel = ViewModelProvider(viewModelStore, LoginViewModelFactory()).get(LoginViewModel::class.java)
-        mActivity = activity as MyActivity
+        mActivity = activity as ActivityExtendFunction
         loginAutoLoginCheckBox.isChecked = DataSource.isAutoLogin()
 
         binding.fragment = this
@@ -65,7 +68,7 @@ class LoginFragment : Fragment() {
         }
 
         if (DataSource.isAutoLogin()) {
-            mActivity.showLoding()
+            mActivity.showLoading()
             viewModel.autoLogin()
         }
 
@@ -86,7 +89,7 @@ class LoginFragment : Fragment() {
                 return@Observer
             }
             result.apply {
-                mActivity.hideLoding()
+                mActivity.hideLoading()
                 AlertDialog.Builder(mActivity).apply {
                     setCancelable(false)
                     result.result?.let {
@@ -146,7 +149,7 @@ class LoginFragment : Fragment() {
     }
 
     fun login(view: View) {
-        mActivity.showLoding()
+        mActivity.showLoading()
         viewModel.login(
             loginEmailTextInputEditText.text.toString(),
             loginPasswordTextInputEditText.text.toString()

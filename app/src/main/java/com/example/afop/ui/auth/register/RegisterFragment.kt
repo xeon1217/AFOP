@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.afop.R
-import com.example.afop.activity.MyActivity
+import com.example.afop.util.ActivityExtendFunction
 import com.example.afop.data.exception.EmailCheckFailedException
 import com.example.afop.data.exception.NickNameCheckFailedException
 import com.example.afop.databinding.FragmentRegisterBinding
@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_register.*
 class RegisterFragment : Fragment() {
     private lateinit var binding: FragmentRegisterBinding
     private lateinit var viewModel: RegisterViewModel
-    private lateinit var mActivity: MyActivity
+    private lateinit var mActivity: ActivityExtendFunction
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +45,7 @@ class RegisterFragment : Fragment() {
 
         //변수 초기화
         viewModel = ViewModelProvider(this, RegisterViewModelFactory()).get(RegisterViewModel::class.java)
-        mActivity = activity as MyActivity
+        mActivity = activity as ActivityExtendFunction
         mActivity.changeTitle(R.string.title_register)
 
         binding.fragment = this
@@ -86,7 +86,7 @@ class RegisterFragment : Fragment() {
                 return@Observer
             }
             result.apply {
-                mActivity.hideLoding()
+                mActivity.hideLoading()
                 AlertDialog.Builder(mActivity).apply {
                     setCancelable(false)
                     result.result?.let {
@@ -160,7 +160,7 @@ class RegisterFragment : Fragment() {
     }
 
     fun checkEmail(view: View) {
-        mActivity.showLoding()
+        mActivity.showLoading()
         viewModel.checkEmail(registerEmailTextInputEditText.text.toString())
     }
 
@@ -173,7 +173,7 @@ class RegisterFragment : Fragment() {
                         "NickName : ${registerNickNameTextInputEditText.text.toString()}"
             )
             setPositiveButton(getString(R.string.action_register)) { _, _ ->
-                mActivity.showLoding()
+                mActivity.showLoading()
                 viewModel.register(
                     email = registerEmailTextInputEditText.text.toString(),
                     name = registerNameTextInputEditText.text.toString(),
