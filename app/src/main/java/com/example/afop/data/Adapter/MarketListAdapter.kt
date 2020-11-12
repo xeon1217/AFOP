@@ -21,18 +21,18 @@ class MarketListAdapter(val context: Context?) : ListAdapter<MarketDTO, MarketLi
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
-        holder.itemView.setOnClickListener {
-            context?.apply {
-                startActivity(Intent(this, MarketActivity::class.java).putExtra("item", item))
-            }
-        }
     }
 
-    class ViewHolder(val binding: ItemMarketSummaryBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(val binding: ItemMarketSummaryBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(_item: MarketDTO) {
             binding.apply {
                 item = _item
                 executePendingBindings()
+            }
+            binding.root.setOnClickListener {
+                context?.apply {
+                    startActivity(Intent(this, MarketActivity::class.java).putExtra("detail", _item.marketID))
+                }
             }
         }
     }
@@ -40,10 +40,10 @@ class MarketListAdapter(val context: Context?) : ListAdapter<MarketDTO, MarketLi
 
 private class MarketListDiffCallback : DiffUtil.ItemCallback<MarketDTO>() {
     override fun areItemsTheSame(oldItem: MarketDTO, newItem: MarketDTO): Boolean {
-        return true
+        return oldItem == newItem
     }
 
     override fun areContentsTheSame(oldItem: MarketDTO, newItem: MarketDTO): Boolean {
-        return true
+        return oldItem == newItem
     }
 }
