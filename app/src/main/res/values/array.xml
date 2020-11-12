@@ -13,7 +13,7 @@
         <item>뷰티/미용</item>
         <item>반려동물용품</item>
         <item>도서/티켓/음반</item>
-        <item>기타 중고물품</item>
+        <item>기타</item>
     </string-array>
 
     <string-array name="market_status">

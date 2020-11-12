@@ -14,7 +14,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.afop.R
-import com.example.afop.data.exception.EmailVerifiedException
 import com.example.afop.data.dataSource.DataSource
 import com.example.afop.databinding.FragmentLoginBinding
 import com.example.afop.util.ActivityExtendFunction
@@ -22,8 +21,6 @@ import com.example.afop.ui.activity.MainActivity
 import com.example.afop.ui.activity.RegisterActivity
 import com.example.afop.ui.activity.ResetPasswordActivity
 import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginFragment : Fragment() {
@@ -53,7 +50,6 @@ class LoginFragment : Fragment() {
         //변수 초기화
         viewModel = ViewModelProvider(viewModelStore, LoginViewModelFactory()).get(LoginViewModel::class.java)
         mActivity = activity as ActivityExtendFunction
-        loginAutoLoginCheckBox.isChecked = DataSource.isAutoLogin()
 
         binding.fragment = this
         binding.textWatcher = object : TextWatcher {
@@ -65,11 +61,6 @@ class LoginFragment : Fragment() {
                     password = loginPasswordTextInputEditText.text.toString()
                 )
             }
-        }
-
-        if (DataSource.isAutoLogin()) {
-            mActivity.showLoading()
-            viewModel.autoLogin()
         }
 
         //관찰자 등록
@@ -87,63 +78,6 @@ class LoginFragment : Fragment() {
         viewModel.result.observe(viewLifecycleOwner, Observer { result ->
             if (result == null) {
                 return@Observer
-            }
-            result.apply {
-                mActivity.hideLoading()
-                AlertDialog.Builder(mActivity).apply {
-                    setCancelable(false)
-                    result.result?.let {
-                        (it as LoginResult).apply {
-                            isLogin?.let {
-                                mActivity.startActivity(Intent(mActivity, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-                            }
-                        }
-                    }
-                    error?.apply {
-                        Log.d("LoginException", "$this")
-                        when (this) {
-                            is EmailVerifiedException -> {
-                                setTitle(getString(R.string.dialog_title_login_fail))
-                                setMessage(R.string.dialog_message_need_email_verify)
-                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                                    loginEmailTextInputEditText.setText("")
-                                    loginPasswordTextInputEditText.setText("")
-                                }
-                            }
-                            is FirebaseAuthInvalidCredentialsException -> { // 아이디 혹은 패스워드 틀림
-                                setTitle(getString(R.string.dialog_title_login_fail))
-                                setMessage(getString(R.string.dialog_message_error_login_fail))
-                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                                    loginEmailTextInputEditText.setText("")
-                                    loginPasswordTextInputEditText.setText("")
-                                }
-                            }
-                            is FirebaseAuthInvalidUserException -> { // 사용자 존재하지 않음
-                                setTitle(getString(R.string.dialog_title_login_fail))
-                                setMessage(getString(R.string.dialog_message_error_login_fail))
-                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                                    loginEmailTextInputEditText.setText("")
-                                    loginPasswordTextInputEditText.setText("")
-                                }
-                            }
-                            is FirebaseTooManyRequestsException -> { // 너무 많은 로그인을 시도함!
-                                setTitle(getString(R.string.dialog_title_login_fail))
-                                setMessage(getString(R.string.dialog_message_error_login_fail))
-                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                                    loginEmailTextInputEditText.setText("")
-                                    loginPasswordTextInputEditText.setText("")
-                                }
-                            }
-                            else -> {
-                                setTitle(getString(R.string.dialog_title_login_fail))
-                                setMessage(getString(R.string.dialog_message_unknown_error))
-                                setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                                    Log.d("reg", "$error")
-                                }
-                            }
-                        }.show()
-                    }
-                }
             }
         })
     }

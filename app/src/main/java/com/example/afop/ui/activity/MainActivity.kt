@@ -9,6 +9,7 @@ import com.example.afop.databinding.ActivityMainBinding
 import com.example.afop.ui.main.MainCommunityFragment
 import com.example.afop.ui.main.MainHomeFragment
 import com.example.afop.ui.main.MainInformationFragment
+import com.example.afop.ui.main.MainMarketFragment
 import com.example.afop.ui.main.market.marketList.MarketListFragment
 import com.example.afop.util.PreferenceFragment
 import com.example.afop.util.ActivityExtendFunction
@@ -44,7 +45,7 @@ class MainActivity : ActivityExtendFunction() {
                         switchFragment(MainCommunityFragment.newInstance())
                     } // 커뮤니티
                     R.id.menuItemMarket -> {
-                        switchFragment(MarketListFragment.newInstance())
+                        switchFragment(MainMarketFragment.newInstance())
                     } // 매칭
                     R.id.menuItemInformation -> {
                         switchFragment(MainInformationFragment.newInstance())
@@ -69,7 +70,7 @@ class MainActivity : ActivityExtendFunction() {
 
     override fun onBackPressed() {
         if (System.currentTimeMillis() - lastTimeBackPressed < 2000) {
-            DataSource.exit()
+            //DataSource.exit()
             finishAffinity()
             System.runFinalization()
             exitProcess(0)

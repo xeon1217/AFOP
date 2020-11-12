@@ -1,6 +1,7 @@
 package com.example.afop.ui.main.market.marketList
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.example.afop.R
 import com.example.afop.util.ActivityExtendFunction
 import com.example.afop.data.Adapter.MarketListAdapter
 import com.example.afop.databinding.FragmentMarketListBinding
+import kotlinx.android.synthetic.main.fragment_market_list.*
 
 /**
  * 마켓의 글을 읽어오는데 사용
@@ -30,38 +32,36 @@ class MarketListFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_market_list, container, false)
         viewModel = ViewModelProvider(viewModelStore, MarketListViewModelFactory()).get(MarketListViewModel::class.java)
         mActivity = activity as ActivityExtendFunction
-        home()
         subscribeUi()
 
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        marketRefreshLayout.setOnRefreshListener {
+            home()
+            marketRefreshLayout.isRefreshing = false
+        }
+    }
+
     override fun onResume() {
         super.onResume()
+        home()
     }
 
     private fun subscribeUi() {
         val marketListAdapter = MarketListAdapter(context)
+        binding.marketRecyclerView.adapter = marketListAdapter
+        binding.marketRecyclerView.addItemDecoration(DividerItemDecoration(context, VERTICAL))
+        binding.marketRecyclerView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if(!v.canScrollVertically(1)) {
+                Log.d("List","asdadsdadd")
+            }
+        }
         viewModel.result.observe(viewLifecycleOwner, Observer { result ->
             if (result == null) {
                 return@Observer
-            }
-            result.apply {
-                mActivity.hideLoading()
-                result.apply {
-                    marketListAdapter.submitList(data)
-                    binding.marketRecyclerView.addItemDecoration(DividerItemDecoration(context, VERTICAL))
-                    binding.marketRecyclerView.adapter = marketListAdapter
-                }
-                error?.let {
-                    AlertDialog.Builder(mActivity).apply {
-                        setCancelable(false)
-                        setTitle(getString(R.string.dialog_title_fail))
-                        setMessage("글을 읽어오는데 실패했습니다!")
-                        setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                        }
-                    }.show()
-                }
             }
         })
     }

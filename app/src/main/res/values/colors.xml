@@ -12,7 +12,7 @@
     <color name="colorPrimaryDark">#062342</color>
     <color name="colorAccent">#6BB2FF</color>
     <color name="textColorPrimary">#ffffff</color>
-    <color name="windowBackground">#ffffff</color>
+    <color name="windowBackground">#F0F0F0</color>
     <color name="colorLoading">#40000000</color>
 
     <color name="colorTitle">#202020</color>

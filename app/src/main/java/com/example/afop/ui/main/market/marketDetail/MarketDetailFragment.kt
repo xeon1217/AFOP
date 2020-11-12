@@ -6,9 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.example.afop.R
 import com.example.afop.data.model.MarketDTO
 import com.example.afop.databinding.FragmentMarketDetailBinding
@@ -29,24 +33,37 @@ class MarketDetailFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_market_detail, container, false)
         viewModel = ViewModelProvider(viewModelStore, MarketDetailViewModelFactory()).get(MarketDetailViewModel::class.java)
         mActivity = activity as ActivityExtendFunction
-
         subscribeUi()
+
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        arguments?.get("detail")?.let {
+            viewModel.getItem(it as String)
+        }
     }
 
     private fun subscribeUi() {
         binding.viewModel = viewModel
         binding.fragment = this
-        binding.item = arguments?.get("item") as MarketDTO
-        //mActivity.initToolbar(binding.marketDetailToolbar)
+        viewModel.result.observe(viewLifecycleOwner, Observer { result ->
+            if (result == null) {
+                return@Observer
+            }
+        })
     }
 
     fun modify(view: View) {
-        mActivity.startActivity(Intent(context, MarketActivity::class.java).putExtra("modify", binding.item))
+        arguments?.get("detail")?.let {
+            mActivity.startActivity(Intent(context, MarketActivity::class.java).putExtra("modify", it as String))
+        }
     }
 
     fun buy(view: View) {
-        mActivity.startActivity(Intent(context, ChatActivity::class.java).putExtra("buy", binding.item))
+        //mActivity.startActivity(Intent(context, ChatActivity::class.java).putExtra("buy", binding.item))
     }
 
     companion object {

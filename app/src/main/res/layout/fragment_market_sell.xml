@@ -19,8 +19,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:background="@color/windowBackground">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -35,141 +34,135 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="16dp" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/marketSellTitleTextInputLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:boxBackgroundColor="#FFFFFF"
-                    app:boxBackgroundMode="none"
-                    app:errorEnabled="false">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/marketSellTitleTextInputEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:addTextChangedListener="@{textWatcher}"
-                        android:hint="@string/prompt_title"
-                        android:text="@{item == null ? null : item.title}"
-                        android:maxLength="24"
-                        android:padding="8dp"
-                        android:singleLine="true" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorPrimary" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="24dp" />
-
-                <Spinner
-                    android:id="@+id/marketSellCategorySpinner"
-                    style="@android:style/Widget.Material.Light.Spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/category"
-                    android:paddingStart="4dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="4dp"
-                    android:paddingBottom="8dp"
-                    android:spinnerMode="dropdown" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorPrimary" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="16dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="8dp">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/marketSellPriceTextInputLayout"
+                        android:id="@+id/marketSellTitleTextInputLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:padding="8dp"
                         app:boxBackgroundColor="#FFFFFF"
                         app:boxBackgroundMode="none"
-                        app:errorEnabled="false">
+                        app:errorEnabled="false"
+                        app:hintEnabled="true">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/marketSellPriceTextInputEditText"
+                            android:id="@+id/marketSellTitleTextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:addTextChangedListener="@{textWatcher}"
-                            android:hint="@string/prompt_price"
-
-                            android:inputType="number"
-                            android:letterSpacing="0.2"
-                            android:maxLength="16"
+                            android:hint="@string/prompt_title"
+                            android:maxLength="24"
                             android:padding="8dp"
-                            android:singleLine="true" />
-
+                            android:singleLine="true"
+                            android:text="@{item == null ? null : item.title}" />
                     </com.google.android.material.textfield.TextInputLayout>
+                </androidx.cardview.widget.CardView>
 
-                    <CheckBox
-                        android:id="@+id/marketSellNegotiationCheckBox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="12dp"
-                        android:text="@string/action_negotiation" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorPrimary"
-                    android:padding="16dp" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="16dp" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/marketSellContentTextInputLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:boxBackgroundColor="#FFFFFF"
-                    app:boxBackgroundMode="none"
-                    app:errorEnabled="false">
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="8dp">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/marketSellContentTextInputEditText"
+                    <Spinner
+                        android:id="@+id/marketSellCategorySpinner"
+                        style="@android:style/Widget.Material.Light.Spinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:addTextChangedListener="@{textWatcher}"
-                        android:gravity="top|left"
-                        android:hint="@string/prompt_content"
-                        android:text="@{item == null ? null : item.marketID}"
-                        android:lineSpacingMultiplier="1.5"
-                        android:minLines="4"
-                        android:padding="8dp" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:entries="@array/category"
+                        android:paddingStart="8dp"
+                        android:paddingTop="16dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="16dp"
+                        android:spinnerMode="dropdown" />
+                </androidx.cardview.widget.CardView>
 
-                <View
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorPrimary" />
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="8dp">
 
-                <Space
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:padding="8dp">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/marketSellPriceTextInputLayout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:boxBackgroundColor="#FFFFFF"
+                            app:boxBackgroundMode="none"
+                            app:errorEnabled="false"
+                            app:hintEnabled="true">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/marketSellPriceTextInputEditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:addTextChangedListener="@{textWatcher}"
+                                android:hint="@string/prompt_price"
+                                android:inputType="number"
+                                android:letterSpacing="0.1"
+                                android:maxLength="16"
+                                android:padding="8dp"
+                                android:singleLine="true"
+                                android:text="@{item == null ? null : item.price}" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <CheckBox
+                            android:id="@+id/marketSellNegotiationCheckBox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:checked="@{item.negotiation}"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="12dp"
+                            android:text="@string/action_negotiation" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="16dp" />
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="8dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/marketSellContentTextInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        app:boxBackgroundColor="#FFFFFF"
+                        app:boxBackgroundMode="none"
+                        app:errorEnabled="false"
+                        app:hintEnabled="true">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/marketSellContentTextInputEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:addTextChangedListener="@{textWatcher}"
+                            android:gravity="top|left"
+                            android:hint="@string/prompt_content"
+                            android:lineSpacingMultiplier="1.5"
+                            android:minLines="4"
+                            android:padding="8dp"
+                            android:text="@{item == null ? null : item.content}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </androidx.cardview.widget.CardView>
 
             </LinearLayout>
         </ScrollView>
@@ -178,6 +171,8 @@
             android:id="@+id/linearLayout2"
             android:layout_width="0dp"
             android:layout_height="48dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:orientation="horizontal"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -204,7 +199,8 @@
                 android:layout_weight="1"
                 android:enabled="false"
                 android:onClick="@{item == null ? fragment::sell : fragment::modify}"
-                android:text="@{item == null ? @string/action_selling : @string/action_modify}" />
+                android:text="@{item == null ? @string/action_selling : @string/action_modify}"
+                tools:text="판매하기/수정하기" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

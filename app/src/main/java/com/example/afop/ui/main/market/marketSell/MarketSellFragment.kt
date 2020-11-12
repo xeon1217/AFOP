@@ -3,7 +3,6 @@ package com.example.afop.ui.main.market.marketSell
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import com.example.afop.R
 import com.example.afop.util.ActivityExtendFunction
 import com.example.afop.data.model.MarketDTO
 import com.example.afop.databinding.FragmentMarketSellBinding
-import com.example.afop.databinding.FragmentMarketSellBindingImpl
 import kotlinx.android.synthetic.main.fragment_market_sell.*
 
 /**
@@ -33,20 +31,22 @@ class MarketSellFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_market_sell, container, false)
-        viewModel = ViewModelProvider(
-            viewModelStore,
-            MarketSellViewModelFactory()
-        ).get(MarketSellViewModel::class.java)
+        viewModel = ViewModelProvider(viewModelStore, MarketSellViewModelFactory()).get(MarketSellViewModel::class.java)
         mActivity = activity as ActivityExtendFunction
         subscribeUi()
 
         return binding.root
     }
 
-    private fun subscribeUi() {
+    override fun onStart() {
+        super.onStart()
+
         arguments?.get("modify")?.let {
-            binding.item = it as MarketDTO
+            viewModel.getItem(it as String)
         }
+    }
+
+    private fun subscribeUi() {
         binding.fragment = this
         binding.textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -77,36 +77,7 @@ class MarketSellFragment : Fragment() {
             if (result == null) {
                 return@Observer
             }
-            result.apply {
-                result.result?.let {
-                    (it as MarketSellResult).let {
-                        mActivity.hideLoading()
-                        AlertDialog.Builder(mActivity).apply {
-                            setCancelable(false)
-                            setTitle(getString(R.string.dialog_title_success))
-                            setMessage(getString(R.string.dialog_message_writing_success))
-                            setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                                mActivity.finish()
-                            }
-                        }.show()
-                    }
-                }
-                error?.let {
-                    AlertDialog.Builder(mActivity).apply {
-                        setCancelable(false)
-                        setTitle(getString(R.string.dialog_title_fail))
-                        setMessage(getString(R.string.dialog_message_writing_fail))
-                        setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
-                            mActivity.finish()
-                        }
-                    }.show()
-                }
-            }
         })
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     fun sell(view: View) {

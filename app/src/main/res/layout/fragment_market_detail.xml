@@ -89,17 +89,23 @@
                         android:id="@+id/textView4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{item.category}" />
+                        android:text="@{item.category}"
+                        tools:text="카테고리" />
 
-                    <Space
-                        android:layout_width="8dp"
-                        android:layout_height="16dp" />
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:text="@string/char_divider" />
 
                     <TextView
                         android:id="@+id/textView5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{util.Companion.timeDiff(item.timeStamp)}" />
+                        android:text="@{util.Companion.timeDiff(item.timeStamp)}"
+                        tools:text="시간" />
                 </LinearLayout>
 
                 <Space

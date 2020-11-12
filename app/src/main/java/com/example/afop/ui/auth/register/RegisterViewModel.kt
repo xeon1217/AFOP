@@ -3,9 +3,9 @@ package com.example.afop.ui.auth.register
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.afop.data.model.Result
 import com.example.afop.util.UiViewModel
 import com.example.afop.data.repository.RegisterRepository
+import com.example.afop.data.response.Result
 
 class RegisterViewModel(private val repository: RegisterRepository) : UiViewModel() {
     private val _registerState = MutableLiveData<RegisterState>()
@@ -14,23 +14,15 @@ class RegisterViewModel(private val repository: RegisterRepository) : UiViewMode
     private var _result = MutableLiveData<Result<*>>()
     val result: LiveData<Result<*>> = _result
 
-    fun checkEmail(email: String) {
-        repository.checkEmail(email) { result ->
-            _result.postValue(result)
-        }
-    }
 
-    fun checkNickName(nickName: String) {
-        repository.checkNickName(nickName) { result ->
+    fun verifyEmail(email: String) {
+        repository.verifyEmail(email) { result ->
             _result.postValue(result)
         }
     }
 
     fun register(email: String, name: String, password: String, verifyPassword: String, nickName: String) {
-        repository.register(email = email, name = name, password = password, verifyPassword = verifyPassword, nickName = nickName
-        ) { result ->
-            _result.postValue(result)
-        }
+
     }
 
     fun registerStateChanged(email: String, name: String, password: String, verifyPassword: String, nickName: String, state: View) {

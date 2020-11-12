@@ -69,5 +69,16 @@ class Util {
                 return "ERROR"
             }
         }
+
+        fun money_comma(_money: String): String {
+            try {
+                val format_kor = DecimalFormat("#,###")
+                var result = format_kor.format(_money.toLong())
+                result += "원"
+                return result
+            } catch (e: Exception) {
+                return "ERROR"
+            }
+        }
     }
 }

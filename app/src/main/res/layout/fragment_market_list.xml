@@ -5,25 +5,33 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/windowBackground">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/marketRecyclerView"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fadeScrollbars="false"
-            android:scrollbarSize="10dp"
-            android:scrollbars="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            tools:listitem="@layout/item_market_summary">
+            android:id="@+id/marketRefreshLayout">
 
-        </androidx.recyclerview.widget.RecyclerView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/marketRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadeScrollbars="false"
+                android:scrollbarSize="10dp"
+                android:scrollbars="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:listitem="@layout/item_market_summary">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

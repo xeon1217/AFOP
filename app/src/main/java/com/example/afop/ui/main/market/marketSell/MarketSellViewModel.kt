@@ -3,7 +3,6 @@ package com.example.afop.ui.main.market.marketSell
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.afop.data.model.MarketDTO
-import com.example.afop.data.model.Result
 import com.example.afop.util.UiViewModel
 import com.example.afop.data.repository.MarketRepository
 
@@ -11,17 +10,23 @@ class MarketSellViewModel (private val repository: MarketRepository) : UiViewMod
     private var _sellState = MutableLiveData<MarketSellState>()
     val state: LiveData<MarketSellState> = _sellState
 
-    private var _result = MutableLiveData<Result<*>>()
-    val result: LiveData<Result<*>> = _result
+    private var _result = MutableLiveData<Result<MarketDTO>>()
+    val result: LiveData<Result<MarketDTO>> = _result
 
-    fun sell(item: MarketDTO) {
-        repository.sell(item) { result ->
+    fun sell(_item: MarketDTO) {
+        repository.sell(_item) { result ->
             _result.postValue(result)
         }
     }
 
-    fun modify(item: MarketDTO) {
-        repository.modify(item) { result ->
+    fun modify(_item: MarketDTO) {
+        repository.modify(_item) { result ->
+            _result.postValue(result)
+        }
+    }
+
+    fun getItem(_marketID: String) {
+        repository.getItem(_marketID) { result ->
             _result.postValue(result)
         }
     }

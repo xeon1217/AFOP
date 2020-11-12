@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:onClick="@{fragment::checkEmail}"
+                android:onClick="@{fragment::verifyEmail}"
                 android:text="@string/action_register_check_email" />
 
         </LinearLayout>
@@ -131,7 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:onClick="@{fragment::checkForm}"
+                android:onClick="@{fragment::verifyForm}"
                 android:text="@string/action_register" />
 
         </LinearLayout>

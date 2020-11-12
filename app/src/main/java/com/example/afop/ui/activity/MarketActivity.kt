@@ -26,11 +26,14 @@ class MarketActivity : ActivityExtendFunction() {
         setContentView(R.layout.activity_market)
         if (savedInstanceState == null) { }
 
-        intent.getSerializableExtra("item")?.let {
-            switchFragment(MarketDetailFragment.newInstance(), bundle = bundleOf("item" to it))
+        intent.getStringExtra("detail")?.let {
+            switchFragment(MarketDetailFragment.newInstance(), bundle = bundleOf("detail" to it))
         }
-        intent.getSerializableExtra("modify")?.let {
+        intent.getStringExtra("modify")?.let {
             switchFragment(MarketSellFragment.newInstance(), bundle = bundleOf("modify" to it))
+        }
+        intent.getStringExtra("sell")?.let {
+            switchFragment(MarketSellFragment.newInstance())
         }
     }
 
