@@ -20,4 +20,4 @@ data class MarketDTO (
     var lookUpCount: Long? = null, //조회횟수
     var category: String? = null,
     var photos: List<String>? = null //사진, 10장까지
-) : Serializable
+)

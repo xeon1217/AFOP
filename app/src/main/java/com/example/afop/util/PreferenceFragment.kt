@@ -31,7 +31,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
                 setTitle(getString(R.string.dialog_title_logout))
                 setMessage(getString(R.string.dialog_message_logout))
                 setPositiveButton(getString(R.string.action_yes)) { _, _ ->
-                    dataSource.logout()
+                    //dataSource.logout()
                     mActivity.startActivity(Intent(mActivity, LoginActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
                 }
                 setNegativeButton(getString(R.string.action_no)) {_, _->
