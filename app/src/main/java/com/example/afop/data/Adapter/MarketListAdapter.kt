@@ -2,6 +2,7 @@ package com.example.afop.data.Adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -11,9 +12,7 @@ import com.example.afop.ui.activity.MarketActivity
 import com.example.afop.data.model.MarketDTO
 import com.example.afop.databinding.ItemMarketSummaryBinding
 
-class MarketListAdapter(val context: Context?) : ListAdapter<MarketDTO, MarketListAdapter.ViewHolder>(
-    MarketListDiffCallback()
-) {
+class MarketListAdapter(val context: Context?) : ListAdapter<MarketDTO, MarketListAdapter.ViewHolder>(MarketListDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemMarketSummaryBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
@@ -21,6 +20,10 @@ class MarketListAdapter(val context: Context?) : ListAdapter<MarketDTO, MarketLi
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
+    }
+
+    override fun getItem(position: Int): MarketDTO {
+        return super.getItem(position)
     }
 
     inner class ViewHolder(val binding: ItemMarketSummaryBinding) : RecyclerView.ViewHolder(binding.root) {

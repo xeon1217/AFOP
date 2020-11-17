@@ -2,8 +2,10 @@ package com.example.afop.ui.auth.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.afop.data.dataSource.DataSource
 import com.example.afop.util.UiViewModel
 import com.example.afop.data.repository.LoginRepository
+import com.example.afop.data.response.Result
 
 class LoginViewModel(private val repository: LoginRepository) : UiViewModel() {
     private val _loginPrompt = MutableLiveData<LoginState>()
@@ -13,28 +15,19 @@ class LoginViewModel(private val repository: LoginRepository) : UiViewModel() {
     val result: LiveData<Result<*>> = _result
 
     fun login(email: String, password: String) {
-        /*
         repository.login(email = email, password = password) { result ->
             _result.postValue(result)
         }
-
-         */
     }
 
     fun autoLogin() {
-        /*
         repository.autoLogin { result ->
             _result.postValue(result)
         }
-
-         */
     }
 
     fun setAutoLogin(value: Boolean) {
-        /*
-        repository.setAutoLogin(value)
-
-         */
+        DataSource.setAutoLogin(value)
     }
 
     fun loginDataChanged(email: String, password: String) {

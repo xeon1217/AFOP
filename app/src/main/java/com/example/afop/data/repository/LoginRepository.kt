@@ -1,9 +1,9 @@
 package com.example.afop.data.repository
 
+import android.util.Log
 import com.example.afop.data.dataSource.DataSource
 import com.example.afop.data.response.Result
-import com.example.afop.ui.auth.login.LoginResult
-import com.example.afop.ui.auth.register.RegisterResponse
+import com.example.afop.ui.auth.login.LoginResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -21,7 +21,20 @@ class LoginRepository(private val dataSource: DataSource) {
                 )
             ).apply {
                 response?.let {
-                    callback(Result(data = data, response = RegisterResponse(isRegister = true)))
+                    callback(Result(data = data, response = LoginResponse(isLogin = true)))
+                }
+                error?.let {
+                    callback(Result(data = data, error = error))
+                }
+            }
+        }
+    }
+
+    fun autoLogin(callback: (Result<*>) -> Unit) {
+        CoroutineScope(IO).launch {
+            dataSource.autoLogin().apply {
+                response?.let {
+                    callback(Result(data = data, response = LoginResponse(isLogin = true)))
                 }
                 error?.let {
                     callback(Result(data = data, error = error))

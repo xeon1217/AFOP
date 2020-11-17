@@ -1,11 +1,14 @@
 package com.example.afop.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.example.afop.R
 import com.example.afop.data.dataSource.DataSource
 import com.example.afop.databinding.ActivityMainBinding
+import com.example.afop.service.ForcedTerminationService
 import com.example.afop.ui.main.MainCommunityFragment
 import com.example.afop.ui.main.MainHomeFragment
 import com.example.afop.ui.main.MainInformationFragment
@@ -25,10 +28,12 @@ class MainActivity : ActivityExtendFunction() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initApp()
 
         //setContentView(R.layout.activity_main)
 
-        var binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        var binding: ActivityMainBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         if (savedInstanceState == null) {
             switchFragment(MainHomeFragment.newInstance())
@@ -36,7 +41,7 @@ class MainActivity : ActivityExtendFunction() {
         initToolbar()
 
         mainBottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            if(mainBottomNavigationView.selectedItemId != item.itemId) {
+            if (mainBottomNavigationView.selectedItemId != item.itemId) {
                 when (item.itemId) {
                     R.id.menuItemHome -> {
                         switchFragment(MainHomeFragment.newInstance())
@@ -59,6 +64,23 @@ class MainActivity : ActivityExtendFunction() {
         }
     }
 
+    fun initApp() {
+        DataSource.init(this)
+        startService(Intent(this, ForcedTerminationService::class.java))
+        if (!DataSource.isLogin() && DataSource.getAutoLogin()) {
+            goToLogin(null)
+        }
+    }
+
+    fun goToLogin(view: View?) {
+        startActivity(
+            Intent(
+                this,
+                LoginActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
+    }
+
     //툴바 관련
     private fun initToolbar() {
         setSupportActionBar(mainToolbar)
@@ -70,7 +92,7 @@ class MainActivity : ActivityExtendFunction() {
 
     override fun onBackPressed() {
         if (System.currentTimeMillis() - lastTimeBackPressed < 2000) {
-            //DataSource.exit()
+            DataSource.exit()
             finishAffinity()
             System.runFinalization()
             exitProcess(0)

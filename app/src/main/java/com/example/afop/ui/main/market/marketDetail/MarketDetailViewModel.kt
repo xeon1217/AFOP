@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.afop.data.model.MarketDTO
 import com.example.afop.data.repository.MarketRepository
+import com.example.afop.data.response.Response
 import com.example.afop.util.UiViewModel
+import com.example.afop.data.response.Result
 
 class MarketDetailViewModel(private val repository: MarketRepository) : UiViewModel() {
     private var _result = MutableLiveData<Result<MarketDTO>>()
@@ -14,9 +16,9 @@ class MarketDetailViewModel(private val repository: MarketRepository) : UiViewMo
         return repository.getUID()
     }
 
-    fun getItem(_marketID: String) {
-        repository.getItem(_marketID) { result ->
-            _result.postValue(result)
+    fun getItem(marketID: Long) {
+        repository.getItem(marketID) { result ->
+            _result.postValue(result.copy(response = MarketDetailResponse(isSuccessGetItem = result.response?.success)))
         }
     }
 }

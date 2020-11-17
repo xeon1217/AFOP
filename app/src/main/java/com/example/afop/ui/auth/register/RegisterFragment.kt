@@ -88,18 +88,23 @@ class RegisterFragment : Fragment() {
             mActivity.hideLoading()
             AlertDialog.Builder(mActivity).apply {
                 setCancelable(false)
-
                 result.response?.let {
                     (it as RegisterResponse).apply {
                         isVerifyEmail?.apply {
                             setTitle(getString(R.string.dialog_title_success))
                             setMessage(getString(R.string.dialog_message_can_email))
-                            setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                            setPositiveButton(getString(R.string.action_use)) { _, _ ->
+                                useEmail()
+                            }
+                            setNegativeButton(getString(R.string.action_not_use)) { _, _ ->
+                                notUseEmail()
                             }
                         }
                         isRegister?.apply {
-                            setTitle(getString(R.string.dialog_title_fail))
+                            setTitle(getString(R.string.dialog_title_success))
+                            setMessage(getString(R.string.dialog_message_register_email_verify))
                             setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                mActivity.finish()
                             }
                         }
                     }
@@ -123,6 +128,20 @@ class RegisterFragment : Fragment() {
         })
     }
 
+    //이메일 중복 검사 후 사용함 누름
+    fun useEmail() {
+        registerFormLayout.visibility = View.VISIBLE
+        registerCheckEmailButton.visibility = View.GONE
+        registerEmailTextInputEditText.isEnabled = false
+    }
+
+    //이메일 중복 검사 후 사용하지 않음 누름
+    fun notUseEmail() {
+        registerFormLayout.visibility = View.GONE
+        registerEmailTextInputEditText.isEnabled = true
+        registerEmailTextInputEditText.setText("")
+    }
+
     //회원가입 전 이메일 중복 검사
     fun verifyEmail(view: View) {
         mActivity.showLoading()
@@ -134,23 +153,28 @@ class RegisterFragment : Fragment() {
         AlertDialog.Builder(mActivity).apply {
             setMessage(
                 "${getString(R.string.dialog_message_submit_register_form)}\n" +
-                        "Email : ${registerEmailTextInputEditText.text.toString()}\n" +
-                        "Name : ${registerNameTextInputEditText.text.toString()}\n" +
-                        "NickName : ${registerNickNameTextInputEditText.text.toString()}"
+                        "이메일 : ${registerEmailTextInputEditText.text.toString()}\n" +
+                        "이  름 : ${registerNameTextInputEditText.text.toString()}\n" +
+                        "닉네임 : ${registerNickNameTextInputEditText.text.toString()}"
             )
             setPositiveButton(getString(R.string.action_register)) { _, _ ->
-                mActivity.showLoading()
-                viewModel.register(
-                    email = registerEmailTextInputEditText.text.toString(),
-                    name = registerNameTextInputEditText.text.toString(),
-                    password = registerPasswordTextInputEditText.text.toString(),
-                    verifyPassword = registerVerifyPasswordTextInputEditText.text.toString(),
-                    nickName = registerNickNameTextInputEditText.text.toString()
-                )
+                register()
             }
             setNegativeButton(getString(R.string.action_cancel)) { _, _ -> }
             show()
         }
+    }
+
+    //회원가입
+    fun register() {
+        mActivity.showLoading()
+        viewModel.register(
+            email = registerEmailTextInputEditText.text.toString(),
+            password = registerPasswordTextInputEditText.text.toString(),
+            verifyPassword = registerVerifyPasswordTextInputEditText.text.toString(),
+            name = registerNameTextInputEditText.text.toString(),
+            nickName = registerNickNameTextInputEditText.text.toString()
+        )
     }
 
     companion object {

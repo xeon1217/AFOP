@@ -41,9 +41,9 @@ class RegisterRepository(private val dataSource: DataSource) {
 
     fun register(
         email: String,
-        name: String,
         password: String,
         verifyPassword: String,
+        name: String,
         nickName: String,
         callback: (Result<*>) -> Unit
     ) {

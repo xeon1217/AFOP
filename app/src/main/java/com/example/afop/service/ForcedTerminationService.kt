@@ -14,7 +14,7 @@ class ForcedTerminationService : Service() {
     override fun onTaskRemoved(rootIntent: Intent?) {
         Log.d("termination Service", "onTaskRemoved!")
         try {
-            //DataSource.exit()
+            DataSource.exit()
         } catch (e: Exception) { }
     }
 

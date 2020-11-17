@@ -3,29 +3,48 @@ package com.example.afop.data.repository
 import android.util.Log
 import com.example.afop.data.dataSource.DataSource
 import com.example.afop.data.model.MarketDTO
+import com.example.afop.data.response.Response
+import com.example.afop.ui.auth.register.RegisterResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import com.example.afop.data.response.Result
+import com.example.afop.ui.main.market.marketDetail.MarketDetailResponse
+import com.example.afop.ui.main.market.marketList.MarketListResponse
+import com.example.afop.ui.main.market.marketSell.MarketSellResponse
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 마켓 관련 레포지토리
  */
 class MarketRepository(private val dataSource: DataSource) {
-    fun sell(_item: MarketDTO, callback: (Result<MarketDTO>) -> Unit) {
-        /*
+    fun sell(item: MarketDTO, callback: (Result<*>) -> Unit) {
         CoroutineScope(IO).launch {
-            try {
-                dataSource.marketPutItem(_item)
-                callback(Result(data = null, result = MarketResult(isSuccessPutItem = true)))
-            } catch (e: Exception) {
-                callback(Result(data = null, error = e))
+            item.timeStamp = Date().time
+            item.sellerUID = DataSource.getUser().uid
+            dataSource.marketPutItem(item = item).apply {
+                response?.let { response ->
+                    callback(Result(data = data, response = response))
+                }
+                error?.let { error ->
+                    callback(Result(data = data, error = error))
+                }
             }
         }
-
-         */
     }
 
-    fun getList(callback: (Result<List<MarketDTO>>) -> Unit) {
+    fun getList(title: String? = null, last_id_cursor: Long?, callback: (Result<ArrayList<MarketDTO?>>) -> Unit) {
+        CoroutineScope(IO).launch {
+            dataSource.marketGetList(title = title, last_id_cursor = last_id_cursor).apply {
+                response?.let { response ->
+                    callback(Result(data = data, response = response))
+                }
+                error?.let { error ->
+                    callback(Result(data = data, error = error))
+                }
+            }
+        }
         /*
         CoroutineScope(IO).launch {
             try {
@@ -61,24 +80,17 @@ class MarketRepository(private val dataSource: DataSource) {
          */
     }
 
-    fun getItem(_marketID: String, callback: (Result<MarketDTO>) -> Unit) {
-        /*
+    fun getItem(marketID: Long, callback: (Result<MarketDTO>) -> Unit) {
         CoroutineScope(IO).launch {
-            try {
-                var item = MarketDTO()
-                dataSource.marketGetItem(_marketID).let { _document ->
-                    _document.toObject(MarketDTO::class.java)?.let { _item ->
-                        _item.marketID = _document.id
-                        item = _item
-                    }
+            dataSource.marketGetItem(marketID).apply {
+                response?.let { response ->
+                    callback(Result(data = data, response = response))
                 }
-                callback(Result(data = item, result = MarketResult(isSuccessGetItem = true)))
-            } catch (e: Exception) {
-                callback(Result(data = null, error = e))
+                error?.let { error ->
+                    callback(Result(data = data, error = error))
+                }
             }
         }
-
-         */
     }
 
     fun modify(_item: MarketDTO, callback: (Result<MarketDTO>) -> Unit) {
@@ -96,6 +108,6 @@ class MarketRepository(private val dataSource: DataSource) {
     }
 
     fun getUID(): String {
-        return "dataSource.getUID()"
+        return DataSource.getUser().uid
     }
 }

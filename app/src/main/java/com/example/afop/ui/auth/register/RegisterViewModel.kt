@@ -21,8 +21,10 @@ class RegisterViewModel(private val repository: RegisterRepository) : UiViewMode
         }
     }
 
-    fun register(email: String, name: String, password: String, verifyPassword: String, nickName: String) {
-
+    fun register(email: String, password: String, verifyPassword: String, name: String, nickName: String) {
+        repository.register(email = email, password = password, verifyPassword = verifyPassword, name = name, nickName =  nickName) { result ->
+            _result.postValue(result)
+        }
     }
 
     fun registerStateChanged(email: String, name: String, password: String, verifyPassword: String, nickName: String, state: View) {

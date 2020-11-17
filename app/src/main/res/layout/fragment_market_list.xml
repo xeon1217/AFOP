@@ -3,15 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.example.afop.ui.main.market.marketList.MarketListViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/windowBackground">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/marketRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/marketRefreshLayout">
+            android:visibility="@{viewModel.marketList.size > 0 ? View.GONE : View.VISIBLE}"
+            tools:layout_editor_absoluteX="130dp"
+            tools:layout_editor_absoluteY="67dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/marketRecyclerView"
@@ -32,6 +44,18 @@
             </androidx.recyclerview.widget.RecyclerView>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_empty_data"
+            android:textSize="24sp"
+            android:visibility="@{viewModel.marketList.size > 0 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/marketRefreshLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

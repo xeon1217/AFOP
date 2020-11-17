@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <Preference
+        android:visibility="gone"
+        app:iconSpaceReserved="false"
+        app:key="login"
+        app:title="@string/action_log_in"></Preference>
+</PreferenceScreen>

@@ -18,7 +18,5 @@ class LoginActivity : ActivityExtendFunction() {
         if (savedInstanceState == null) {
             switchFragment(LoginFragment.newInstance())
         }
-        DataSource.init(this)
-        startService(Intent(this, ForcedTerminationService::class.java))
     }
 }

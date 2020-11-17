@@ -14,7 +14,6 @@
             type="com.example.afop.util.Util" />
     </data>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120dp"
@@ -32,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                app:bind_image="@{(item.photos.size() > 0) ? item.photos.get(0) : null}"
+                app:bind_image="@{(item.images.size() > 0) ? item.images.get(0) : null}"
                 app:bind_image_error="@{@drawable/ic_baseline_image_not_supported_24}"
                 tools:srcCompat="@drawable/ic_launcher_foreground" />
         </androidx.cardview.widget.CardView>

@@ -21,17 +21,36 @@ class PreferenceFragment : PreferenceFragmentCompat() {
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(R.xml.preferences)
         dataSource = DataSource()
-        val logoutPreference: Preference? = findPreference("logout")
 
+        if(DataSource.isLogin()) { //로그인이 되어있을 경우 보여줄 메뉴
+            addPreferencesFromResource(R.xml.preferences_after_login)
+            createLogout()
+        } else { //로그인이 되어있지 않은 경우 보여줄 메뉴
+            addPreferencesFromResource(R.xml.preferences_before_login)
+            createLogin()
+        }
+    }
+
+    private fun createLogin() {
+        val loginPreference: Preference? = findPreference("login")
+        loginPreference?.setOnPreferenceClickListener {
+            it.isVisible = true
+            mActivity.startActivity(Intent(mActivity, LoginActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            true
+        }
+    }
+
+    private fun createLogout() {
+        val logoutPreference: Preference? = findPreference("logout")
         logoutPreference?.setOnPreferenceClickListener {
+            it.isVisible = true
             AlertDialog.Builder(mActivity).apply {
                 setCancelable(false)
                 setTitle(getString(R.string.dialog_title_logout))
                 setMessage(getString(R.string.dialog_message_logout))
                 setPositiveButton(getString(R.string.action_yes)) { _, _ ->
-                    //dataSource.logout()
+                    DataSource.logout()
                     mActivity.startActivity(Intent(mActivity, LoginActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
                 }
                 setNegativeButton(getString(R.string.action_no)) {_, _->

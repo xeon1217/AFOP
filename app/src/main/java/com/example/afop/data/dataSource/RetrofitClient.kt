@@ -14,9 +14,10 @@ class RetrofitClient {
         private const val PORT = "8081" // 포트
         private const val ADDRESS = "jungyoon.dynu.net" // 서버 주소
         private const val ADDRESS_LOCAL = "192.168.1.230" // 서버 주소
+        private const val ADDRESS_PC = "192.168.1.10" // 서버 주소
         private const val ADDRESS_AVD = "10.0.2.2" // 서버 주소
         private const val ADDRESS_LOCALHOST = "localhost" // 서버 주소
-        private const val BASE_URL = "${PROTOCOL_HTTP}${ADDRESS_AVD}:${PORT}"
+        private const val BASE_URL = "${PROTOCOL_HTTP}${ADDRESS}:${PORT}"
         val gson = GsonBuilder().setLenient().create()
         val okHttpClient = OkHttpClient.Builder()
             .connectTimeout(5, TimeUnit.SECONDS) // 연결에 성공하는데 기다리는 시간

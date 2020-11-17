@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.afop">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -15,16 +16,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AFOP">
         <activity android:name=".ui.activity.MarketActivity" />
-        <activity android:name=".ui.activity.MarketActivity" />
+        <activity android:name=".ui.activity.MarketActivity"
+            tools:ignore="DuplicateActivity" />
         <activity android:name=".ui.activity.ResetPasswordActivity" />
         <activity
             android:name=".ui.activity.RegisterActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name=".ui.activity.LoginActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name=".ui.activity.MainActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
