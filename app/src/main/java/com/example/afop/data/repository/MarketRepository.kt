@@ -21,28 +21,34 @@ import kotlin.collections.HashMap
 class MarketRepository(private val dataSource: DataSource) {
     fun sell(item: MarketDTO, callback: (Result<*>) -> Unit) {
         CoroutineScope(IO).launch {
+            var mItem: MarketDTO
             item.timeStamp = Date().time
             item.sellerUID = DataSource.getUser().uid
 
-            val imageList: ArrayList<MultipartBody.Part> = ArrayList()
-            val newFileNames: ArrayList<String> = ArrayList()
+            if(item.images.size > 0) {
+                val imageList: ArrayList<MultipartBody.Part> = ArrayList()
+                val newFileNames: ArrayList<String> = ArrayList()
 
-            for (i in 0 until item.images.size) {
-                val file = File(item.images[i])
-                val newFileName = "${item.sellerUID}-${UUID.randomUUID()}.${item.images[i].split(".").last()}"
-                newFileNames.add(newFileName)
+                for (i in 0 until item.images.size) {
+                    val file = File(item.images[i])
+                    val newFileName = "${item.sellerUID}-${UUID.randomUUID()}.${item.images[i].split(".").last()}"
+                    newFileNames.add(newFileName)
 
-                val newFile = file.copyTo(target = File("${dataSource.getCacheDir()}/${newFileName}"))
-                val requestFile: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), newFile)
-                val uploadFile = MultipartBody.Part.createFormData("files", newFile.name, requestFile)
-                imageList.add(uploadFile)
+                    val newFile = file.copyTo(target = File("${dataSource.getCacheDir()}/${newFileName}"))
+                    val requestFile: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), newFile)
+                    val uploadFile = MultipartBody.Part.createFormData("files", newFile.name, requestFile)
+                    imageList.add(uploadFile)
 
-                Log.d("list", newFileName)
-                Log.d("cache", "${dataSource.getCacheDir()}/${newFileName}")
+                    Log.d("list", newFileName)
+                    Log.d("cache", "${dataSource.getCacheDir()}/${newFileName}")
+                }
+                mItem = item.copy(images = newFileNames)
+                dataSource.filePutList(imageList)
+            } else {
+                mItem = item
             }
 
-            dataSource.filePutList(imageList)
-            dataSource.marketPutItem(item = item.copy(images = newFileNames)).apply {
+            dataSource.marketPutItem(item = mItem).apply {
                 response?.let { response ->
                     callback(Result(data = data, response = response))
                 }

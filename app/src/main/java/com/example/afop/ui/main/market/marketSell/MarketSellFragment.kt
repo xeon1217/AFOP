@@ -183,7 +183,7 @@ class MarketSellFragment : Fragment() {
         binding.item?.negotiation = binding.marketSellNegotiationCheckBox.isChecked
         binding.item?.category = binding.marketSellCategorySpinner.selectedItemId.toString()
 
-        val intent = Intent(Intent.ACTION_PICK).apply {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
