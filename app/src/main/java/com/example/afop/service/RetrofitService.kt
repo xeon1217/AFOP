@@ -5,6 +5,8 @@ import com.example.afop.data.model.UserDTO
 import com.example.afop.data.response.Response
 import com.example.afop.data.response.Result
 import kotlinx.coroutines.Deferred
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -31,11 +33,24 @@ interface RetrofitService {
      * market 관련
      */
     @POST("/market/item")
-    suspend fun marketPutItem(@Header("X-AUTH-TOKEN") token: String, @Body item: MarketDTO): Result<*>
+    suspend fun marketPutItem(@Header("X-AUTH-TOKEN") token: String, @Body item: MarketDTO): Result<MarketDTO>
     @PUT("market/item")
-    suspend fun marketModifyItem(@Header("X-AUTH-TOKEN") token: String, @Body item: MarketDTO, @Query("market-id") marketID: String): Result<*>
+    suspend fun marketModifyItem(@Header("X-AUTH-TOKEN") token: String, @Body item: MarketDTO): Result<MarketDTO>
     @GET("/market/item")
     suspend fun marketGetItem(@Query("market_id") marketID: Long): Result<MarketDTO>
     @GET("/market/items")
     suspend fun marketGetList(@Query("title") title: String?, @Query("last_id_cursor") last_id_cursor: Long?): Result<ArrayList<MarketDTO?>>
+
+    /**
+     * 파일 업로드/다운로드 관련
+     */
+    @Multipart
+    @POST("/files/upload")
+    suspend fun filePutItem(@Header("X-AUTH-TOKEN") token: String, @Part file: MultipartBody.Part): Result<*>
+    @Multipart
+    @POST("/files/uploads")
+    suspend fun filePutList(@Header("X-AUTH-TOKEN") token: String, @Part files: ArrayList<MultipartBody.Part>): Result<*>
+    @Multipart
+    @POST("/files/download/{fileName}")
+    suspend fun fileGetList()
 }

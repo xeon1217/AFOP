@@ -1,9 +1,13 @@
 package com.example.afop.ui.activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.example.afop.R
 import com.example.afop.data.dataSource.DataSource
@@ -31,6 +35,15 @@ class MainActivity : ActivityExtendFunction() {
         initApp()
 
         //setContentView(R.layout.activity_main)
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    1);
+            }
+        }
 
         var binding: ActivityMainBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_main)

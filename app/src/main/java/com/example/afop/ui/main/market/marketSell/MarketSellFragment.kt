@@ -1,25 +1,41 @@
 package com.example.afop.ui.main.market.marketSell
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.ClipData
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.os.FileUtils
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.afop.R
-import com.example.afop.data.dataSource.DataSource
 import com.example.afop.util.ActivityExtendFunction
 import com.example.afop.data.model.MarketDTO
-import com.example.afop.data.response.ErrorCode
 import com.example.afop.databinding.FragmentMarketSellBinding
-import com.example.afop.ui.main.market.marketList.MarketListResponse
 import kotlinx.android.synthetic.main.fragment_market_sell.*
+import java.io.File
 
 /**
  * 마켓에 판매글을 올릴 때 사용
@@ -36,10 +52,8 @@ class MarketSellFragment : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_market_sell, container, false)
         binding.fragment = this
-        viewModel = ViewModelProvider(
-            viewModelStore,
-            MarketSellViewModelFactory()
-        ).get(MarketSellViewModel::class.java)
+        binding.item = MarketDTO()
+        viewModel = ViewModelProvider(viewModelStore, MarketSellViewModelFactory()).get(MarketSellViewModel::class.java)
         mActivity = activity as ActivityExtendFunction
         subscribeUi()
 
@@ -48,10 +62,7 @@ class MarketSellFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-
-        arguments?.getLong("modify")?.let {
-            viewModel.getItem(it)
-        }
+        arguments?.getLong("modify")?.let { viewModel.getItem(it) }
     }
 
     private fun subscribeUi() {
@@ -100,7 +111,11 @@ class MarketSellFragment : Fragment() {
                             binding.item = result.data as MarketDTO?
                         }
                         isSuccessModifyItem?.let {
-                            //viewModel.modify()
+                            setTitle(getString(R.string.dialog_title_success))
+                            setMessage(getString(R.string.dialog_message_writing_success))
+                            setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
+                                mActivity.finish()
+                            }.show()
                         }
                     }
                 }
@@ -122,7 +137,7 @@ class MarketSellFragment : Fragment() {
     fun sell(view: View) {
         mActivity.showLoading()
         viewModel.sell(
-            MarketDTO(
+            binding.item!!.copy(
                 title = marketSellTitleTextInputEditText.text.toString(),
                 price = marketSellPriceTextInputEditText.text.toString(),
                 content = marketSellContentTextInputEditText.text.toString(),
@@ -146,6 +161,7 @@ class MarketSellFragment : Fragment() {
     }
 
     fun modify(view: View) {
+        mActivity.showLoading()
         viewModel.modify(
             binding.item!!.copy(
                 title = marketSellTitleTextInputEditText.text.toString(),
@@ -155,6 +171,57 @@ class MarketSellFragment : Fragment() {
                 category = marketSellCategorySpinner.selectedItem.toString()
             )
         )
+    }
+
+    val PICTURE_REQUEST_CODE = 100
+
+    @SuppressLint("IntentReset")
+    fun imageAdd(view: View) {
+        binding.item?.title = binding.marketSellTitleTextInputEditText.text.toString()
+        binding.item?.price = binding.marketSellPriceTextInputEditText.text.toString()
+        binding.item?.content = binding.marketSellContentTextInputEditText.text.toString()
+        binding.item?.negotiation = binding.marketSellNegotiationCheckBox.isChecked
+        binding.item?.category = binding.marketSellCategorySpinner.selectedItemId.toString()
+
+        val intent = Intent(Intent.ACTION_PICK).apply {
+            type = "image/*"
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        }
+        startActivityForResult(Intent.createChooser(intent, "사진을 선택해주세요."), PICTURE_REQUEST_CODE)
+    }
+
+    fun imageDelete(view: View, position: Int) {
+        binding.item!!.images.removeAt(position)
+        binding.invalidateAll()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == PICTURE_REQUEST_CODE) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    data?.clipData?.apply {
+                        for (i in 0 until itemCount) {
+                            if (binding.item!!.images.size < 10) {
+                                binding.item!!.images.add(getRealPathFromURI(requireContext(), getItemAt(i).uri))
+                            } else {
+                                Toast.makeText(context, "이미지는 10장까지 첨부가 가능합니다!", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        binding.invalidateAll()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getRealPathFromURI(context: Context, uri: Uri): String {
+        var columnIndex = 0
+        var proj = arrayOf(MediaStore.Images.Media.DATA)
+        var cursor = context.contentResolver.query(uri, proj, null, null, null)
+        if (cursor?.moveToFirst()!!) {
+            columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        }
+        return cursor.getString(columnIndex)
     }
 
     companion object {

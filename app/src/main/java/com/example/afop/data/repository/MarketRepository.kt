@@ -3,17 +3,17 @@ package com.example.afop.data.repository
 import android.util.Log
 import com.example.afop.data.dataSource.DataSource
 import com.example.afop.data.model.MarketDTO
-import com.example.afop.data.response.Response
-import com.example.afop.ui.auth.register.RegisterResponse
+import com.example.afop.data.response.Result
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
-import com.example.afop.data.response.Result
-import com.example.afop.ui.main.market.marketDetail.MarketDetailResponse
-import com.example.afop.ui.main.market.marketList.MarketListResponse
-import com.example.afop.ui.main.market.marketSell.MarketSellResponse
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * 마켓 관련 레포지토리
@@ -23,7 +23,26 @@ class MarketRepository(private val dataSource: DataSource) {
         CoroutineScope(IO).launch {
             item.timeStamp = Date().time
             item.sellerUID = DataSource.getUser().uid
-            dataSource.marketPutItem(item = item).apply {
+
+            val imageList: ArrayList<MultipartBody.Part> = ArrayList()
+            val newFileNames: ArrayList<String> = ArrayList()
+
+            for (i in 0 until item.images.size) {
+                val file = File(item.images[i])
+                val newFileName = "${item.sellerUID}-${UUID.randomUUID()}.${item.images[i].split(".").last()}"
+                newFileNames.add(newFileName)
+
+                val newFile = file.copyTo(target = File("${dataSource.getCacheDir()}/${newFileName}"))
+                val requestFile: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), newFile)
+                val uploadFile = MultipartBody.Part.createFormData("files", newFile.name, requestFile)
+                imageList.add(uploadFile)
+
+                Log.d("list", newFileName)
+                Log.d("cache", "${dataSource.getCacheDir()}/${newFileName}")
+            }
+
+            dataSource.filePutList(imageList)
+            dataSource.marketPutItem(item = item.copy(images = newFileNames)).apply {
                 response?.let { response ->
                     callback(Result(data = data, response = response))
                 }
@@ -34,7 +53,11 @@ class MarketRepository(private val dataSource: DataSource) {
         }
     }
 
-    fun getList(title: String? = null, last_id_cursor: Long?, callback: (Result<ArrayList<MarketDTO?>>) -> Unit) {
+    fun getList(
+        title: String? = null,
+        last_id_cursor: Long?,
+        callback: (Result<ArrayList<MarketDTO?>>) -> Unit
+    ) {
         CoroutineScope(IO).launch {
             dataSource.marketGetList(title = title, last_id_cursor = last_id_cursor).apply {
                 response?.let { response ->
@@ -62,7 +85,7 @@ class MarketRepository(private val dataSource: DataSource) {
                         }
                     }
                 }
-                 */
+                */
 
                 dataSource.marketGetList().documents.forEach { _document ->
                     _document.toObject(MarketDTO::class.java)?.let { _item ->
@@ -93,18 +116,17 @@ class MarketRepository(private val dataSource: DataSource) {
         }
     }
 
-    fun modify(_item: MarketDTO, callback: (Result<MarketDTO>) -> Unit) {
-        /*
+    fun modify(item: MarketDTO, callback: (Result<MarketDTO>) -> Unit) {
         CoroutineScope(IO).launch {
-            try {
-                dataSource.marketModifyItem(_item)
-                callback(Result(data = null, result = MarketResult(isSuccessPutItem = true)))
-            } catch (e: Exception) {
-                callback(Result(data = null, error = e))
+            dataSource.marketModifyItem(item = item).apply {
+                response?.let { response ->
+                    callback(Result(data = data, response = response))
+                }
+                error?.let { error ->
+                    callback(Result(data = data, error = error))
+                }
             }
         }
-
-         */
     }
 
     fun getUID(): String {

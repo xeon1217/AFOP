@@ -82,6 +82,8 @@
 
     <string name="action_app_exit">\'뒤로\'버튼을 한 번 더 누르면 앱이 종료됩니다.</string>
     <string name="char_divider">•</string>
+    
+    <string name="alert_not_implement_function">미구현된 기능입니다.</string>
     <!--
     <string name="invalid_void_email">이메일 입력칸이 비어있습니다.</string>
     <string name="invalid_void_name">이름 입력칸이 비어있습니다.</string>

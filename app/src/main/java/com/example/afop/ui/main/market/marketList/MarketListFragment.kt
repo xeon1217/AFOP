@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.size
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -37,9 +38,13 @@ class MarketListFragment : Fragment() {
         binding.viewModel = ViewModelProvider(viewModelStore, MarketListViewModelFactory()).get(MarketListViewModel::class.java)
         mActivity = activity as ActivityExtendFunction
         subscribeUi()
-        getList()
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getList()
     }
 
     private fun subscribeUi() {
@@ -100,7 +105,6 @@ class MarketListFragment : Fragment() {
         binding.viewModel?.marketList?.let { marketList ->
             if(marketList.size > 0) {
                 marketList[marketList.size - 1]?.let { last_item ->
-                    Log.d("UI", "${last_item.title} ${last_item.marketID}")
                     getList(last_id_cursor = last_item.marketID)
                 }
             }

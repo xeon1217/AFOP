@@ -12,6 +12,9 @@
         <variable
             name="util"
             type="com.example.afop.util.Util" />
+        <variable
+            name="state"
+            type="com.example.afop.data.model.MarketDTO.State" />
     </data>
 
     <LinearLayout
@@ -31,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                app:bind_image="@{(item.images.size() > 0) ? item.images.get(0) : null}"
+                app:bind_image_server="@{(item.images.size() > 0) ? item.images.get(0) : null}"
                 app:bind_image_error="@{@drawable/ic_baseline_image_not_supported_24}"
                 tools:srcCompat="@drawable/ic_launcher_foreground" />
         </androidx.cardview.widget.CardView>
@@ -97,7 +100,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:visibility="@{item.reservation &amp;&amp; !item.sold ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{item.state == state.RESERVATION.ordinal() ? View.VISIBLE : View.GONE}"
                     app:cardBackgroundColor="@color/colorAccent"
                     app:cardCornerRadius="8dp">
 
@@ -117,7 +120,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:visibility="@{item.sold ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{item.state == state.SOLD_OUT.ordinal() ? View.VISIBLE : View.GONE}"
                     app:cardBackgroundColor="#C0C0C0"
                     app:cardCornerRadius="8dp">
 

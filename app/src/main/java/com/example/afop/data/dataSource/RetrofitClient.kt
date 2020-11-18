@@ -18,6 +18,7 @@ class RetrofitClient {
         private const val ADDRESS_AVD = "10.0.2.2" // 서버 주소
         private const val ADDRESS_LOCALHOST = "localhost" // 서버 주소
         private const val BASE_URL = "${PROTOCOL_HTTP}${ADDRESS}:${PORT}"
+        const val IMAGE_URL = "${BASE_URL}/files/"
         val gson = GsonBuilder().setLenient().create()
         val okHttpClient = OkHttpClient.Builder()
             .connectTimeout(5, TimeUnit.SECONDS) // 연결에 성공하는데 기다리는 시간

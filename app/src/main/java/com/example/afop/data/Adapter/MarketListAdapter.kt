@@ -27,8 +27,8 @@ class MarketListAdapter(val context: Context?) : ListAdapter<MarketDTO, MarketLi
     }
 
     inner class ViewHolder(val binding: ItemMarketSummaryBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(_item: MarketDTO) {
-            binding.apply {
+                fun bind(_item: MarketDTO) {
+                    binding.apply {
                 item = _item
                 executePendingBindings()
             }

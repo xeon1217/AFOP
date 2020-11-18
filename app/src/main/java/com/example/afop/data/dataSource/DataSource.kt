@@ -9,7 +9,10 @@ import com.example.afop.data.response.Response
 import com.example.afop.data.response.Result
 import com.example.afop.service.RetrofitService
 import com.google.firebase.iid.FirebaseInstanceId
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.*
+import java.io.File
 import java.net.SocketTimeoutException
 
 /**
@@ -17,16 +20,18 @@ import java.net.SocketTimeoutException
  */
 class DataSource {
     companion object {
+        private lateinit var cache: File
         private lateinit var fcm: FirebaseInstanceId
         private var user: UserDTO? = null
 
         fun init(context: Context) {
+            cache = context.cacheDir
             fcm = FirebaseInstanceId.getInstance()
             PreferenceManager.init(context)
         }
 
         fun exit() {
-            if(isLogin() && !getAutoLogin()) {
+            if (isLogin() && !getAutoLogin()) {
                 logout()
             }
         }
@@ -55,7 +60,7 @@ class DataSource {
             user?.let { user ->
                 return user
             }
-            return UserDTO("", "", "",  "", "", "")
+            return UserDTO("", "", "", "", "", "")
         }
 
         private fun removeToken() {
@@ -80,7 +85,7 @@ class DataSource {
 
     suspend fun login(loginData: Map<String, String>): Result<UserDTO> {
         return try {
-            service.login(loginData).apply {
+            service.login(data = loginData).apply {
                 user = data
                 if (getAutoLogin()) {
                     putToken(getUser().token)
@@ -93,7 +98,7 @@ class DataSource {
 
     suspend fun autoLogin(): Result<UserDTO> {
         return try {
-            service.autoLogin(getToken()).apply {
+            service.autoLogin(token = getToken()).apply {
                 user = data
                 if (getAutoLogin()) {
                     putToken(getUser().token)
@@ -111,7 +116,7 @@ class DataSource {
     //이메일 중복 확인
     suspend fun verifyEmail(email: String): Result<*> {
         return try {
-            service.verifyEmail(email)
+            service.verifyEmail(email = email)
         } catch (e: Exception) {
             exceptionHandler(e)
         }
@@ -120,7 +125,7 @@ class DataSource {
     //닉네임 중복 확인
     suspend fun verifyNickname(nickname: String): Result<*> {
         return try {
-            service.verifyNickname(nickname)
+            service.verifyNickname(nickname = nickname)
         } catch (e: Exception) {
             exceptionHandler(e)
         }
@@ -129,7 +134,7 @@ class DataSource {
     //회원가입
     suspend fun register(data: Map<String, String>): Result<*> {
         return try {
-            service.register(data)
+            service.register(data = data)
         } catch (e: Exception) {
             exceptionHandler(e)
         }
@@ -140,33 +145,36 @@ class DataSource {
      */
 
     //글 한 개 쓰기
-    suspend fun marketPutItem(item: MarketDTO): Result<*> {
+    suspend fun marketPutItem(item: MarketDTO): Result<MarketDTO> {
         return try {
-            service.marketPutItem(token = getUser().token, item)
+            service.marketPutItem(token = getUser().token, item = item)
         } catch (e: Exception) {
-            exceptionHandler(e)
+            exceptionHandler(e) as Result<MarketDTO>
         }
     }
 
     //글 한 개 수정
-    suspend fun marketModifyItem(item: MarketDTO, marketID: String): Result<*> {
+    suspend fun marketModifyItem(item: MarketDTO): Result<MarketDTO> {
         return try {
-            service.marketModifyItem(token = getUser().token, item = item, marketID = marketID)
+            service.marketModifyItem(token = getUser().token, item = item)
         } catch (e: Exception) {
-            exceptionHandler(e)
+            exceptionHandler(e) as Result<MarketDTO>
         }
     }
 
     //글 한 개 읽기
     suspend fun marketGetItem(marketID: Long): Result<MarketDTO> {
         return try {
-            service.marketGetItem(marketID)
+            service.marketGetItem(marketID = marketID)
         } catch (e: Exception) {
             exceptionHandler(e) as Result<MarketDTO>
         }
     }
 
-    suspend fun marketGetList(title: String?, last_id_cursor: Long?): Result<ArrayList<MarketDTO?>> {
+    suspend fun marketGetList(
+        title: String?,
+        last_id_cursor: Long?
+    ): Result<ArrayList<MarketDTO?>> {
         return try {
             service.marketGetList(title = title, last_id_cursor = last_id_cursor)
         } catch (e: Exception) {
@@ -179,6 +187,36 @@ class DataSource {
     //커뮤니티 관련
 
     //위치 관련
+
+    /**
+     * 파일 관련
+     */
+
+    @Multipart
+    suspend fun filePutItem(map: HashMap<String, RequestBody>, file: MultipartBody.Part): Result<*> {
+        return try {
+            service.filePutItem(token = getToken(), file = file)
+        } catch (e: Exception) {
+            exceptionHandler(e)
+        }
+    }
+
+    @Multipart
+    suspend fun filePutList(files: ArrayList<MultipartBody.Part>): Result<*> {
+        return try {
+            service.filePutList(token = getToken(), files = files)
+        } catch (e: Exception) {
+            exceptionHandler(e)
+        }
+    }
+
+    suspend fun fileGetList() {
+
+    }
+
+    fun getCacheDir(): File {
+        return cache
+    }
 
     /**
      * preference 관련
@@ -195,7 +233,7 @@ class DataSource {
                 Result(data = null, error = ErrorCode.FAILED_CONNECT_SERVER)
             }
             else -> {
-                Log.d("Exception Handler", "$exception")
+                Log.d("Exception!", "$exception")
                 Result(data = null, error = ErrorCode.NOT_DEFINE_ERROR)
             }
         }

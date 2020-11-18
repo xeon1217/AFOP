@@ -11,6 +11,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.afop.R
 import com.example.afop.ui.activity.LoginActivity
+import com.example.afop.ui.activity.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -25,7 +26,7 @@ class CustomFirebaseMessagingService : FirebaseMessagingService() {
         val title = remoteMessage.data.get("title") // firebase에서 보낸 메세지의 title
         val message = remoteMessage.data.get("message") // firebase에서 보낸 메세지의 내용
         val data = remoteMessage.data.get("data")
-        val intent = Intent(this, LoginActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("data", data)
 
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)

@@ -21,7 +21,7 @@
             android:id="@+id/marketRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{viewModel.marketList.size > 0 ? View.GONE : View.VISIBLE}"
+            android:visibility="@{viewModel.marketList.size > 0 ? View.VISIBLE : View.VISIBLE}"
             tools:layout_editor_absoluteX="130dp"
             tools:layout_editor_absoluteY="67dp">
 
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:text="@string/title_empty_data"
             android:textSize="24sp"
-            android:visibility="@{viewModel.marketList.size > 0 ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.marketList.size > 0 ? View.GONE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

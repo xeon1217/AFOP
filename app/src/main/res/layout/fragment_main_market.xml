@@ -5,10 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="dataSource"
             type="com.example.afop.data.dataSource.DataSource" />
+
+        <variable
+            name="fragment"
+            type="com.example.afop.ui.main.MainMarketFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +22,7 @@
         android:layout_height="match_parent">
 
         <fragment
-            android:id="@+id/fragment"
+            android:id="@+id/container"
             android:name="com.example.afop.ui.main.market.marketList.MarketListFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -26,21 +32,141 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/mainMarketSellFloatingButton"
+            android:layout_width="125dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end"
+            android:layout_marginBottom="16dp"
+            android:gravity="center|center_horizontal"
+            android:padding="0dp"
+            android:paddingStart="0dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="0dp"
+            android:text="판매글 쓰기"
+            android:onClick="@{fragment::openSell}"
+            android:visibility="@{fragment.isOpen ? View.VISIBLE : View.GONE}"
+            app:backgroundTint="@color/textColorPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/mainMarketSellHistoryFloatingButton"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/mainMarketSellHistoryFloatingButton"
+            android:layout_width="125dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end"
+            android:layout_marginBottom="16dp"
+            android:gravity="center|center_horizontal"
+            android:padding="0dp"
+            android:paddingStart="0dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="0dp"
+            android:text="판매 내역"
+            android:onClick="@{fragment::openSellHistory}"
+            android:visibility="@{fragment.isOpen ? View.VISIBLE : View.GONE}"
+            app:backgroundTint="@color/textColorPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/mainMarketBuyHistoryFloatingButton"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/mainMarketBuyHistoryFloatingButton"
+            android:layout_width="125dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end"
+            android:layout_marginBottom="16dp"
+            android:gravity="center|center_horizontal"
+            android:padding="0dp"
+            android:paddingStart="0dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="0dp"
+            android:text="구매 내역"
+            android:onClick="@{fragment::openBuyHistory}"
+            android:visibility="@{fragment.isOpen ? View.VISIBLE : View.GONE}"
+            app:backgroundTint="@color/textColorPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/mainMarketChattingFloatingButton"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/mainMarketChattingFloatingButton"
+            android:layout_width="125dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center|center_horizontal"
+            android:padding="0dp"
+            android:paddingStart="0dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="0dp"
+            android:text="채팅방"
+            android:onClick="@{fragment::openChatting}"
+            android:visibility="@{fragment.isOpen ? View.VISIBLE : View.GONE}"
+            app:backgroundTint="@color/textColorPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/mainMarketKeywordFloatingButton"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/mainMarketKeywordFloatingButton"
+            android:layout_width="125dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center|center_horizontal"
+            android:padding="0dp"
+            android:paddingStart="0dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="0dp"
+            android:text="키워드 알림"
+            android:onClick="@{fragment::openKeyword}"
+            android:visibility="@{fragment.isOpen ? View.VISIBLE : View.GONE}"
+            app:backgroundTint="@color/textColorPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/mainMarketFavoriteFloatingButton"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!--Action name text for the add person button-->
+        <!--Make sure that you are constraining this Text
+            to the add Person FAB button-->
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/mainMarketFavoriteFloatingButton"
+            android:layout_width="125dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center|center_horizontal"
+            android:padding="0dp"
+            android:paddingStart="0dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="0dp"
+            android:text="찜한 목록"
+            android:onClick="@{fragment::openFavorite}"
+            android:visibility="@{fragment.isOpen ? View.VISIBLE : View.GONE}"
+            app:backgroundTint="@color/textColorPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/mainMarketOpenMenuFloatingButton"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/mainMarketOpenMenuFloatingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="메뉴 펼치기"
-            android:textColor="@color/textColorPrimary"
-            android:visibility="@{dataSource.Companion.login ? View.VISIBLE : View.GONE}"
-            app:backgroundTint="@color/colorAccent"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_baseline_add"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias=".95"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias=".95" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
