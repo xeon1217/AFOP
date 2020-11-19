@@ -5,7 +5,6 @@ import android.util.Log
 import com.example.afop.data.model.MarketDTO
 import com.example.afop.data.model.UserDTO
 import com.example.afop.data.response.ErrorCode
-import com.example.afop.data.response.Response
 import com.example.afop.data.response.Result
 import com.example.afop.service.RetrofitService
 import com.google.firebase.iid.FirebaseInstanceId
@@ -60,7 +59,7 @@ class DataSource {
             user?.let { user ->
                 return user
             }
-            return UserDTO("", "", "", "", "", "")
+            throw Exception()
         }
 
         private fun removeToken() {
@@ -85,24 +84,13 @@ class DataSource {
 
     suspend fun login(loginData: Map<String, String>): Result<UserDTO> {
         return try {
-            service.login(data = loginData).apply {
+            if (getAutoLogin()) {
+                service.autoLogin(token = getToken())
+            } else {
+                service.login(data = loginData)
+            }.apply {
                 user = data
-                if (getAutoLogin()) {
-                    putToken(getUser().token)
-                }
-            }
-        } catch (e: Exception) {
-            exceptionHandler(e) as Result<UserDTO>
-        }
-    }
-
-    suspend fun autoLogin(): Result<UserDTO> {
-        return try {
-            service.autoLogin(token = getToken()).apply {
-                user = data
-                if (getAutoLogin()) {
-                    putToken(getUser().token)
-                }
+                putToken(getUser().token)
             }
         } catch (e: Exception) {
             exceptionHandler(e) as Result<UserDTO>
@@ -193,7 +181,10 @@ class DataSource {
      */
 
     @Multipart
-    suspend fun filePutItem(map: HashMap<String, RequestBody>, file: MultipartBody.Part): Result<*> {
+    suspend fun filePutItem(
+        map: HashMap<String, RequestBody>,
+        file: MultipartBody.Part
+    ): Result<*> {
         return try {
             service.filePutItem(token = getToken(), file = file)
         } catch (e: Exception) {

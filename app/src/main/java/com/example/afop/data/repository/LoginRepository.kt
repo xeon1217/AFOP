@@ -12,27 +12,9 @@ import kotlinx.coroutines.launch
  * 로그인 관련 레포지토리
  */
 class LoginRepository(private val dataSource: DataSource) {
-    fun login(email: String, password: String, callback: (Result<*>) -> Unit) {
+    fun login(email: String = "", password: String = "", callback: (Result<*>) -> Unit) {
         CoroutineScope(IO).launch {
-            dataSource.login(
-                mapOf(
-                    "email" to email,
-                    "password" to password
-                )
-            ).apply {
-                response?.let {
-                    callback(Result(data = data, response = LoginResponse(isLogin = true)))
-                }
-                error?.let {
-                    callback(Result(data = data, error = error))
-                }
-            }
-        }
-    }
-
-    fun autoLogin(callback: (Result<*>) -> Unit) {
-        CoroutineScope(IO).launch {
-            dataSource.autoLogin().apply {
+            dataSource.login(mapOf("email" to email, "password" to password)).apply {
                 response?.let {
                     callback(Result(data = data, response = LoginResponse(isLogin = true)))
                 }

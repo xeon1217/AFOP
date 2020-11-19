@@ -51,8 +51,6 @@ class MarketSellFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_market_sell, container, false)
-        binding.fragment = this
-        binding.item = MarketDTO()
         viewModel = ViewModelProvider(viewModelStore, MarketSellViewModelFactory()).get(MarketSellViewModel::class.java)
         mActivity = activity as ActivityExtendFunction
         subscribeUi()
@@ -66,6 +64,8 @@ class MarketSellFragment : Fragment() {
     }
 
     private fun subscribeUi() {
+        binding.fragment = this
+        binding.viewModel = viewModel
         binding.textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
@@ -108,7 +108,8 @@ class MarketSellFragment : Fragment() {
                             }.show()
                         }
                         isSuccessGetItem?.let {
-                            binding.item = result.data as MarketDTO?
+                            Log.e("asd", "${viewModel.item.title}")
+                            binding.invalidateAll()
                         }
                         isSuccessModifyItem?.let {
                             setTitle(getString(R.string.dialog_title_success))
@@ -137,7 +138,7 @@ class MarketSellFragment : Fragment() {
     fun sell(view: View) {
         mActivity.showLoading()
         viewModel.sell(
-            binding.item!!.copy(
+            viewModel.item.copy(
                 title = marketSellTitleTextInputEditText.text.toString(),
                 price = marketSellPriceTextInputEditText.text.toString(),
                 content = marketSellContentTextInputEditText.text.toString(),
@@ -163,7 +164,7 @@ class MarketSellFragment : Fragment() {
     fun modify(view: View) {
         mActivity.showLoading()
         viewModel.modify(
-            binding.item!!.copy(
+            viewModel.item.copy(
                 title = marketSellTitleTextInputEditText.text.toString(),
                 price = marketSellPriceTextInputEditText.text.toString(),
                 content = marketSellContentTextInputEditText.text.toString(),
@@ -175,13 +176,14 @@ class MarketSellFragment : Fragment() {
 
     val PICTURE_REQUEST_CODE = 100
 
-    @SuppressLint("IntentReset")
     fun imageAdd(view: View) {
+        /*
         binding.item?.title = binding.marketSellTitleTextInputEditText.text.toString()
         binding.item?.price = binding.marketSellPriceTextInputEditText.text.toString()
         binding.item?.content = binding.marketSellContentTextInputEditText.text.toString()
         binding.item?.negotiation = binding.marketSellNegotiationCheckBox.isChecked
         binding.item?.category = binding.marketSellCategorySpinner.selectedItemId.toString()
+         */
 
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
@@ -191,7 +193,7 @@ class MarketSellFragment : Fragment() {
     }
 
     fun imageDelete(view: View, position: Int) {
-        binding.item!!.images.removeAt(position)
+        viewModel.item.images.removeAt(position)
         binding.invalidateAll()
     }
 
@@ -201,8 +203,8 @@ class MarketSellFragment : Fragment() {
                 Activity.RESULT_OK -> {
                     data?.clipData?.apply {
                         for (i in 0 until itemCount) {
-                            if (binding.item!!.images.size < 10) {
-                                binding.item!!.images.add(getRealPathFromURI(requireContext(), getItemAt(i).uri))
+                            if (viewModel.item.images.size < 10) {
+                                viewModel.item.images.add(getRealPathFromURI(requireContext(), getItemAt(i).uri))
                             } else {
                                 Toast.makeText(context, "이미지는 10장까지 첨부가 가능합니다!", Toast.LENGTH_SHORT).show()
                             }
@@ -214,10 +216,11 @@ class MarketSellFragment : Fragment() {
         }
     }
 
+    @SuppressLint("Recycle")
     private fun getRealPathFromURI(context: Context, uri: Uri): String {
         var columnIndex = 0
-        var proj = arrayOf(MediaStore.Images.Media.DATA)
-        var cursor = context.contentResolver.query(uri, proj, null, null, null)
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.contentResolver.query(uri, proj, null, null, null)
         if (cursor?.moveToFirst()!!) {
             columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         }

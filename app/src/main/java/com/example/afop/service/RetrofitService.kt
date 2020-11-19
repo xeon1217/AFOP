@@ -2,12 +2,8 @@ package com.example.afop.service
 
 import com.example.afop.data.model.MarketDTO
 import com.example.afop.data.model.UserDTO
-import com.example.afop.data.response.Response
 import com.example.afop.data.response.Result
-import kotlinx.coroutines.Deferred
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import retrofit2.Call
 import retrofit2.http.*
 
 interface RetrofitService {

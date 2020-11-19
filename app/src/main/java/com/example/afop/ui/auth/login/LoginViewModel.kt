@@ -21,7 +21,7 @@ class LoginViewModel(private val repository: LoginRepository) : UiViewModel() {
     }
 
     fun autoLogin() {
-        repository.autoLogin { result ->
+        repository.login() { result ->
             _result.postValue(result)
         }
     }

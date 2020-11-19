@@ -16,6 +16,8 @@ class MarketSellViewModel (private val repository: MarketRepository) : UiViewMod
     private var _result = MutableLiveData<Result<*>>()
     val result: LiveData<Result<*>> = _result
 
+    var item = MarketDTO()
+
     fun sell(item: MarketDTO) {
         repository.sell(item) { result ->
             _result.postValue(result.copy(response = MarketSellResponse(isSuccessPutItem = result.response?.success)))
@@ -30,6 +32,9 @@ class MarketSellViewModel (private val repository: MarketRepository) : UiViewMod
 
     fun getItem(marketID: Long) {
         repository.getItem(marketID) { result ->
+            result.data?.let {
+                item = it
+            }
             _result.postValue(result.copy(response = MarketSellResponse(isSuccessGetItem = result.response?.success)))
         }
     }
