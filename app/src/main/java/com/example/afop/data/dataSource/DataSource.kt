@@ -59,7 +59,7 @@ class DataSource {
             user?.let { user ->
                 return user
             }
-            throw Exception()
+            return UserDTO(uid = "", token = "")
         }
 
         private fun removeToken() {
