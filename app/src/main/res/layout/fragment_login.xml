@@ -9,6 +9,10 @@
             type="com.example.afop.ui.auth.login.LoginFragment" />
 
         <variable
+            name="dataSource"
+            type="com.example.afop.data.dataSource.DataSource" />
+
+        <variable
             name="textWatcher"
             type="android.text.TextWatcher" />
     </data>
@@ -93,6 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{fragment::autoLogin}"
+                    android:checked="@{dataSource.Companion.autoLogin}"
                     android:text="@string/action_auto_login" />
 
                 <Button

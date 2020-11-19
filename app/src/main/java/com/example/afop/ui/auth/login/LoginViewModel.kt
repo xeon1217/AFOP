@@ -15,13 +15,13 @@ class LoginViewModel(private val repository: LoginRepository) : UiViewModel() {
     val result: LiveData<Result<*>> = _result
 
     fun login(email: String, password: String) {
-        repository.login(email = email, password = password) { result ->
+        repository.login(mapOf("email" to email, "password" to password)) { result ->
             _result.postValue(result)
         }
     }
 
     fun autoLogin() {
-        repository.login() { result ->
+        repository.login { result ->
             _result.postValue(result)
         }
     }

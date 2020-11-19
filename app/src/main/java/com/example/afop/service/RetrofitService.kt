@@ -11,7 +11,7 @@ interface RetrofitService {
      *  login 관련
      */
     @POST("/auth/login")
-    suspend fun login(@Body data: Map<String, String>): Result<UserDTO>
+    suspend fun login(@Body data: Map<String, String>?): Result<UserDTO>
     @POST("/auth/auto-login")
     suspend fun autoLogin(@Header("X-AUTH-TOKEN") token: String): Result<UserDTO>
 

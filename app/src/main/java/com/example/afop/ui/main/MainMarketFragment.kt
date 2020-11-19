@@ -39,7 +39,6 @@ class MainMarketFragment : Fragment() {
         mActivity = activity as ActivityExtendFunction
         mActivity.changeTitle(getString(R.string.title_menu_market))
 
-
         initFAB()
     }
 
