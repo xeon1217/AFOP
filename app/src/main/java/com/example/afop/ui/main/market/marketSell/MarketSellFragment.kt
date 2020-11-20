@@ -39,12 +39,19 @@ class MarketSellFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_market_sell, container, false)
-        viewModel = ViewModelProvider(viewModelStore, MarketSellViewModelFactory()).get(MarketSellViewModel::class.java)
-        arguments?.getLong("modify")?.let { viewModel.getItem(it) }
+        viewModel = ViewModelProvider(
+            viewModelStore,
+            MarketSellViewModelFactory()
+        ).get(MarketSellViewModel::class.java)
         mActivity = activity as ActivityExtendFunction
         subscribeUi()
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        arguments?.getLong("modify")?.let { viewModel.getItem(it) }
     }
 
     private fun subscribeUi() {
@@ -160,6 +167,14 @@ class MarketSellFragment : Fragment() {
     val PICTURE_REQUEST_CODE = 100
 
     fun imageAdd(view: View) {
+
+        //글 내용을 저장
+        viewModel.item.title = marketSellTitleTextInputEditText.text.toString()
+        viewModel.item.price = marketSellPriceTextInputEditText.text.toString()
+        viewModel.item.content = marketSellContentTextInputEditText.text.toString()
+        viewModel.item.negotiation = marketSellNegotiationCheckBox.isChecked
+        viewModel.item.category = marketSellCategorySpinner.selectedItemId.toString()
+
         Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
