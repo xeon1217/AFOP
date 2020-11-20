@@ -39,19 +39,12 @@ class MarketSellFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_market_sell, container, false)
-        viewModel = ViewModelProvider(
-            viewModelStore,
-            MarketSellViewModelFactory()
-        ).get(MarketSellViewModel::class.java)
+        viewModel = ViewModelProvider(viewModelStore, MarketSellViewModelFactory()).get(MarketSellViewModel::class.java)
+        arguments?.getLong("modify")?.let { viewModel.getItem(it) }
         mActivity = activity as ActivityExtendFunction
         subscribeUi()
 
         return binding.root
-    }
-
-    override fun onStart() {
-        super.onStart()
-        arguments?.getLong("modify")?.let { viewModel.getItem(it) }
     }
 
     private fun subscribeUi() {

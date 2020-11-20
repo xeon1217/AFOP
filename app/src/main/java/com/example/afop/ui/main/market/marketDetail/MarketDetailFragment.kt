@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.afop.R
+import com.example.afop.data.Adapter.MarketListAdapter
+import com.example.afop.data.Adapter.ViewPagerAdapter
 import com.example.afop.data.model.MarketDTO
 import com.example.afop.databinding.FragmentMarketDetailBinding
 import com.example.afop.ui.activity.MainActivity
@@ -45,6 +47,8 @@ class MarketDetailFragment : Fragment() {
     }
 
     private fun subscribeUi() {
+        val viewPagerAdapter = ViewPagerAdapter(context)
+        binding.marketDetailViewPager.adapter = viewPagerAdapter
         binding.viewModel = viewModel
         binding.fragment = this
 
@@ -60,6 +64,8 @@ class MarketDetailFragment : Fragment() {
                         isSuccessGetItem?.let { success ->
                             binding.item = result.data
                             binding.marketDetailStateSpinner.setSelection(binding.item!!.state)
+                            viewPagerAdapter.submitList(binding.item!!.images)
+                            viewPagerAdapter.notifyDataSetChanged()
                         }
                         isSuccessModifyItem?.let { success ->
                             binding.item = result.data
