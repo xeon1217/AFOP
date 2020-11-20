@@ -5,13 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
+
+        <import type="android.widget.ImageView.ScaleType" />
+
         <variable
             name="item"
             type="com.example.afop.data.model.MarketDTO" />
+
         <variable
             name="util"
             type="com.example.afop.util.Util" />
+
         <variable
             name="state"
             type="com.example.afop.data.model.MarketDTO.State" />
@@ -33,8 +39,8 @@
                 android:id="@+id/marketSummaryPhotoImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                app:bind_image_server="@{(item.images.size() > 0) ? item.images.get(0) : null}"
+                android:scaleType="@{(item.images.size() > 0) ? ScaleType.CENTER_CROP : ScaleType.CENTER_INSIDE}"
+                app:bind_image="@{(item.images.size() > 0) ? item.images.get(0) : null}"
                 app:bind_image_error="@{@drawable/ic_baseline_image_not_supported_24}"
                 tools:srcCompat="@drawable/ic_launcher_foreground" />
         </androidx.cardview.widget.CardView>

@@ -17,6 +17,10 @@ import com.example.afop.ui.activity.ChatActivity
 import com.example.afop.ui.activity.MarketActivity
 import com.example.afop.util.ActivityExtendFunction
 import kotlinx.android.synthetic.main.fragment_main_market.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.coroutineContext
 
 class MainMarketFragment : Fragment() {
     private lateinit var mActivity: ActivityExtendFunction
@@ -75,8 +79,6 @@ class MainMarketFragment : Fragment() {
         //mActivity.startActivity(Intent(context, MarketActivity::class.java))
     }
 
-
-
     fun initFAB() {
         val fabOpen = AnimationUtils.loadAnimation(mActivity, R.anim.fab_open)
         val fabClose = AnimationUtils.loadAnimation(mActivity, R.anim.fab_close)
@@ -96,12 +98,12 @@ class MainMarketFragment : Fragment() {
                 mainMarketOpenMenuFloatingButton.startAnimation(fabRAntiClockwise)
                 isOpen = true
             } else {
-                mainMarketSellFloatingButton.startAnimation(fabClose)
-                mainMarketBuyHistoryFloatingButton.startAnimation(fabClose)
-                mainMarketSellHistoryFloatingButton.startAnimation(fabClose)
-                mainMarketChattingFloatingButton.startAnimation(fabClose)
-                mainMarketKeywordFloatingButton.startAnimation(fabClose)
                 mainMarketFavoriteFloatingButton.startAnimation(fabClose)
+                mainMarketKeywordFloatingButton.startAnimation(fabClose)
+                mainMarketChattingFloatingButton.startAnimation(fabClose)
+                mainMarketSellHistoryFloatingButton.startAnimation(fabClose)
+                mainMarketBuyHistoryFloatingButton.startAnimation(fabClose)
+                mainMarketSellFloatingButton.startAnimation(fabClose)
 
                 mainMarketOpenMenuFloatingButton.startAnimation(fabRClockwise)
                 isOpen = false
@@ -212,8 +214,6 @@ class MainMarketFragment : Fragment() {
             });
     }
 }
-
-
      */
     companion object {
         fun newInstance() =

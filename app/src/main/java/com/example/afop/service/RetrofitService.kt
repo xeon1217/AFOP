@@ -4,6 +4,8 @@ import com.example.afop.data.model.MarketDTO
 import com.example.afop.data.model.UserDTO
 import com.example.afop.data.response.Result
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.*
 
 interface RetrofitService {
@@ -46,7 +48,8 @@ interface RetrofitService {
     @Multipart
     @POST("/files/uploads")
     suspend fun filePutList(@Header("X-AUTH-TOKEN") token: String, @Part files: ArrayList<MultipartBody.Part>): Result<*>
-    @Multipart
-    @POST("/files/download/{fileName}")
-    suspend fun fileGetList()
+    @Streaming
+    @GET("/files/download")
+    suspend fun fileGetItem(@Query("file") file: String): Response<ResponseBody>
+
 }

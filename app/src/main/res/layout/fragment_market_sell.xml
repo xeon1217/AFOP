@@ -65,7 +65,7 @@
                             android:maxLength="24"
                             android:padding="8dp"
                             android:singleLine="true"
-                            android:text="@{viewModel.item == null ? null : viewModel.item.title}" />
+                            android:text="@{viewModel.item.title}" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -122,7 +122,7 @@
                                 android:maxLength="16"
                                 android:padding="8dp"
                                 android:singleLine="true"
-                                android:text="@{viewModel.item == null ? null : viewModel.item.price}" />
+                                android:text="@{viewModel.item.price}" />
 
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -206,7 +206,8 @@
                                     android:onClick="@{(view) -> fragment.imageDelete(view, 0)}"
                                     android:padding="0dp"
                                     android:visibility="@{viewModel.item.images[0] != null ? View.VISIBLE : View.GONE}"
-                                    app:bind_image="@{viewModel.item.images[0]}" />
+                                    app:bind_image="@{viewModel.item.images[0]}"
+                                    app:bind_image_error="@{@drawable/ic_baseline_image_not_supported_24}" />
 
                             </androidx.cardview.widget.CardView>
 
@@ -225,7 +226,8 @@
                                     android:onClick="@{(view) -> fragment.imageDelete(view, 1)}"
                                     android:padding="0dp"
                                     android:visibility="@{viewModel.item.images[1] != null ? View.VISIBLE : View.GONE}"
-                                    app:bind_image="@{viewModel.item.images[1]}" />
+                                    app:bind_image="@{viewModel.item.images[1]}"
+                                    app:bind_image_error="@{@drawable/ic_baseline_image_not_supported_24}" />
 
                             </androidx.cardview.widget.CardView>
 
@@ -244,7 +246,8 @@
                                     android:onClick="@{(view) -> fragment.imageDelete(view, 2)}"
                                     android:padding="0dp"
                                     android:visibility="@{viewModel.item.images[2] != null ? View.VISIBLE : View.GONE}"
-                                    app:bind_image="@{viewModel.item.images[2]}" />
+                                    app:bind_image="@{viewModel.item.images[2]}"
+                                    app:bind_image_error="@{@drawable/ic_baseline_image_not_supported_24}" />
 
                             </androidx.cardview.widget.CardView>
 
@@ -263,7 +266,8 @@
                                     android:onClick="@{(view) -> fragment.imageDelete(view, 3)}"
                                     android:padding="0dp"
                                     android:visibility="@{viewModel.item.images[3] != null ? View.VISIBLE : View.GONE}"
-                                    app:bind_image="@{viewModel.item.images[3]}" />
+                                    app:bind_image="@{viewModel.item.images[3]}"
+                                    app:bind_image_error="@{@drawable/ic_baseline_image_not_supported_24}" />
 
                             </androidx.cardview.widget.CardView>
 
@@ -282,7 +286,8 @@
                                     android:onClick="@{(view) -> fragment.imageDelete(view, 4)}"
                                     android:padding="0dp"
                                     android:visibility="@{viewModel.item.images[4] != null ? View.VISIBLE : View.GONE}"
-                                    app:bind_image="@{viewModel.item.images[4]}" />
+                                    app:bind_image="@{viewModel.item.images[4]}"
+                                    app:bind_image_error="@{@drawable/ic_baseline_image_not_supported_24}" />
 
                             </androidx.cardview.widget.CardView>
 
@@ -301,7 +306,8 @@
                                     android:onClick="@{(view) -> fragment.imageDelete(view, 5)}"
                                     android:padding="0dp"
                                     android:visibility="@{viewModel.item.images[5] != null ? View.VISIBLE : View.GONE}"
-                                    app:bind_image="@{viewModel.item.images[5]}" />
+                                    app:bind_image="@{viewModel.item.images[5]}"
+                                    app:bind_image_error="@{@drawable/ic_baseline_image_not_supported_24}" />
 
                             </androidx.cardview.widget.CardView>
 
@@ -320,7 +326,8 @@
                                     android:onClick="@{(view) -> fragment.imageDelete(view, 6)}"
                                     android:padding="0dp"
                                     android:visibility="@{viewModel.item.images[6] != null ? View.VISIBLE : View.GONE}"
-                                    app:bind_image="@{viewModel.item.images[6]}" />
+                                    app:bind_image="@{viewModel.item.images[6]}"
+                                    app:bind_image_error="@{@drawable/ic_baseline_image_not_supported_24}" />
 
                             </androidx.cardview.widget.CardView>
 
@@ -339,7 +346,8 @@
                                     android:onClick="@{(view) -> fragment.imageDelete(view, 7)}"
                                     android:padding="0dp"
                                     android:visibility="@{viewModel.item.images[7] != null ? View.VISIBLE : View.GONE}"
-                                    app:bind_image="@{viewModel.item.images[7]}" />
+                                    app:bind_image="@{viewModel.item.images[7]}"
+                                    app:bind_image_error="@{@drawable/ic_baseline_image_not_supported_24}" />
 
                             </androidx.cardview.widget.CardView>
 
@@ -358,7 +366,8 @@
                                     android:onClick="@{(view) -> fragment.imageDelete(view, 8)}"
                                     android:padding="0dp"
                                     android:visibility="@{viewModel.item.images[8] != null ? View.VISIBLE : View.GONE}"
-                                    app:bind_image="@{viewModel.item.images[8]}" />
+                                    app:bind_image="@{viewModel.item.images[8]}"
+                                    app:bind_image_error="@{@drawable/ic_baseline_image_not_supported_24}" />
 
                             </androidx.cardview.widget.CardView>
 
@@ -369,7 +378,6 @@
                                 android:layout_margin="4dp"
                                 app:cardCornerRadius="8dp">
 
-
                                 <ImageButton
                                     android:id="@+id/marketSellImageButton9"
                                     android:layout_width="75dp"
@@ -378,7 +386,8 @@
                                     android:onClick="@{(view) -> fragment.imageDelete(view, 9)}"
                                     android:padding="0dp"
                                     android:visibility="@{viewModel.item.images[9] != null ? View.VISIBLE : View.GONE}"
-                                    app:bind_image="@{viewModel.item.images[9]}" />
+                                    app:bind_image="@{viewModel.item.images[9]}"
+                                    app:bind_image_error="@{@drawable/ic_baseline_image_not_supported_24}" />
 
                             </androidx.cardview.widget.CardView>
 
@@ -414,7 +423,7 @@
                             android:lineSpacingMultiplier="1.5"
                             android:minLines="4"
                             android:padding="8dp"
-                            android:text="@{viewModel.item == null ? null : viewModel.item.content}" />
+                            android:text="@{viewModel.item.content}" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </androidx.cardview.widget.CardView>
 

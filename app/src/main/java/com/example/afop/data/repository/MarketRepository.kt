@@ -11,6 +11,9 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -19,54 +22,6 @@ import kotlin.collections.HashMap
  * 마켓 관련 레포지토리
  */
 class MarketRepository(private val dataSource: DataSource) {
-    fun sell(item: MarketDTO, callback: (Result<*>) -> Unit) {
-        CoroutineScope(IO).launch {
-            var mItem: MarketDTO
-
-            mItem = item.copy(
-                sellerUID = DataSource.getUser().uid,
-                timeStamp = Date().time
-            )
-            Log.e("aaa", "")
-            Log.e("aaa", "${DataSource.getUser().uid}")
-            Log.e("aaa", "${mItem.sellerUID}")
-
-            if (item.images.size > 0) {
-                val imageList: ArrayList<MultipartBody.Part> = ArrayList()
-                val newFileNames: ArrayList<String> = ArrayList()
-
-                for (i in 0 until item.images.size) {
-                    val file = File(item.images[i])
-                    val newFileName =
-                        "${item.sellerUID}-${UUID.randomUUID()}.${item.images[i].split(".").last()}"
-                    newFileNames.add(newFileName)
-
-                    val newFile =
-                        file.copyTo(target = File("${dataSource.getCacheDir()}/${newFileName}"))
-                    val requestFile: RequestBody =
-                        RequestBody.create(MediaType.parse("multipart/form-data"), newFile)
-                    val uploadFile =
-                        MultipartBody.Part.createFormData("files", newFile.name, requestFile)
-                    imageList.add(uploadFile)
-
-                    Log.d("list", newFileName)
-                    Log.d("cache", "${dataSource.getCacheDir()}/${newFileName}")
-                }
-                mItem = mItem.copy(images = newFileNames)
-                dataSource.filePutList(imageList)
-            }
-
-            dataSource.marketPutItem(item = mItem).apply {
-                response?.let { response ->
-                    callback(Result(data = data, response = response))
-                }
-                error?.let { error ->
-                    callback(Result(data = data, error = error))
-                }
-            }
-        }
-    }
-
     fun getList(
         title: String? = null,
         last_id_cursor: Long?,
@@ -74,6 +29,11 @@ class MarketRepository(private val dataSource: DataSource) {
     ) {
         CoroutineScope(IO).launch {
             dataSource.marketGetList(title = title, last_id_cursor = last_id_cursor).apply {
+                data?.forEach {
+                    it?.images?.forEach {
+                        dataSource.fileGetItem(it)
+                    }
+                }
                 response?.let { response ->
                     callback(Result(data = data, response = response))
                 }
@@ -120,6 +80,23 @@ class MarketRepository(private val dataSource: DataSource) {
     fun getItem(marketID: Long, callback: (Result<MarketDTO>) -> Unit) {
         CoroutineScope(IO).launch {
             dataSource.marketGetItem(marketID).apply {
+                data?.images?.forEach {
+                    dataSource.fileGetItem(it)
+                }
+                response?.let { response ->
+                    callback(Result(data = data, response = response))
+                }
+                error?.let { error ->
+                    callback(Result(data = data, error = error))
+                }
+            }
+        }
+    }
+
+    fun sell(item: MarketDTO, callback: (Result<*>) -> Unit) {
+        CoroutineScope(IO).launch {
+            uploadImage(item)
+            dataSource.marketPutItem(item = item).apply {
                 response?.let { response ->
                     callback(Result(data = data, response = response))
                 }
@@ -131,7 +108,9 @@ class MarketRepository(private val dataSource: DataSource) {
     }
 
     fun modify(item: MarketDTO, callback: (Result<MarketDTO>) -> Unit) {
+        Log.e("t", "modify")
         CoroutineScope(IO).launch {
+            uploadImage(item)
             dataSource.marketModifyItem(item = item).apply {
                 response?.let { response ->
                     callback(Result(data = data, response = response))
@@ -140,6 +119,32 @@ class MarketRepository(private val dataSource: DataSource) {
                     callback(Result(data = data, error = error))
                 }
             }
+        }
+    }
+
+    private suspend fun uploadImage(item: MarketDTO) {
+        if (item.images.size > 0) {
+            val imageList: ArrayList<MultipartBody.Part> = ArrayList()
+            val newFileNames: ArrayList<String> = ArrayList()
+
+            for (i in 0 until item.images.size) {
+                val file = File(item.images[i])
+                if(File("${dataSource.getCacheDir()}/${file}").exists()) {
+                    newFileNames.add(item.images[i])
+                } else {
+                    val newFileName = "${UUID.randomUUID()}.${item.images[i].split(".").last()}"
+                    newFileNames.add(newFileName)
+
+                    val newFile = file.copyTo(target = File("${dataSource.getCacheDir()}/${newFileName}"))
+                    val requestFile: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), newFile)
+                    val uploadFile = MultipartBody.Part.createFormData("files", newFile.name, requestFile)
+                    imageList.add(uploadFile)
+                }
+            }
+            item.apply {
+                images = newFileNames
+            }
+            dataSource.filePutList(imageList)
         }
     }
 

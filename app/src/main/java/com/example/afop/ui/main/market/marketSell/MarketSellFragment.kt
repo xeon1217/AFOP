@@ -1,18 +1,10 @@
 package com.example.afop.ui.main.market.marketSell
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.ClipData
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.os.FileUtils
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
@@ -21,21 +13,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
 import com.example.afop.R
-import com.example.afop.util.ActivityExtendFunction
-import com.example.afop.data.model.MarketDTO
 import com.example.afop.databinding.FragmentMarketSellBinding
+import com.example.afop.util.ActivityExtendFunction
+import com.example.afop.util.Util
 import kotlinx.android.synthetic.main.fragment_market_sell.*
-import java.io.File
 
 /**
  * 마켓에 판매글을 올릴 때 사용
@@ -52,15 +40,11 @@ class MarketSellFragment : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_market_sell, container, false)
         viewModel = ViewModelProvider(viewModelStore, MarketSellViewModelFactory()).get(MarketSellViewModel::class.java)
+        arguments?.getLong("modify")?.let { viewModel.getItem(it) }
         mActivity = activity as ActivityExtendFunction
         subscribeUi()
 
         return binding.root
-    }
-
-    override fun onStart() {
-        super.onStart()
-        arguments?.getLong("modify")?.let { viewModel.getItem(it) }
     }
 
     private fun subscribeUi() {
@@ -108,7 +92,6 @@ class MarketSellFragment : Fragment() {
                             }.show()
                         }
                         isSuccessGetItem?.let {
-                            Log.e("asd", "${viewModel.item.title}")
                             binding.invalidateAll()
                         }
                         isSuccessModifyItem?.let {
@@ -123,7 +106,7 @@ class MarketSellFragment : Fragment() {
                 result.error?.apply {
                     setTitle(getString(R.string.dialog_title_fail))
                     setMessage(message)
-                    when (this) {
+                    when {
                         else -> {
                             setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                                 mActivity.finish()
@@ -148,19 +131,6 @@ class MarketSellFragment : Fragment() {
         )
     }
 
-    fun exit(view: View) {
-        AlertDialog.Builder(mActivity).apply {
-            setCancelable(false)
-            setTitle(getString(R.string.dialog_title_exit))
-            setMessage(getString(R.string.dialog_message_market_exit))
-            setPositiveButton(getString(R.string.action_exit)) { _, _ ->
-                mActivity.finish()
-            }
-            setNegativeButton(getString(R.string.action_not_exit)) { _, _ ->
-            }
-        }.show()
-    }
-
     fun modify(view: View) {
         mActivity.showLoading()
         viewModel.modify(
@@ -174,22 +144,27 @@ class MarketSellFragment : Fragment() {
         )
     }
 
+    fun exit(view: View) {
+        AlertDialog.Builder(mActivity).apply {
+            setCancelable(false)
+            setTitle(getString(R.string.dialog_title_exit))
+            setMessage(getString(R.string.dialog_message_market_exit))
+            setPositiveButton(getString(R.string.action_exit)) { _, _ ->
+                mActivity.finish()
+            }
+            setNegativeButton(getString(R.string.action_not_exit)) { _, _ ->
+            }
+        }.show()
+    }
+
     val PICTURE_REQUEST_CODE = 100
 
     fun imageAdd(view: View) {
-        /*
-        binding.item?.title = binding.marketSellTitleTextInputEditText.text.toString()
-        binding.item?.price = binding.marketSellPriceTextInputEditText.text.toString()
-        binding.item?.content = binding.marketSellContentTextInputEditText.text.toString()
-        binding.item?.negotiation = binding.marketSellNegotiationCheckBox.isChecked
-        binding.item?.category = binding.marketSellCategorySpinner.selectedItemId.toString()
-         */
-
-        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+        Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            startActivityForResult(Intent.createChooser(this, "사진을 선택해주세요."), PICTURE_REQUEST_CODE)
         }
-        startActivityForResult(Intent.createChooser(intent, "사진을 선택해주세요."), PICTURE_REQUEST_CODE)
     }
 
     fun imageDelete(view: View, position: Int) {
@@ -201,12 +176,17 @@ class MarketSellFragment : Fragment() {
         if (requestCode == PICTURE_REQUEST_CODE) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
-                    data?.clipData?.apply {
-                        for (i in 0 until itemCount) {
-                            if (viewModel.item.images.size < 10) {
-                                viewModel.item.images.add(getRealPathFromURI(requireContext(), getItemAt(i).uri))
-                            } else {
-                                Toast.makeText(context, "이미지는 10장까지 첨부가 가능합니다!", Toast.LENGTH_SHORT).show()
+                    data?.let { intentData ->
+                        intentData.data?.apply { // 이미지가 한 개
+                            Util.getRealPathFromURI(requireContext(), this)?.let { viewModel.item.images.add(it) }
+                        }
+                        intentData.clipData?.apply {  // 이미지가 여러개
+                            for (i in 0 until itemCount) {
+                                if (viewModel.item.images.size < 10) {
+                                    Util.getRealPathFromURI(requireContext(), getItemAt(i).uri)?.let { viewModel.item.images.add(it) }
+                                } else {
+                                    Toast.makeText(context, "이미지는 10장까지 첨부가 가능합니다!", Toast.LENGTH_SHORT).show()
+                                }
                             }
                         }
                         binding.invalidateAll()
@@ -214,17 +194,6 @@ class MarketSellFragment : Fragment() {
                 }
             }
         }
-    }
-
-    @SuppressLint("Recycle")
-    private fun getRealPathFromURI(context: Context, uri: Uri): String {
-        var columnIndex = 0
-        val proj = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = context.contentResolver.query(uri, proj, null, null, null)
-        if (cursor?.moveToFirst()!!) {
-            columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-        }
-        return cursor.getString(columnIndex)
     }
 
     companion object {

@@ -8,10 +8,12 @@ import com.example.afop.data.response.ErrorCode
 import com.example.afop.data.response.Result
 import com.example.afop.service.RetrofitService
 import com.google.firebase.iid.FirebaseInstanceId
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import okhttp3.*
 import retrofit2.http.*
 import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
 import java.net.SocketTimeoutException
 
 /**
@@ -205,6 +207,39 @@ class DataSource {
 
     suspend fun fileGetList() {
 
+    }
+
+    suspend fun fileGetItem(file: String) {
+        try {
+            service.fileGetItem(file = file).apply {
+                body()?.apply {
+                    val newFile = File("${getCacheDir()}", file)
+                    if (!newFile.exists()) {
+                        var iS: InputStream? = null
+                        var oS: OutputStream? = null
+                        try {
+                            iS = byteStream()
+                            oS = FileOutputStream(newFile)
+                            val data = ByteArray(4096)
+                            var count = 0
+                            while (count != -1) {
+                                count = iS?.read(data)!!
+                                oS.write(data, 0, count)
+                            }
+                            oS.flush()
+
+                        } catch (e: Exception) {
+
+                        } finally {
+                            iS?.close()
+                            oS?.close()
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("get", "error")
+        }
     }
 
     fun getCacheDir(): File {
