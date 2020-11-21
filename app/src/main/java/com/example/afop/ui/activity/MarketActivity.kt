@@ -13,8 +13,10 @@ import com.example.afop.data.model.MarketDTO
 import com.example.afop.ui.main.market.marketDetail.MarketDetailFragment
 import com.example.afop.ui.main.market.marketDetail.MarketDetailViewModel
 import com.example.afop.ui.main.market.marketDetail.MarketDetailViewModelFactory
+import com.example.afop.ui.main.market.marketList.MarketListFragment
 import com.example.afop.ui.main.market.marketSell.MarketSellFragment
 import com.example.afop.util.ActivityExtendFunction
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_market.*
 
 /**
@@ -25,7 +27,7 @@ class MarketActivity : ActivityExtendFunction() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_market)
         if (savedInstanceState == null) { }
-
+        initToolbar()
         switchFragment(MarketSellFragment.newInstance())
 
         intent.getLongExtra("detail", -1).let {
@@ -38,6 +40,26 @@ class MarketActivity : ActivityExtendFunction() {
             if(it != -1L) {
                 switchFragment(MarketSellFragment.newInstance(), bundle = bundleOf("modify" to it))
             }
+        }
+
+        intent.getLongExtra("sell", -1).let { //판매내역
+            if(it != -1L) {
+                switchFragment(MarketListFragment.newInstance(), bundle = bundleOf("sell" to it))
+            }
+        }
+
+        intent.getLongExtra("buy", -1).let { //구매내역
+            if(it != -1L) {
+                switchFragment(MarketListFragment.newInstance(), bundle = bundleOf("buy" to it))
+            }
+        }
+    }
+
+    private fun initToolbar() {
+        setSupportActionBar(mainToolbar)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = getString(R.string.app_name)
         }
     }
 

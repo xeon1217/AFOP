@@ -8,9 +8,16 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.afop.databinding.ItemViewPagerImageBinding
 
-class ViewPagerAdapter(val context: Context?) : ListAdapter<String, ViewPagerAdapter.ViewHolder>(ViewPagerDiffCallback()) {
+class ViewPagerAdapter(val context: Context?) :
+    ListAdapter<String, ViewPagerAdapter.ViewHolder>(ViewPagerDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemViewPagerImageBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            ItemViewPagerImageBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -22,7 +29,8 @@ class ViewPagerAdapter(val context: Context?) : ListAdapter<String, ViewPagerAda
         return super.getItem(position)
     }
 
-    inner class ViewHolder(val binding: ItemViewPagerImageBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(val binding: ItemViewPagerImageBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(_item: String) {
             binding.apply {
                 item = _item

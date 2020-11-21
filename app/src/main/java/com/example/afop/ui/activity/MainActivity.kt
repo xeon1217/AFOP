@@ -59,15 +59,15 @@ class MainActivity : ActivityExtendFunction() {
                     R.id.menuItemHome -> {
                         switchFragment(MainHomeFragment.newInstance())
                     } // 홈
+                    R.id.menuItemMeeting -> {
+                        switchFragment(MainInformationFragment.newInstance())
+                    } // 모임
+                    R.id.menuItemMarket -> {
+                        switchFragment(MainMarketFragment.newInstance())
+                    } // 중고마켓
                     R.id.menuItemCommunity -> {
                         switchFragment(MainCommunityFragment.newInstance())
                     } // 커뮤니티
-                    R.id.menuItemMarket -> {
-                        switchFragment(MainMarketFragment.newInstance())
-                    } // 매칭
-                    R.id.menuItemInformation -> {
-                        switchFragment(MainInformationFragment.newInstance())
-                    } // 혼족 정보
                     R.id.menuItemPreferences -> {
                         switchFragment(PreferenceFragment.newInstance())
                     }

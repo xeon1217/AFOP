@@ -163,10 +163,7 @@ class DataSource {
         }
     }
 
-    suspend fun marketGetList(
-        title: String?,
-        last_id_cursor: Long?
-    ): Result<ArrayList<MarketDTO?>> {
+    suspend fun marketGetList(title: String?, last_id_cursor: Long?): Result<ArrayList<MarketDTO?>> {
         return try {
             service.marketGetList(title = title, last_id_cursor = last_id_cursor)
         } catch (e: Exception) {

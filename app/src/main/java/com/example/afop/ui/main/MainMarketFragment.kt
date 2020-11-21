@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.afop.R
+import com.example.afop.data.dataSource.DataSource
 import com.example.afop.databinding.FragmentMainMarketBinding
 import com.example.afop.databinding.FragmentMarketSellBinding
 import com.example.afop.ui.activity.ChatActivity
@@ -42,7 +43,6 @@ class MainMarketFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mActivity = activity as ActivityExtendFunction
         mActivity.changeTitle(getString(R.string.title_menu_market))
-
         initFAB()
     }
 
@@ -51,65 +51,81 @@ class MainMarketFragment : Fragment() {
     }
 
     fun openSell(view: View) {
-        mActivity.startActivity(Intent(context, MarketActivity::class.java).putExtra("sell", "sell"))
+        hideFAB()
+        mActivity.startActivity(Intent(context, MarketActivity::class.java))
     }
 
     fun openBuyHistory(view: View) {
+        hideFAB()
         Toast.makeText(mActivity, getString(R.string.alert_not_implement_function), Toast.LENGTH_SHORT).show()
-        //mActivity.startActivity(Intent(context, MarketActivity::class.java).putExtra("sell", "sell"))
+        mActivity.startActivity(Intent(context, MarketActivity::class.java).putExtra("sell", DataSource.getUser().uid))
     }
 
     fun openSellHistory(view: View) {
+        hideFAB()
         Toast.makeText(mActivity, getString(R.string.alert_not_implement_function), Toast.LENGTH_SHORT).show()
-        //mActivity.startActivity(Intent(context, MarketActivity::class.java).putExtra("sell", "sell"))
+        mActivity.startActivity(Intent(context, MarketActivity::class.java).putExtra("buy", DataSource.getUser().uid))
     }
 
     fun openChatting(view: View) {
+        hideFAB()
         Toast.makeText(mActivity, getString(R.string.alert_not_implement_function), Toast.LENGTH_SHORT).show()
         //mActivity.startActivity(Intent(context, ChatActivity::class.java))
     }
 
     fun openKeyword(view: View) {
+        hideFAB()
         Toast.makeText(mActivity, getString(R.string.alert_not_implement_function), Toast.LENGTH_SHORT).show()
         //mActivity.startActivity(Intent(context, MarketActivity::class.java))
     }
 
     fun openFavorite(view: View) {
+        hideFAB()
         Toast.makeText(mActivity, getString(R.string.alert_not_implement_function), Toast.LENGTH_SHORT).show()
         //mActivity.startActivity(Intent(context, MarketActivity::class.java))
     }
 
-    fun initFAB() {
+    private fun initFAB() {
         val fabOpen = AnimationUtils.loadAnimation(mActivity, R.anim.fab_open)
         val fabClose = AnimationUtils.loadAnimation(mActivity, R.anim.fab_close)
-        val fabRClockwise = AnimationUtils.loadAnimation(mActivity, R.anim.rotate_clock_wise)
-        val fabRAntiClockwise =
-            AnimationUtils.loadAnimation(mActivity, R.anim.rotate_anti_clock_wise)
 
         mainMarketOpenMenuFloatingButton.setOnClickListener {
             if (!isOpen) {
-                mainMarketSellFloatingButton.startAnimation(fabOpen)
-                mainMarketBuyHistoryFloatingButton.startAnimation(fabOpen)
-                mainMarketSellHistoryFloatingButton.startAnimation(fabOpen)
-                mainMarketChattingFloatingButton.startAnimation(fabOpen)
-                mainMarketKeywordFloatingButton.startAnimation(fabOpen)
-                mainMarketFavoriteFloatingButton.startAnimation(fabOpen)
-
-                mainMarketOpenMenuFloatingButton.startAnimation(fabRAntiClockwise)
-                isOpen = true
+                showFAB()
             } else {
-                mainMarketFavoriteFloatingButton.startAnimation(fabClose)
-                mainMarketKeywordFloatingButton.startAnimation(fabClose)
-                mainMarketChattingFloatingButton.startAnimation(fabClose)
-                mainMarketSellHistoryFloatingButton.startAnimation(fabClose)
-                mainMarketBuyHistoryFloatingButton.startAnimation(fabClose)
-                mainMarketSellFloatingButton.startAnimation(fabClose)
-
-                mainMarketOpenMenuFloatingButton.startAnimation(fabRClockwise)
-                isOpen = false
+                hideFAB()
             }
-            binding.invalidateAll()
         }
+    }
+
+    private fun hideFAB() {
+        isOpen = false
+        binding.invalidateAll()
+
+        mainMarketFavoriteFloatingButton.hide()
+        mainMarketKeywordFloatingButton.hide()
+        mainMarketChattingFloatingButton.hide()
+        mainMarketSellHistoryFloatingButton.hide()
+        mainMarketBuyHistoryFloatingButton.hide()
+        mainMarketSellFloatingButton.hide()
+
+        val fabRClockwise = AnimationUtils.loadAnimation(mActivity, R.anim.rotate_clock_wise)
+        mainMarketOpenMenuFloatingButton.startAnimation(fabRClockwise)
+    }
+
+    private fun showFAB() {
+        isOpen = true
+        binding.invalidateAll()
+
+        mainMarketSellFloatingButton.show()
+        mainMarketBuyHistoryFloatingButton.show()
+        mainMarketSellHistoryFloatingButton.show()
+        mainMarketChattingFloatingButton.show()
+        mainMarketKeywordFloatingButton.show()
+        mainMarketFavoriteFloatingButton.show()
+
+        val fabRAntiClockwise = AnimationUtils.loadAnimation(mActivity, R.anim.rotate_anti_clock_wise)
+        mainMarketOpenMenuFloatingButton.startAnimation(fabRAntiClockwise)
     }
 
     /*

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.size
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -24,6 +25,7 @@ import com.example.afop.ui.main.market.marketList.MarketListFragment
 import com.example.afop.ui.main.market.marketList.MarketListResponse
 import com.example.afop.ui.main.market.marketList.MarketListViewModel
 import com.example.afop.util.ActivityExtendFunction
+import kotlinx.android.synthetic.main.fragment_market_detail.*
 
 class MarketDetailFragment : Fragment() {
     private lateinit var binding: FragmentMarketDetailBinding
@@ -34,6 +36,7 @@ class MarketDetailFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_market_detail, container, false)
         viewModel = ViewModelProvider(viewModelStore, MarketDetailViewModelFactory()).get(MarketDetailViewModel::class.java)
         mActivity = activity as ActivityExtendFunction
+        mActivity.initToolbar(binding.toolbar)
         subscribeUi()
 
         return binding.root
@@ -62,21 +65,20 @@ class MarketDetailFragment : Fragment() {
                 result.response?.let { response ->
                     (response as MarketDetailResponse).apply {
                         isSuccessGetItem?.let { success ->
-                            binding.item = result.data
-                            binding.marketDetailStateSpinner.setSelection(binding.item!!.state)
-                            viewPagerAdapter.submitList(binding.item!!.images)
+                            binding.marketDetailStateSpinner.setSelection(viewModel.item.state)
+                            viewPagerAdapter.submitList(viewModel.item.images)
                             viewPagerAdapter.notifyDataSetChanged()
                         }
                         isSuccessModifyItem?.let { success ->
-                            binding.item = result.data
                         }
+                        binding.invalidateAll()
                         return@Observer
                     }
                 }
                 result.error?.apply {
                     setTitle(getString(R.string.dialog_title_fail))
                     setMessage(message)
-                    when (this) {
+                    when {
                         else -> {
                             setPositiveButton(getString(R.string.action_confirm)) { _, _ ->
                                 //mActivity.finish()
@@ -102,20 +104,19 @@ class MarketDetailFragment : Fragment() {
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
             when(position) {
                 0 -> {
-                    viewModel.modify(item = binding.item!!.copy(state = MarketDTO.State.SOLD.ordinal))
+                    viewModel.modify(item = viewModel.item.copy(state = MarketDTO.State.SOLD.ordinal))
                 }
                 1 -> {
-                    viewModel.modify(item = binding.item!!.copy(state = MarketDTO.State.RESERVATION.ordinal))
+                    viewModel.modify(item = viewModel.item.copy(state = MarketDTO.State.RESERVATION.ordinal))
                 }
                 2 -> {
-                    viewModel.modify(item = binding.item!!.copy(state = MarketDTO.State.SOLD_OUT.ordinal))
+                    viewModel.modify(item = viewModel.item.copy(state = MarketDTO.State.SOLD_OUT.ordinal))
                 }
             }
         }
         override fun onNothingSelected(parent: AdapterView<*>?) {
         }
     }
-
 
     companion object {
         fun newInstance() = MarketDetailFragment().apply {

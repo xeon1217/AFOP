@@ -16,18 +16,26 @@ class MarketDetailViewModel(private val repository: MarketRepository) : UiViewMo
     private var _result = MutableLiveData<Result<MarketDTO>>()
     val result: LiveData<Result<MarketDTO>> = _result
 
+    var item = MarketDTO()
+
     fun getUID(): String {
         return repository.getUID()
     }
 
     fun getItem(marketID: Long) {
         repository.getItem(marketID) { result ->
+            result.data?.let {
+                item = it
+            }
             _result.postValue(result.copy(response = MarketDetailResponse(isSuccessGetItem = result.response?.success)))
         }
     }
 
     fun modify(item: MarketDTO) {
         repository.modify(item) { result ->
+            result.data?.let {
+                this.item = it
+            }
             _result.postValue(result.copy(response = MarketDetailResponse(isSuccessModifyItem = result.response?.success)))
         }
     }

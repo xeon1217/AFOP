@@ -56,7 +56,7 @@ open class ActivityExtendFunction : AppCompatActivity() {
         }
     }
 
-    fun changeTitle(_title: String) {
+    fun changeTitle(_title: String?) {
         supportActionBar?.apply {
             title = _title
         }

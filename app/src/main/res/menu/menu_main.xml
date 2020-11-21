@@ -4,14 +4,14 @@
         android:id="@+id/menuItemHome"
         android:title="@string/title_menu_home"/>
     <item
-        android:id="@+id/menuItemCommunity"
-        android:title="@string/title_menu_community"/>
+        android:id="@+id/menuItemMeeting"
+        android:title="@string/title_menu_meeting" />
     <item
         android:id="@+id/menuItemMarket"
         android:title="@string/title_menu_market"/>
     <item
-        android:id="@+id/menuItemInformation"
-        android:title="@string/title_menu_information" />
+        android:id="@+id/menuItemCommunity"
+        android:title="@string/title_menu_community"/>
     <item
         android:id="@+id/menuItemPreferences"
         android:title="@string/title_menu_preferences" />

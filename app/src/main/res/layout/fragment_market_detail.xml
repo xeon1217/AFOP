@@ -4,12 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <import type="android.view.View" />
-
-        <variable
-            name="item"
-            type="com.example.afop.data.model.MarketDTO" />
 
         <variable
             name="viewModel"
@@ -33,145 +28,191 @@
         android:layout_height="match_parent"
         android:background="@color/windowBackground">
 
-        <ScrollView
-            android:layout_width="match_parent"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinatorLayout"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible">
+                android:layout_height="wrap_content">
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="@{item.images.size &lt;= 0 ? View.GONE : View.VISIBLE}">
+                    app:contentScrim="?attr/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                    app:toolbarId="@+id/registerToolbar">
 
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/marketDetailViewPager"
                         android:layout_width="match_parent"
-                        android:layout_height="300dp" />
-                </androidx.cardview.widget.CardView>
+                        android:layout_height="320dp"
+                        app:layout_collapseMode="parallax">
 
-                <Space
+                    </androidx.viewpager2.widget.ViewPager2>
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:background="#00000000"
+                        android:minHeight="?attr/actionBarSize"
+                        android:theme="?attr/actionBarTheme"
+                        android:visibility="visible"
+                        app:layout_collapseMode="pin" />
+
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_anchor="@+id/appbar"
+                app:layout_anchorGravity="center"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+                <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="16dp" />
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:visibility="@{item.sellerUID.equals(viewModel.getUID) ? View.VISIBLE : View.GONE}"
-                    app:cardCornerRadius="8dp">
-
-                    <Spinner
-                        android:id="@+id/marketDetailStateSpinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:entries="@array/market_status"
-                        android:spinnerMode="dialog"
-                        tools:setOnItemSelectedListener="@{fragment.stateListener}" />
-                </androidx.cardview.widget.CardView>
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="16dp"
-                    android:visibility="@{item.sellerUID.equals(viewModel.getUID) ? View.VISIBLE : View.GONE}" />
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    app:cardCornerRadius="8dp">
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="8dp"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="visible">
 
-                        <TextView
-                            android:id="@+id/textView2"
+                        <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@{item.title}"
-                            android:textColor="@color/colorTitle"
-                            android:textSize="24sp"
-                            tools:text="제목" />
+                            android:layout_height="match_parent"
+                            android:visibility="@{viewModel.item.images.size &lt;= 0 ? View.GONE : View.VISIBLE}">
+
+                        </androidx.cardview.widget.CardView>
 
                         <Space
                             android:layout_width="match_parent"
-                            android:layout_height="4dp" />
+                            android:layout_height="16dp" />
 
-                        <LinearLayout
+                        <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="horizontal">
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:visibility="@{viewModel.item.sellerUID.equals(viewModel.getUID) ? View.VISIBLE : View.GONE}"
+                            app:cardCornerRadius="8dp">
 
-                            <TextView
-                                android:id="@+id/textView4"
+                            <Spinner
+                                android:id="@+id/marketDetailStateSpinner"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{item.category}"
-                                tools:text="카테고리" />
+                                android:layout_margin="8dp"
+                                android:entries="@array/market_status"
+                                android:spinnerMode="dialog"
+                                tools:setOnItemSelectedListener="@{fragment.stateListener}" />
+                        </androidx.cardview.widget.CardView>
+
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="16dp"
+                            android:visibility="@{viewModel.item.sellerUID.equals(viewModel.getUID) ? View.VISIBLE : View.GONE}" />
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            app:cardCornerRadius="8dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="8dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/textView2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@{viewModel.item.title}"
+                                    android:textColor="@color/colorTitle"
+                                    android:textSize="24sp"
+                                    tools:text="제목" />
+
+                                <Space
+                                    android:layout_width="match_parent"
+                                    android:layout_height="4dp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/textView4"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@{viewModel.item.category}"
+                                        tools:text="카테고리" />
+
+                                    <TextView
+                                        android:id="@+id/textView7"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="4dp"
+                                        android:layout_marginRight="4dp"
+                                        android:text="@string/char_divider" />
+
+                                    <TextView
+                                        android:id="@+id/textView5"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@{util.Companion.timeDiff(viewModel.item.timeStamp)}"
+                                        tools:text="시간" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="16dp" />
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            app:cardCornerRadius="8dp">
 
                             <TextView
-                                android:id="@+id/textView7"
-                                android:layout_width="wrap_content"
+                                android:id="@+id/textView3"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="4dp"
-                                android:layout_marginRight="4dp"
-                                android:text="@string/char_divider" />
+                                android:layout_margin="8dp"
+                                android:lineSpacingMultiplier="1.5"
+                                android:text="@{viewModel.item.content}"
+                                android:textColor="@color/colorContent"
+                                android:textSize="16sp"
+                                tools:text="내용" />
+                        </androidx.cardview.widget.CardView>
 
-                            <TextView
-                                android:id="@+id/textView5"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@{util.Companion.timeDiff(item.timeStamp)}"
-                                tools:text="시간" />
-                        </LinearLayout>
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="16dp" />
 
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </ScrollView>
+            </androidx.core.widget.NestedScrollView>
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="16dp" />
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    app:cardCornerRadius="8dp">
-
-                    <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:lineSpacingMultiplier="1.5"
-                        android:text="@{item.content}"
-                        android:textColor="@color/colorContent"
-                        android:textSize="16sp"
-                        tools:text="내용" />
-                </androidx.cardview.widget.CardView>
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="16dp" />
-
-            </LinearLayout>
-        </ScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout3"
@@ -210,10 +251,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:enabled="@{item.state != state.SOLD_OUT.ordinal()}"
+                android:enabled="@{viewModel.item.state != state.SOLD_OUT.ordinal()}"
                 android:onClick="@{fragment::modify}"
                 android:text="글 수정하기"
-                android:visibility="@{item.sellerUID.equals(viewModel.getUID()) ? View.VISIBLE : View.GONE}" />
+                android:visibility="@{viewModel.item.sellerUID.equals(viewModel.getUID()) ? View.VISIBLE : View.GONE}" />
 
             <Button
                 android:id="@+id/button3"
@@ -221,7 +262,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="판매자와 대화"
-                android:visibility="@{item.sellerUID.equals(viewModel.getUID()) ? View.GONE : View.VISIBLE}" />
+                android:visibility="@{viewModel.item.sellerUID.equals(viewModel.getUID()) ? View.GONE : View.VISIBLE}" />
         </LinearLayout>
 
         <ImageView

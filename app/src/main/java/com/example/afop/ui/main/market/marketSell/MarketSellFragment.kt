@@ -39,9 +39,13 @@ class MarketSellFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_market_sell, container, false)
-        viewModel = ViewModelProvider(viewModelStore, MarketSellViewModelFactory()).get(MarketSellViewModel::class.java)
+        viewModel = ViewModelProvider(
+            viewModelStore,
+            MarketSellViewModelFactory()
+        ).get(MarketSellViewModel::class.java)
         arguments?.getLong("modify")?.let { viewModel.getItem(it) }
         mActivity = activity as ActivityExtendFunction
+        mActivity.initToolbar(binding.toolbar)
         subscribeUi()
 
         return binding.root
@@ -92,7 +96,6 @@ class MarketSellFragment : Fragment() {
                             }.show()
                         }
                         isSuccessGetItem?.let {
-                            binding.invalidateAll()
                         }
                         isSuccessModifyItem?.let {
                             setTitle(getString(R.string.dialog_title_success))
@@ -101,6 +104,7 @@ class MarketSellFragment : Fragment() {
                                 mActivity.finish()
                             }.show()
                         }
+                        binding.invalidateAll()
                     }
                 }
                 result.error?.apply {
@@ -162,11 +166,6 @@ class MarketSellFragment : Fragment() {
     fun imageAdd(view: View) {
 
         //글 내용을 저장
-        viewModel.item.title = marketSellTitleTextInputEditText.text.toString()
-        viewModel.item.price = marketSellPriceTextInputEditText.text.toString()
-        viewModel.item.content = marketSellContentTextInputEditText.text.toString()
-        viewModel.item.negotiation = marketSellNegotiationCheckBox.isChecked
-        viewModel.item.category = marketSellCategorySpinner.selectedItemId.toString()
 
         Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
@@ -186,14 +185,20 @@ class MarketSellFragment : Fragment() {
                 Activity.RESULT_OK -> {
                     data?.let { intentData ->
                         intentData.data?.apply { // 이미지가 한 개
-                            Util.getRealPathFromURI(requireContext(), this)?.let { viewModel.item.images.add(it) }
+                            Util.getRealPathFromURI(requireContext(), this)
+                                ?.let { viewModel.item.images.add(it) }
                         }
                         intentData.clipData?.apply {  // 이미지가 여러개
                             for (i in 0 until itemCount) {
                                 if (viewModel.item.images.size < 10) {
-                                    Util.getRealPathFromURI(requireContext(), getItemAt(i).uri)?.let { viewModel.item.images.add(it) }
+                                    Util.getRealPathFromURI(requireContext(), getItemAt(i).uri)
+                                        ?.let { viewModel.item.images.add(it) }
                                 } else {
-                                    Toast.makeText(context, "이미지는 10장까지 첨부가 가능합니다!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        "이미지는 10장까지 첨부가 가능합니다!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
                         }

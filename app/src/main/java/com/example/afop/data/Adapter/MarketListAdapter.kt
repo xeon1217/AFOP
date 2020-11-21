@@ -12,9 +12,16 @@ import com.example.afop.ui.activity.MarketActivity
 import com.example.afop.data.model.MarketDTO
 import com.example.afop.databinding.ItemMarketSummaryBinding
 
-class MarketListAdapter(val context: Context?) : ListAdapter<MarketDTO, MarketListAdapter.ViewHolder>(MarketListDiffCallback()) {
+class MarketListAdapter(val context: Context?) :
+    ListAdapter<MarketDTO, MarketListAdapter.ViewHolder>(MarketListDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemMarketSummaryBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            ItemMarketSummaryBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -26,15 +33,21 @@ class MarketListAdapter(val context: Context?) : ListAdapter<MarketDTO, MarketLi
         return super.getItem(position)
     }
 
-    inner class ViewHolder(val binding: ItemMarketSummaryBinding) : RecyclerView.ViewHolder(binding.root) {
-                fun bind(_item: MarketDTO) {
-                    binding.apply {
+    inner class ViewHolder(val binding: ItemMarketSummaryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(_item: MarketDTO) {
+            binding.apply {
                 item = _item
                 executePendingBindings()
             }
             binding.root.setOnClickListener {
                 context?.apply {
-                    startActivity(Intent(this, MarketActivity::class.java).putExtra("detail", _item.marketID))
+                    startActivity(
+                        Intent(this, MarketActivity::class.java).putExtra(
+                            "detail",
+                            _item.marketID
+                        )
+                    )
                 }
             }
         }

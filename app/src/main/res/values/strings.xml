@@ -49,8 +49,8 @@
     <string name="title_waiting_server_response">서버의 응답을 기다리는 중..</string>
     <string name="title_menu_home">홈</string>
     <string name="title_menu_community">커뮤니티</string>
-    <string name="title_menu_market">벼룩시장</string>
-    <string name="title_menu_information">혼족정보</string>
+    <string name="title_menu_market">중고마켓</string>
+    <string name="title_menu_meeting">모임</string>
     <string name="title_menu_preferences">환경설정</string>
     <string name="title_menu_market_list">판매글 보기</string>
     <string name="title_menu_market_my_sale">내가 쓴 글 보기</string>
