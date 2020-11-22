@@ -25,6 +25,7 @@ import com.example.afop.ui.main.market.marketList.MarketListFragment
 import com.example.afop.ui.main.market.marketList.MarketListResponse
 import com.example.afop.ui.main.market.marketList.MarketListViewModel
 import com.example.afop.util.ActivityExtendFunction
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_market_detail.*
 
 class MarketDetailFragment : Fragment() {
@@ -52,6 +53,9 @@ class MarketDetailFragment : Fragment() {
     private fun subscribeUi() {
         val viewPagerAdapter = ViewPagerAdapter(context)
         binding.marketDetailViewPager.adapter = viewPagerAdapter
+        TabLayoutMediator(binding.marketDetailTabLayout, binding.marketDetailViewPager) { tab, position ->
+            binding.marketDetailViewPager.currentItem = tab.position
+        }.attach()
         binding.viewModel = viewModel
         binding.fragment = this
 

@@ -23,6 +23,7 @@ import com.example.afop.data.response.ErrorCode
 import com.example.afop.databinding.FragmentMarketListBinding
 import com.example.afop.ui.auth.register.RegisterResponse
 import com.example.afop.ui.main.market.marketSell.MarketSellViewModel
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_market_list.*
 import kotlin.math.log
 
@@ -100,7 +101,7 @@ class MarketListFragment : Fragment() {
     }
 
     private fun getList(last_id_cursor: Long? = null) {
-        mActivity.showLoading()
+        //mActivity.showLoading()
         viewModel.getList(last_id_cursor = last_id_cursor)
     }
 

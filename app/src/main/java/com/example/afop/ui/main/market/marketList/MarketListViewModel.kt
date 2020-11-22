@@ -16,10 +16,10 @@ class MarketListViewModel(private val repository: MarketRepository) : UiViewMode
     val result: LiveData<Result<ArrayList<MarketDTO?>>> = _result
 
     fun getList(last_id_cursor: Long?) {
-        if (last_id_cursor == null) {
-            marketList.clear()
-        }
         repository.getList(last_id_cursor = last_id_cursor) { result ->
+            if (last_id_cursor == null) {
+                marketList.clear()
+            }
             if (result.data == null) {
                 _result.postValue(result.copy(data = null, error = result.error))
             } else {

@@ -11,7 +11,7 @@ import com.example.afop.util.ActivityExtendFunction
 class MainInformationFragment : Fragment() {
     private lateinit var mActivity: ActivityExtendFunction
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_main_information, container, false)
+        return inflater.inflate(R.layout.fragment_main_meeting, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
