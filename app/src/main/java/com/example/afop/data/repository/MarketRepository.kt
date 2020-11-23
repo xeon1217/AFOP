@@ -76,7 +76,6 @@ class MarketRepository(private val dataSource: DataSource) {
             }
         }
     }
-
      */
 
     fun getItem(marketID: Long, callback: (Result<MarketDTO>) -> Unit) {
