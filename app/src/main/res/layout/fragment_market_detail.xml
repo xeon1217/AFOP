@@ -26,7 +26,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/windowBackground">
+        android:background="@color/windowBackground"
+        android:visibility="@{viewModel.item.sellerUID != null ? View.VISIBLE : View.GONE}">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/coordinatorLayout"
