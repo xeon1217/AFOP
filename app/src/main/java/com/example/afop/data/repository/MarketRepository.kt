@@ -11,12 +11,8 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.OutputStream
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * 마켓 관련 레포지토리
@@ -29,11 +25,6 @@ class MarketRepository(private val dataSource: DataSource) {
     ) {
         CoroutineScope(IO).launch {
             dataSource.marketGetList(title = title, last_id_cursor = last_id_cursor).apply {
-                data?.forEach {
-                    it?.images?.forEach {
-                        dataSource.fileGetItem(it)
-                    }
-                }
                 response?.let { response ->
                     callback(Result(data = data, response = response))
                 }
@@ -76,6 +67,17 @@ class MarketRepository(private val dataSource: DataSource) {
 
          */
     }
+
+    /*
+    fun getImage() {
+        data?.forEach {
+            it?.images?.forEach {
+                dataSource.fileGetItem(it)
+            }
+        }
+    }
+
+     */
 
     fun getItem(marketID: Long, callback: (Result<MarketDTO>) -> Unit) {
         CoroutineScope(IO).launch {

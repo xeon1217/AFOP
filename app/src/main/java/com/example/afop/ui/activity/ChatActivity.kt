@@ -8,7 +8,7 @@ import com.example.afop.util.ActivityExtendFunction
 /***
  * 채팅 관련 액티비티
  */
-class ChatActivity : ActivityExtendFunction() {
+class  ChatActivity : ActivityExtendFunction() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)

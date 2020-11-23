@@ -1,12 +1,10 @@
 package com.example.afop.ui.main.market.marketList
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.afop.data.model.MarketDTO
 import com.example.afop.util.UiViewModel
 import com.example.afop.data.repository.MarketRepository
-import com.example.afop.data.response.Response
 import com.example.afop.data.response.Result
 
 class MarketListViewModel(private val repository: MarketRepository) : UiViewModel() {

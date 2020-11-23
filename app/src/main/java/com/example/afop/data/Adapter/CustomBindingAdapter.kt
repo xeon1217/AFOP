@@ -63,10 +63,10 @@ fun bindImage(view: ImageView, url: String?, error: Drawable) {
 @BindingAdapter("bind_image", "bind_image_error")
 fun bindImage(view: ImageView, url: String?, error: Drawable) {
     Glide.with(view.context)
-        .load("$url")
+        .load("${RetrofitClient.IMAGE_URL}$url")
         .error(
             Glide.with(view.context)
-                .load("${view.context.cacheDir}/${url}")
+                .load("${view.context.cacheDir}/$url")
                 .error(
                     Glide.with(view.context)
                         .load(error)
