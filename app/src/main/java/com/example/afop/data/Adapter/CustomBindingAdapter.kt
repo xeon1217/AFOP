@@ -63,13 +63,17 @@ fun bindImage(view: ImageView, url: String?, error: Drawable) {
 @BindingAdapter("bind_image", "bind_image_error")
 fun bindImage(view: ImageView, url: String?, error: Drawable) {
     Glide.with(view.context)
-        .load("${view.context.cacheDir}/$url")
+        .load("$url") // 스토리지 내부의 uri에 접근
         .error(
             Glide.with(view.context)
-                .load("${RetrofitClient.IMAGE_URL}$url")
+                .load("${view.context.cacheDir}/$url") // 스토리지 내부의 캐시 디렉토리에 접근
                 .error(
                     Glide.with(view.context)
-                        .load(error)
+                        .load("${RetrofitClient.IMAGE_URL}$url") // 네트워크 주소로 접근
+                        .error(
+                            Glide.with(view.context)
+                                .load(error) // 에러 이미지 출력
+                        )
                 )
         )
         .thumbnail(0.3f)
