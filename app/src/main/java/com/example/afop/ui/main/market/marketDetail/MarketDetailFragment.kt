@@ -38,6 +38,7 @@ class MarketDetailFragment : Fragment() {
         viewModel = ViewModelProvider(viewModelStore, MarketDetailViewModelFactory()).get(MarketDetailViewModel::class.java)
         mActivity = activity as ActivityExtendFunction
         mActivity.initToolbar(binding.toolbar)
+        mActivity.showLoading()
         subscribeUi()
 
         return binding.root
