@@ -24,6 +24,8 @@ import com.example.afop.databinding.FragmentMarketSellBinding
 import com.example.afop.util.ActivityExtendFunction
 import com.example.afop.util.Util
 import kotlinx.android.synthetic.main.fragment_market_sell.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 /**
  * 마켓에 판매글을 올릴 때 사용
@@ -161,12 +163,20 @@ class MarketSellFragment : Fragment() {
         }.show()
     }
 
+    fun saveContent() {
+        viewModel.item.title = marketSellTitleTextInputEditText.text.toString()
+        viewModel.item.price = marketSellPriceTextInputEditText.text.toString()
+        viewModel.item.content = marketSellContentTextInputEditText.text.toString()
+        viewModel.item.negotiation = marketSellNegotiationCheckBox.isChecked
+        viewModel.item.category = marketSellCategorySpinner.selectedItem.toString()
+    }
+
     val PICTURE_REQUEST_CODE = 100
 
     fun imageAdd(view: View) {
 
         //글 내용을 저장
-
+        saveContent()
         Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
