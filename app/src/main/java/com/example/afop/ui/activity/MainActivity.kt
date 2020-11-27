@@ -15,9 +15,8 @@ import com.example.afop.databinding.ActivityMainBinding
 import com.example.afop.service.ForcedTerminationService
 import com.example.afop.ui.main.MainCommunityFragment
 import com.example.afop.ui.main.MainHomeFragment
-import com.example.afop.ui.main.MainInformationFragment
+import com.example.afop.ui.main.MainMeetingFragment
 import com.example.afop.ui.main.MainMarketFragment
-import com.example.afop.ui.main.market.marketList.MarketListFragment
 import com.example.afop.util.PreferenceFragment
 import com.example.afop.util.ActivityExtendFunction
 import kotlinx.android.synthetic.main.activity_main.*
@@ -60,7 +59,7 @@ class MainActivity : ActivityExtendFunction() {
                         switchFragment(MainHomeFragment.newInstance())
                     } // 홈
                     R.id.menuItemMeeting -> {
-                        switchFragment(MainInformationFragment.newInstance())
+                        switchFragment(MainMeetingFragment.newInstance())
                     } // 모임
                     R.id.menuItemMarket -> {
                         switchFragment(MainMarketFragment.newInstance())

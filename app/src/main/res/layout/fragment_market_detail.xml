@@ -57,7 +57,8 @@
                         android:id="@+id/marketDetailViewPager"
                         android:layout_width="match_parent"
                         android:layout_height="320dp"
-                        app:layout_collapseMode="parallax" />
+                        app:layout_collapseMode="parallax"
+                        android:visibility="@{viewModel.item.images.size &lt;= 0 ? View.GONE : View.VISIBLE}"/>
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/marketDetailTabLayout"

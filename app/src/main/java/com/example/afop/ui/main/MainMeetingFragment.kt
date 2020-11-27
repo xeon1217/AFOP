@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.example.afop.R
 import com.example.afop.util.ActivityExtendFunction
 
-class MainInformationFragment : Fragment() {
+class MainMeetingFragment : Fragment() {
     private lateinit var mActivity: ActivityExtendFunction
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_main_meeting, container, false)
@@ -22,7 +22,7 @@ class MainInformationFragment : Fragment() {
 
     companion object {
         fun newInstance() =
-            MainInformationFragment().apply {
+            MainMeetingFragment().apply {
                 arguments = Bundle().apply {
                 }
             }
