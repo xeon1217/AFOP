@@ -87,10 +87,8 @@ class DataSource {
     suspend fun login(loginData: Map<String, String>?): Result<UserDTO> {
         return try {
             if (getAutoLogin() && loginData.isNullOrEmpty()) {
-                Log.e("tt", "!${loginData}")
                 service.autoLogin(token = getToken())
             } else {
-                Log.e("tt", "?${loginData}")
                 service.login(data = loginData)
             }.apply {
                 user = data

@@ -62,18 +62,19 @@ class MarketListFragment : Fragment() {
         }
         binding.marketRefreshLayout.setOnRefreshListener {
             getList()
-            marketRefreshLayout.isRefreshing = false
         }
 
         viewModel.result.observe(viewLifecycleOwner, Observer { result ->
             if (result == null) {
                 return@Observer
             }
+
             mActivity.hideLoading()
             AlertDialog.Builder(mActivity).apply {
                 setCancelable(false)
                 result.response?.let { response ->
                     (response as MarketListResponse).apply {
+                        marketRefreshLayout.isRefreshing = false
                         isSuccessGetList?.let { success ->
                             if (success) {
                                 marketListAdapter.submitList(result.data)

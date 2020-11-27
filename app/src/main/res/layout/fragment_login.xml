@@ -64,7 +64,8 @@
                         android:layout_height="wrap_content"
                         android:addTextChangedListener="@{textWatcher}"
                         android:hint="@string/prompt_email"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="textEmailAddress"
+                        android:text="xeon1217@naver.com" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -79,14 +80,15 @@
                         android:layout_height="wrap_content"
                         android:addTextChangedListener="@{textWatcher}"
                         android:hint="@string/prompt_password"
-                        android:inputType="textPassword" />
+                        android:inputType="textPassword"
+                        android:text="xeon1217" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/loginButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
+                    android:enabled="true"
                     android:onClick="@{fragment::login}"
                     android:text="@string/action_log_in"
                     android:textAlignment="center"

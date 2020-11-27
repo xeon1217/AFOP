@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +30,7 @@ class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private lateinit var viewModel: LoginViewModel
     private lateinit var mActivity: ActivityExtendFunction
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +85,7 @@ class LoginFragment : Fragment() {
                 return@Observer
             }
             mActivity.hideLoading()
+
             AlertDialog.Builder(mActivity).apply {
                 setCancelable(false)
                 result.response?.let {
@@ -120,6 +123,7 @@ class LoginFragment : Fragment() {
 
     //로그인 성공
     fun successLogin() {
+
         Toast.makeText(context, "안녕하세요 ${DataSource.getUser().nickname}님!", Toast.LENGTH_SHORT).show()
         mActivity.startActivity(Intent(mActivity, MainActivity::class.java))
     }

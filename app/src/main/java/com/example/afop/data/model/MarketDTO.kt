@@ -25,4 +25,8 @@ data class MarketDTO(
         RESERVATION("예약중"),
         SOLD_OUT("판매완료")
     }
+
+    enum class Category(val string: String) {
+
+    }
 }

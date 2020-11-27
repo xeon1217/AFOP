@@ -9,5 +9,6 @@ data class UserDTO(
     val token: String, //JWT 토큰
     val email: String? = null, //유저의 이메일 주소
     val name: String? = null, //유저의 이름
-    val nickname: String? = null //유저의 닉네임
+    val nickname: String? = null, //유저의 닉네임
+    val profileImage: String? = null //프로필 이미지
 )
