@@ -5,14 +5,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
+        <import type="android.view.View" />
+
         <variable
             name="textWatcher"
             type="android.text.TextWatcher" />
+
+        <variable
+            name="fragment"
+            type="com.example.afop.ui.main.meeting.meetingCreate.MeetingCreateFragment" />
+
+        <variable
+            name="viewModel"
+            type="com.example.afop.ui.main.meeting.meetingCreate.MeetingCreateViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/windowBackground">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -72,7 +84,7 @@
                     app:cardCornerRadius="8dp">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/marketSellContentTextInputLayout"
+                        android:id="@+id/contentTextInputLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -83,6 +95,7 @@
                         app:hintEnabled="true">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/contentTextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:addTextChangedListener="@{textWatcher}"
@@ -101,7 +114,7 @@
                     app:cardCornerRadius="8dp">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/marketSellPriceTextInputLayout"
+                        android:id="@+id/memberTextInputLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -112,7 +125,7 @@
                         app:hintEnabled="true">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/marketSellPriceTextInputEditText"
+                            android:id="@+id/memberTextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:addTextChangedListener="@{textWatcher}"
@@ -155,7 +168,7 @@
                 android:layout_weight="0" />
 
             <Button
-                android:id="@+id/createButton"
+                android:id="@+id/confirmButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

@@ -18,7 +18,6 @@ import com.example.afop.R
 import com.example.afop.databinding.FragmentMarketCreateBinding
 import com.example.afop.util.ActivityExtendFunction
 import com.example.afop.util.Util
-import kotlinx.android.synthetic.main.fragment_market_create.*
 
 /**
  * 마켓에 판매글을 올릴 때 사용
@@ -34,10 +33,7 @@ class MarketCreateFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_market_create, container, false)
-        viewModel = ViewModelProvider(
-            viewModelStore,
-            MarketCreateViewModelFactory()
-        ).get(MarketCreateViewModel::class.java)
+        viewModel = ViewModelProvider(viewModelStore, MarketCreateViewModelFactory()).get(MarketCreateViewModel::class.java)
         arguments?.getString(ActivityExtendFunction.ActivityType.UPDATE.name)?.let {
             viewModel.getItem(it)
         }
@@ -55,7 +51,7 @@ class MarketCreateFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
-                viewModel.sellStateChanged(
+                viewModel.promptChanged(
                     title = binding.marketSellTitleTextInputEditText.text.toString(),
                     price = binding.marketSellPriceTextInputEditText.text.toString(),
                     content = binding.marketSellContentTextInputEditText.text.toString()
@@ -63,12 +59,12 @@ class MarketCreateFragment : Fragment() {
             }
         }
 
-        viewModel.state.observe(viewLifecycleOwner, Observer { state ->
+        viewModel.promptState.observe(viewLifecycleOwner, Observer { state ->
             if (state == null) {
                 return@Observer
             }
             state.apply {
-                binding.marketSellButton.isEnabled = state.isMarketDataValid
+                binding.confirmButton.isEnabled = state.isMarketDataValid
                 //경고 관련 주석
                 //marketSellTitleTextInputLayout.error = state.titleError?.let { getString(it) }
                 //marketSellPriceTextInputLayout.error = state.priceError?.let { getString(it) }

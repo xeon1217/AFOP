@@ -185,7 +185,7 @@ class MarketFragment : Fragment() {
             chatFloatingButton.hide()
             sellHistoryFloatingButton.hide()
             buyHistoryFloatingButton.hide()
-            sellFloatingButton.hide()
+            createFloatingButton.hide()
 
             val fabRClockwise = AnimationUtils.loadAnimation(mActivity, R.anim.rotate_clock_wise)
             openMenuFloatingButton.startAnimation(fabRClockwise)
@@ -198,7 +198,7 @@ class MarketFragment : Fragment() {
         binding.apply {
             invalidateAll()
 
-            sellFloatingButton.show()
+            createFloatingButton.show()
             buyHistoryFloatingButton.show()
             sellHistoryFloatingButton.show()
             chatFloatingButton.show()

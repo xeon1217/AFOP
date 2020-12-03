@@ -8,8 +8,8 @@ import com.example.afop.data.repository.MarketRepository
 import com.example.afop.data.response.Result
 
 class MarketCreateViewModel (private val repository: MarketRepository) : CustomViewModel() {
-    private var _sellState = MutableLiveData<MarketCreateState>()
-    val state: LiveData<MarketCreateState> = _sellState
+    private var _promptState = MutableLiveData<MarketCreateState>()
+    val promptState: LiveData<MarketCreateState> = _promptState
 
     private var _result = MutableLiveData<Result<*>>()
     val result: LiveData<Result<*>> = _result
@@ -37,17 +37,17 @@ class MarketCreateViewModel (private val repository: MarketRepository) : CustomV
         }
     }
 
-    fun sellStateChanged(title: String, price: String, content: String) {
+    fun promptChanged(title: String, price: String, content: String) {
         if(isEmptyValid(title) != null) {
-            _sellState.value = MarketCreateState(titleError = isEmptyValid(title))
+            _promptState.value = MarketCreateState(titleError = isEmptyValid(title))
         } else if (isEmptyValid(price) != null) {
-            _sellState.value = MarketCreateState(priceError = isEmptyValid(price))
+            _promptState.value = MarketCreateState(priceError = isEmptyValid(price))
         } else if (price.length > 16) { // 오류부분 설계할 것
-            _sellState.value = MarketCreateState(priceError = isEmptyValid(price))
+            _promptState.value = MarketCreateState(priceError = isEmptyValid(price))
         } else if (isEmptyValid(content) != null) {
-            _sellState.value = MarketCreateState(contentError = isEmptyValid(content))
+            _promptState.value = MarketCreateState(contentError = isEmptyValid(content))
         } else {
-            _sellState.value = MarketCreateState(isMarketDataValid = true)
+            _promptState.value = MarketCreateState(isMarketDataValid = true)
         }
     }
 }

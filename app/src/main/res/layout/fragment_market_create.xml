@@ -9,12 +9,12 @@
         <import type="android.view.View" />
 
         <variable
-            name="fragment"
-            type="com.example.afop.ui.main.market.marketCreate.MarketCreateFragment" />
-
-        <variable
             name="textWatcher"
             type="android.text.TextWatcher" />
+
+        <variable
+            name="fragment"
+            type="com.example.afop.ui.main.market.marketCreate.MarketCreateFragment" />
 
         <variable
             name="viewModel"
@@ -454,7 +454,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <Button
-                android:id="@+id/marketSellExitButton"
+                android:id="@+id/exitButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -467,7 +467,7 @@
                 android:layout_weight="0" />
 
             <Button
-                android:id="@+id/marketSellButton"
+                android:id="@+id/confirmButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

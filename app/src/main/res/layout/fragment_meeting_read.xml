@@ -164,21 +164,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="16dp" />
 
-            </LinearLayout>
-        </ScrollView>
+                <LinearLayout
+                    android:id="@+id/linearLayout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <!--
+                    <!--
         <Button
             android:id="@+id/button2"
             android:layout_width="match_parent"
@@ -187,36 +181,51 @@
             android:text="닫기" />
             -->
 
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="48dp"
-                android:layout_height="match_parent"
-                android:background="#00000000"
-                android:scaleType="center"
-                app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+                    <ImageButton
+                        android:id="@+id/imageButton"
+                        android:layout_width="48dp"
+                        android:layout_height="match_parent"
+                        android:background="#00000000"
+                        android:scaleType="center"
+                        app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
 
-            <Space
-                android:layout_width="16dp"
-                android:layout_height="match_parent" />
+                    <Space
+                        android:layout_width="16dp"
+                        android:layout_height="match_parent" />
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:enabled="@{viewModel.item.state != state.SOLD_OUT.ordinal()}"
-                android:onClick="@{fragment::modify}"
-                android:text="모임 수정하기"
-                android:visibility="@{viewModel.item.sellerUID.equals(viewModel.getUID()) ? View.VISIBLE : View.GONE}" />
+                    <Button
+                        android:id="@+id/button"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:enabled="@{viewModel.item.state != state.SOLD_OUT.ordinal()}"
+                        android:onClick="@{fragment::modify}"
+                        android:text="모임 수정하기"
+                        android:visibility="@{viewModel.item.sellerUID.equals(viewModel.getUID()) ? View.VISIBLE : View.GONE}" />
 
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="가입 요청하기"
-                android:visibility="@{viewModel.item.sellerUID.equals(viewModel.getUID()) ? View.GONE : View.VISIBLE}" />
-        </LinearLayout>
+                    <Button
+                        android:id="@+id/button3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="가입 요청하기"
+                        android:visibility="@{viewModel.item.sellerUID.equals(viewModel.getUID()) ? View.GONE : View.VISIBLE}" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/meetingBottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/menu_meeting">
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
 
         <ImageView
             android:id="@+id/progressBackground"
