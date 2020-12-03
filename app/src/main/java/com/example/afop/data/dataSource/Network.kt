@@ -21,8 +21,8 @@ class Network {
         private const val ADDRESS_PC = "192.168.1.10" // 서버 주소
         private const val ADDRESS_AVD = "10.0.2.2" // 서버 주소
         private const val ADDRESS_LOCALHOST = "localhost" // 서버 주소
-        private const val BASE_URL = "${PROTOCOL_HTTP}${ADDRESS_AVD}${PORT}"
-        private const val STOMP_BASE_URL = "${PROTOCOL_STOMP_HTTP}${ADDRESS_AVD}${PORT}${STOMP_ENDPOINT}"
+        private const val BASE_URL = "${PROTOCOL_HTTP}${ADDRESS}${PORT}"
+        private const val STOMP_BASE_URL = "${PROTOCOL_STOMP_HTTP}${ADDRESS}${PORT}${STOMP_ENDPOINT}"
         const val IMAGE_URL = "${BASE_URL}/files/download/?file="
         val gson = GsonBuilder().setLenient().create()
         val okHttpClient = OkHttpClient.Builder()
@@ -39,7 +39,7 @@ class Network {
         //Stomp.over(Stomp.ConnectionProvider.OKHTTP, "${PROTOCOL_STOMP_HTTP}${ADDRESS_AVD}${PORT}${STOMP_ENDPOINT}")
 
         fun getStomp() : String {
-            return "${PROTOCOL_STOMP_HTTP}${ADDRESS_AVD}${PORT}${STOMP_ENDPOINT}"
+            return "${PROTOCOL_STOMP_HTTP}${ADDRESS}${PORT}${STOMP_ENDPOINT}"
         }
     }
 }
