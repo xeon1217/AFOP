@@ -13,12 +13,13 @@ import com.example.afop.R
 import com.example.afop.data.dataSource.DataSource
 import com.example.afop.databinding.ActivityMainBinding
 import com.example.afop.service.ForcedTerminationService
-import com.example.afop.ui.main.MainCommunityFragment
-import com.example.afop.ui.main.MainHomeFragment
-import com.example.afop.ui.main.MainMeetingFragment
-import com.example.afop.ui.main.MainMarketFragment
+import com.example.afop.ui.main.community.CommunityFragment
+import com.example.afop.ui.main.home.MainHomeFragment
+import com.example.afop.ui.main.meeting.MeetingFragment
+import com.example.afop.ui.main.market.MarketFragment
 import com.example.afop.util.PreferenceFragment
 import com.example.afop.util.ActivityExtendFunction
+import com.example.afop.util.Util
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.system.exitProcess
 
@@ -28,9 +29,11 @@ import kotlin.system.exitProcess
  */
 class MainActivity : ActivityExtendFunction() {
     private var lastTimeBackPressed: Long = 0
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         initApp()
 
         //setContentView(R.layout.activity_main)
@@ -44,9 +47,6 @@ class MainActivity : ActivityExtendFunction() {
             }
         }
 
-        var binding: ActivityMainBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_main)
-
         if (savedInstanceState == null) {
             switchFragment(MainHomeFragment.newInstance())
         }
@@ -59,13 +59,13 @@ class MainActivity : ActivityExtendFunction() {
                         switchFragment(MainHomeFragment.newInstance())
                     } // 홈
                     R.id.menuItemMeeting -> {
-                        switchFragment(MainMeetingFragment.newInstance())
+                        switchFragment(MeetingFragment.newInstance())
                     } // 모임
                     R.id.menuItemMarket -> {
-                        switchFragment(MainMarketFragment.newInstance())
+                        switchFragment(MarketFragment.newInstance())
                     } // 중고마켓
                     R.id.menuItemCommunity -> {
-                        switchFragment(MainCommunityFragment.newInstance())
+                        switchFragment(CommunityFragment.newInstance())
                     } // 커뮤니티
                     R.id.menuItemPreferences -> {
                         switchFragment(PreferenceFragment.newInstance())
@@ -74,9 +74,10 @@ class MainActivity : ActivityExtendFunction() {
             }
             true
         }
+        binding.invalidateAll()
     }
 
-    fun initApp() {
+    private fun initApp() {
         DataSource.init(this)
         startService(Intent(this, ForcedTerminationService::class.java))
         if (!DataSource.isLogin() && DataSource.getAutoLogin()) {
@@ -85,12 +86,16 @@ class MainActivity : ActivityExtendFunction() {
     }
 
     fun goToLogin(view: View?) {
-        startActivity(
-            Intent(
-                this,
-                LoginActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        )
+        startActivityForResult(Intent(this, LoginActivity::class.java), ActivityType.LOGIN.ordinal)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode) {
+            ActivityType.LOGIN.ordinal -> {
+                binding.invalidateAll()
+            }
+        }
     }
 
     //툴바 관련

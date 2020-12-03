@@ -1,5 +1,6 @@
 package com.example.afop.ui.auth.login
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -123,9 +124,9 @@ class LoginFragment : Fragment() {
 
     //로그인 성공
     fun successLogin() {
-
         Toast.makeText(context, "안녕하세요 ${DataSource.getUser().nickname}님!", Toast.LENGTH_SHORT).show()
-        mActivity.startActivity(Intent(mActivity, MainActivity::class.java))
+        mActivity.setResult(Activity.RESULT_OK)
+        mActivity.finish()
     }
 
     fun failedLogin() {

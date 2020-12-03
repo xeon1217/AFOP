@@ -3,11 +3,11 @@ package com.example.afop.ui.auth.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.afop.data.dataSource.DataSource
-import com.example.afop.util.UiViewModel
-import com.example.afop.data.repository.LoginRepository
+import com.example.afop.util.CustomViewModel
+import com.example.afop.data.repository.AuthRepository
 import com.example.afop.data.response.Result
 
-class LoginViewModel(private val repository: LoginRepository) : UiViewModel() {
+class LoginViewModel(private val repository: AuthRepository) : CustomViewModel() {
     private val _loginPrompt = MutableLiveData<LoginState>()
     val state: LiveData<LoginState> = _loginPrompt
 

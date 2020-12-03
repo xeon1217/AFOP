@@ -3,11 +3,11 @@ package com.example.afop.ui.auth.register
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.afop.util.UiViewModel
+import com.example.afop.util.CustomViewModel
 import com.example.afop.data.repository.RegisterRepository
 import com.example.afop.data.response.Result
 
-class RegisterViewModel(private val repository: RegisterRepository) : UiViewModel() {
+class RegisterViewModel(private val repository: RegisterRepository) : CustomViewModel() {
     private val _registerState = MutableLiveData<RegisterState>()
     val state: LiveData<RegisterState> = _registerState
 

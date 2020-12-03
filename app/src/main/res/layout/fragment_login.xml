@@ -64,8 +64,7 @@
                         android:layout_height="wrap_content"
                         android:addTextChangedListener="@{textWatcher}"
                         android:hint="@string/prompt_email"
-                        android:inputType="textEmailAddress"
-                        android:text="xeon1217@naver.com" />
+                        android:inputType="textEmailAddress" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,8 +79,7 @@
                         android:layout_height="wrap_content"
                         android:addTextChangedListener="@{textWatcher}"
                         android:hint="@string/prompt_password"
-                        android:inputType="textPassword"
-                        android:text="xeon1217" />
+                        android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
