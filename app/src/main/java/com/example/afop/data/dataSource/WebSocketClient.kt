@@ -7,6 +7,7 @@ import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.dto.LifecycleEvent
 
 class WebSocketClient {
+    /*
     companion object {
         val compositeDisposable = CompositeDisposable()
         val mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, Network.getStomp())
@@ -59,4 +60,5 @@ class WebSocketClient {
             }
         }
     }
+     */
 }
