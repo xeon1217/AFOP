@@ -1,4 +1,4 @@
-package com.example.afop.ui.main
+package com.example.afop.ui.main.chat
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,21 +8,21 @@ import androidx.fragment.app.Fragment
 import com.example.afop.R
 import com.example.afop.util.ActivityExtendFunction
 
-class MainHomeFragment : Fragment() {
+class MainChatFragment : Fragment() {
     private lateinit var mActivity: ActivityExtendFunction
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_main_home, container, false)
+        return inflater.inflate(R.layout.fragment_chat_read, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mActivity = activity as ActivityExtendFunction
-        mActivity.changeTitle(R.string.app_name)
+        //mActivity.changeTitle() 이 곳에 채팅방 이름
     }
 
     companion object {
         fun newInstance() =
-            MainHomeFragment().apply {
+            MainChatFragment().apply {
                 arguments = Bundle().apply {
                 }
             }

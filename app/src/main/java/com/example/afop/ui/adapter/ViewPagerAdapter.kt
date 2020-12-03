@@ -1,4 +1,4 @@
-package com.example.afop.data.Adapter
+package com.example.afop.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -32,9 +32,9 @@ class ViewPagerAdapter(val context: Context?) :
 
     inner class ViewHolder(val binding: ItemViewPagerImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(_item: String) {
+        fun bind(_image: String) {
             binding.apply {
-                item = _item
+                image = _image
                 executePendingBindings()
             }
             binding.root.setOnClickListener {

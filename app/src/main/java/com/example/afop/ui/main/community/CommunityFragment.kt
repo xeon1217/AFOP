@@ -1,4 +1,4 @@
-package com.example.afop.ui.main
+package com.example.afop.ui.main.community
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,21 +8,22 @@ import androidx.fragment.app.Fragment
 import com.example.afop.R
 import com.example.afop.util.ActivityExtendFunction
 
-class MainMeetingFragment : Fragment() {
+class CommunityFragment : Fragment() {
+    private lateinit var binding: Fragment
     private lateinit var mActivity: ActivityExtendFunction
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_main_meeting, container, false)
+        return inflater.inflate(R.layout.fragment_community, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mActivity = activity as ActivityExtendFunction
-        mActivity.changeTitle(R.string.title_menu_meeting)
+        mActivity.changeTitle(R.string.title_menu_community)
     }
 
     companion object {
         fun newInstance() =
-            MainMeetingFragment().apply {
+            CommunityFragment().apply {
                 arguments = Bundle().apply {
                 }
             }

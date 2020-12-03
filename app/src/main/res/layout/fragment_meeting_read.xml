@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.example.afop.ui.main.market.marketRead.MarketReadViewModel" />
+
+        <variable
+            name="fragment"
+            type="com.example.afop.ui.main.market.marketRead.MarketReadFragment" />
+
+        <variable
+            name="util"
+            type="com.example.afop.util.Util" />
+
+        <variable
+            name="state"
+            type="com.example.afop.data.model.MarketDTO.State" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/windowBackground"
+        android:visibility="@{viewModel.item.sellerUID != null ? View.VISIBLE : View.GONE}">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="@{viewModel.item.images.size &lt;= 0 ? View.GONE : View.VISIBLE}">
+
+                </androidx.cardview.widget.CardView>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:visibility="@{viewModel.item.sellerUID.equals(viewModel.getUID) ? View.VISIBLE : View.GONE}"
+                    app:cardCornerRadius="8dp"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:visibility="@{viewModel.item.sellerUID.equals(viewModel.getUID) ? View.VISIBLE : View.GONE}" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    app:cardCornerRadius="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{viewModel.item.title}"
+                            android:textColor="@color/colorTitle"
+                            android:textSize="24sp"
+                            tools:text="제목" />
+
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="4dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{viewModel.item.category}"
+                                tools:text="카테고리" />
+
+                            <TextView
+                                android:id="@+id/textView7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:text="@string/char_divider" />
+
+                            <TextView
+                                android:id="@+id/textView5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{util.Companion.timeDiff(viewModel.item.timeStamp)}"
+                                tools:text="시간" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/marketDetailPriceTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:gravity="right"
+                            android:lineSpacingMultiplier="1.5"
+                            android:text="@{util.Companion.money_comma(viewModel.item.price)}"
+                            android:textColor="@color/colorContent"
+                            android:textSize="20sp"
+                            tools:text="가격" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    app:cardCornerRadius="8dp">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:lineSpacingMultiplier="1.5"
+                        android:text="@{viewModel.item.content}"
+                        android:textColor="@color/colorContent"
+                        android:textSize="16sp"
+                        tools:text="내용" />
+                </androidx.cardview.widget.CardView>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <!--
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="닫기" />
+            -->
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:background="#00000000"
+                android:scaleType="center"
+                app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:enabled="@{viewModel.item.state != state.SOLD_OUT.ordinal()}"
+                android:onClick="@{fragment::modify}"
+                android:text="모임 수정하기"
+                android:visibility="@{viewModel.item.sellerUID.equals(viewModel.getUID()) ? View.VISIBLE : View.GONE}" />
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="가입 요청하기"
+                android:visibility="@{viewModel.item.sellerUID.equals(viewModel.getUID()) ? View.GONE : View.VISIBLE}" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/progressBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorLoading"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

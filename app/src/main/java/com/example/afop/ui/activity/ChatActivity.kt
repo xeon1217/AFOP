@@ -2,7 +2,7 @@ package com.example.afop.ui.activity
 
 import android.os.Bundle
 import com.example.afop.R
-import com.example.afop.ui.main.MainChatFragment
+import com.example.afop.ui.main.chat.MainChatFragment
 import com.example.afop.util.ActivityExtendFunction
 
 /***

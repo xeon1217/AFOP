@@ -11,7 +11,7 @@
         <import type="android.widget.ImageView.ScaleType" />
 
         <variable
-            name="item"
+            name="image"
             type="String" />
 
         <variable
@@ -36,8 +36,8 @@
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="@{item != null ? ScaleType.CENTER_CROP : ScaleType.CENTER_INSIDE}"
-                app:bind_image="@{item}"
+                android:scaleType="@{image != null ? ScaleType.CENTER_CROP : ScaleType.CENTER_INSIDE}"
+                app:bind_image="@{image}"
                 app:bind_image_error="@{@drawable/ic_baseline_image_not_supported_24}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
