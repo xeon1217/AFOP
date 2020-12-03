@@ -33,7 +33,7 @@ class DataSource {
             PreferenceManager.init(context)
             cache = context.cacheDir
             fcm = FirebaseInstanceId.getInstance()
-            WebSocketClient.connectSocket()
+            //WebSocketClient.connectSocket()
         }
 
         fun exit() {
