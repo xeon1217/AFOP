@@ -199,11 +199,14 @@ class MarketFragment : Fragment() {
             invalidateAll()
 
             createFloatingButton.show()
+            /*
             buyHistoryFloatingButton.show()
             sellHistoryFloatingButton.show()
             chatFloatingButton.show()
             keywordFloatingButton.show()
             favoriteFloatingButton.show()
+
+             */
 
             val fabRAntiClockwise = AnimationUtils.loadAnimation(mActivity, R.anim.rotate_anti_clock_wise)
             openMenuFloatingButton.startAnimation(fabRAntiClockwise)
