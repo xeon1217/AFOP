@@ -78,7 +78,7 @@ class MarketRepository(private val dataSource: DataSource) {
     }
      */
 
-    fun getItem(marketID: Long, callback: (Result<MarketDTO>) -> Unit) {
+    fun getItem(marketID: String, callback: (Result<MarketDTO>) -> Unit) {
         CoroutineScope(IO).launch {
             dataSource.marketGetItem(marketID).apply {
                 data?.images?.forEach {
@@ -109,7 +109,6 @@ class MarketRepository(private val dataSource: DataSource) {
     }
 
     fun modify(item: MarketDTO, callback: (Result<MarketDTO>) -> Unit) {
-        Log.e("t", "modify")
         CoroutineScope(IO).launch {
             uploadImage(item)
             dataSource.marketModifyItem(item = item).apply {
@@ -127,10 +126,9 @@ class MarketRepository(private val dataSource: DataSource) {
         if (item.images.size > 0) {
             val imageList: ArrayList<MultipartBody.Part> = ArrayList()
             val newFileNames: ArrayList<String> = ArrayList()
-
             for (i in 0 until item.images.size) {
                 val file = File(item.images[i])
-                if(File("${dataSource.getCacheDir()}/${file}").exists()) {
+                if (File("${dataSource.getCacheDir()}/${file}").exists()) {
                     newFileNames.add(item.images[i])
                 } else {
                     val newFileName = "${UUID.randomUUID()}.${item.images[i].split(".").last()}"

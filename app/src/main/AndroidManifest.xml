@@ -17,7 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AFOP">
-        <activity android:name=".ui.activity.MarketActivity" />
         <activity android:name=".ui.activity.MarketActivity"
             tools:ignore="DuplicateActivity" />
         <activity android:name=".ui.activity.ResetPasswordActivity" />
@@ -34,6 +33,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity> <!-- Firebase 관련 Service -->
         <service
             android:name=".service.CustomFirebaseMessagingService"

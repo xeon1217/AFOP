@@ -10,7 +10,7 @@ private const val MIN_PASSWORD_LENGTH = 8
  * 뷰 모델들의 공통 클래스
  * 공통된 동작을 상속하기위해 사용됨
  */
-open class UiViewModel : ViewModel() {
+open class CustomViewModel : ViewModel() {
 
     //비어있지 않은가?
     fun isValid(str: String): Boolean {

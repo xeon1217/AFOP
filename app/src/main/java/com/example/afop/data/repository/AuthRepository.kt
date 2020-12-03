@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 /**
  * 로그인 관련 레포지토리
  */
-class LoginRepository(private val dataSource: DataSource) {
+class AuthRepository(private val dataSource: DataSource) {
     fun login(loginData: Map<String, String>? = null, callback: (Result<*>) -> Unit) {
         CoroutineScope(IO).launch {
             dataSource.login(loginData).apply {

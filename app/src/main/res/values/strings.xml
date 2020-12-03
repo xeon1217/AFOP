@@ -52,6 +52,8 @@
     <string name="title_menu_market">중고마켓</string>
     <string name="title_menu_meeting">모임</string>
     <string name="title_menu_preferences">환경설정</string>
+    <string name="title_menu_chat">채팅</string>
+
     <string name="title_menu_market_list">판매글 보기</string>
     <string name="title_menu_market_my_sale">내가 쓴 글 보기</string>
     <string name="title_menu_market_chat">거래중인 글 보기</string>

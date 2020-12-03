@@ -15,6 +15,14 @@ import kotlinx.android.synthetic.main.activity_login.progressBar
  * 공통된 동작을 상속하기위해 사용됨
  */
 open class ActivityExtendFunction : AppCompatActivity() {
+    enum class ActivityType(val type: String) {
+        LOGIN("LOGIN"),
+        MARKET("MARKET"),
+        CREATE("CREATE"), //생성
+        READ("READ"), //읽기
+        UPDATE("UPDATE") //수정
+    }
+
     fun switchFragment(fragment: Fragment, bundle: Bundle? = null) {
         fragment.arguments = bundle
         supportFragmentManager.beginTransaction()
@@ -32,6 +40,15 @@ open class ActivityExtendFunction : AppCompatActivity() {
 
     fun showLoading() {
         this.progressBar.visibility = View.VISIBLE
+        disableTouch()
+    }
+
+    fun hideLoading() {
+        this.progressBar.visibility = View.GONE
+        ableTouch()
+    }
+
+    fun disableTouch() {
         this.progressBackground.visibility = View.VISIBLE
         this.window.setFlags(
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
@@ -43,8 +60,7 @@ open class ActivityExtendFunction : AppCompatActivity() {
         )
     }
 
-    fun hideLoading() {
-        this.progressBar.visibility = View.GONE
+    fun ableTouch() {
         this.progressBackground.visibility = View.GONE
         this.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         this.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)

@@ -8,27 +8,32 @@ import com.example.afop.data.response.ErrorCode
 import com.example.afop.data.response.Result
 import com.example.afop.service.RetrofitService
 import com.google.firebase.iid.FirebaseInstanceId
-import okhttp3.*
-import retrofit2.http.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.http.Multipart
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.OutputStream
 import java.net.SocketTimeoutException
 
+
 /**
  * 각종 데이터 입/출력을 책임지는 클래스
  */
 class DataSource {
     companion object {
+        private val retrofitService = Network.retrofitInstance.create(RetrofitService::class.java)
+
         private lateinit var cache: File
         private lateinit var fcm: FirebaseInstanceId
         private var user: UserDTO? = null
 
         fun init(context: Context) {
+            PreferenceManager.init(context)
             cache = context.cacheDir
             fcm = FirebaseInstanceId.getInstance()
-            PreferenceManager.init(context)
+            WebSocketClient.connectSocket()
         }
 
         fun exit() {
@@ -70,8 +75,22 @@ class DataSource {
     }
 
     private val tag = this::class.java.simpleName
-    private val service = RetrofitClient.instance.create(RetrofitService::class.java)
 
+    /*
+    CoroutineScope(Dispatchers.IO).launch {
+        Network.stompClient.connect()
+        Log.e("stomp", "conn")
+
+        Network.stompClient.topic("/chat/sub/room/43593553-9212-4cae-92c4-875dd002de78").subscribe {
+            Log.e("stomp", it.payload)
+        }
+    }
+
+    CoroutineScope(Dispatchers.IO).launch {
+        Network.stompClient.send("/chat/pub/room/43593553-9212-4cae-92c4-875dd002de78", "asdasdas")
+    }
+
+     */
     /**
      *  인증 관련
      */
@@ -87,9 +106,9 @@ class DataSource {
     suspend fun login(loginData: Map<String, String>?): Result<UserDTO> {
         return try {
             if (getAutoLogin() && loginData.isNullOrEmpty()) {
-                service.autoLogin(token = getToken())
+                retrofitService.autoLogin(token = getToken())
             } else {
-                service.login(data = loginData)
+                retrofitService.login(data = loginData)
             }.apply {
                 user = data
                 putToken(getUser().token)
@@ -106,7 +125,7 @@ class DataSource {
     //이메일 중복 확인
     suspend fun verifyEmail(email: String): Result<*> {
         return try {
-            service.verifyEmail(email = email)
+            retrofitService.verifyEmail(email = email)
         } catch (e: Exception) {
             exceptionHandler(e)
         }
@@ -115,7 +134,7 @@ class DataSource {
     //닉네임 중복 확인
     suspend fun verifyNickname(nickname: String): Result<*> {
         return try {
-            service.verifyNickname(nickname = nickname)
+            retrofitService.verifyNickname(nickname = nickname)
         } catch (e: Exception) {
             exceptionHandler(e)
         }
@@ -124,7 +143,7 @@ class DataSource {
     //회원가입
     suspend fun register(data: Map<String, String>): Result<*> {
         return try {
-            service.register(data = data)
+            retrofitService.register(data = data)
         } catch (e: Exception) {
             exceptionHandler(e)
         }
@@ -137,7 +156,7 @@ class DataSource {
     //글 한 개 쓰기
     suspend fun marketPutItem(item: MarketDTO): Result<MarketDTO> {
         return try {
-            service.marketPutItem(token = getUser().token, item = item)
+            retrofitService.marketCreate(token = getUser().token, item = item)
         } catch (e: Exception) {
             exceptionHandler(e) as Result<MarketDTO>
         }
@@ -146,16 +165,16 @@ class DataSource {
     //글 한 개 수정
     suspend fun marketModifyItem(item: MarketDTO): Result<MarketDTO> {
         return try {
-            service.marketModifyItem(token = getUser().token, item = item)
+            retrofitService.marketUpdate(token = getUser().token, item = item)
         } catch (e: Exception) {
             exceptionHandler(e) as Result<MarketDTO>
         }
     }
 
     //글 한 개 읽기
-    suspend fun marketGetItem(marketID: Long): Result<MarketDTO> {
+    suspend fun marketGetItem(marketID: String): Result<MarketDTO> {
         return try {
-            service.marketGetItem(marketID = marketID)
+            retrofitService.marketRead(marketID = marketID)
         } catch (e: Exception) {
             exceptionHandler(e) as Result<MarketDTO>
         }
@@ -163,7 +182,7 @@ class DataSource {
 
     suspend fun marketGetList(title: String?, last_id_cursor: Long?): Result<ArrayList<MarketDTO?>> {
         return try {
-            service.marketGetList(title = title, last_id_cursor = last_id_cursor)
+            retrofitService.marketReads(title = title, last_id_cursor = last_id_cursor)
         } catch (e: Exception) {
             exceptionHandler(e) as Result<ArrayList<MarketDTO?>>
         }
@@ -185,7 +204,7 @@ class DataSource {
         file: MultipartBody.Part
     ): Result<*> {
         return try {
-            service.filePutItem(token = getToken(), file = file)
+            retrofitService.fileCreate(token = getToken(), file = file)
         } catch (e: Exception) {
             exceptionHandler(e)
         }
@@ -194,7 +213,7 @@ class DataSource {
     @Multipart
     suspend fun filePutList(files: ArrayList<MultipartBody.Part>): Result<*> {
         return try {
-            service.filePutList(token = getToken(), files = files)
+            retrofitService.fileCreates(token = getToken(), files = files)
         } catch (e: Exception) {
             exceptionHandler(e)
         }
@@ -206,7 +225,7 @@ class DataSource {
 
     suspend fun fileGetItem(file: String) {
         try {
-            service.fileGetItem(file = file).apply {
+            retrofitService.fileRead(file = file).apply {
                 body()?.apply {
                     val newFile = File("${getCacheDir()}", file)
                     if (!newFile.exists()) {
