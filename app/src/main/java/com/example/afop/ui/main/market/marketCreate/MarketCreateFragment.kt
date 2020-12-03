@@ -1,38 +1,31 @@
-package com.example.afop.ui.main.market.marketSell
+package com.example.afop.ui.main.market.marketCreate
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.afop.R
-import com.example.afop.databinding.FragmentMarketSellBinding
+import com.example.afop.databinding.FragmentMarketCreateBinding
 import com.example.afop.util.ActivityExtendFunction
 import com.example.afop.util.Util
-import kotlinx.android.synthetic.main.fragment_market_sell.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.android.synthetic.main.fragment_market_create.*
 
 /**
  * 마켓에 판매글을 올릴 때 사용
  */
-class MarketSellFragment : Fragment() {
-    private lateinit var binding: FragmentMarketSellBinding
-    private lateinit var viewModel: MarketSellViewModel
+class MarketCreateFragment : Fragment() {
+    private lateinit var binding: FragmentMarketCreateBinding
+    private lateinit var viewModel: MarketCreateViewModel
     private lateinit var mActivity: ActivityExtendFunction
 
     override fun onCreateView(
@@ -40,12 +33,14 @@ class MarketSellFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_market_sell, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_market_create, container, false)
         viewModel = ViewModelProvider(
             viewModelStore,
-            MarketSellViewModelFactory()
-        ).get(MarketSellViewModel::class.java)
-        arguments?.getLong("modify")?.let { viewModel.getItem(it) }
+            MarketCreateViewModelFactory()
+        ).get(MarketCreateViewModel::class.java)
+        arguments?.getString(ActivityExtendFunction.ActivityType.UPDATE.name)?.let {
+            viewModel.getItem(it)
+        }
         mActivity = activity as ActivityExtendFunction
         mActivity.initToolbar(binding.toolbar)
         subscribeUi()
@@ -61,9 +56,9 @@ class MarketSellFragment : Fragment() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
                 viewModel.sellStateChanged(
-                    title = marketSellTitleTextInputEditText.text.toString(),
-                    price = marketSellPriceTextInputEditText.text.toString(),
-                    content = marketSellContentTextInputEditText.text.toString()
+                    title = binding.marketSellTitleTextInputEditText.text.toString(),
+                    price = binding.marketSellPriceTextInputEditText.text.toString(),
+                    content = binding.marketSellContentTextInputEditText.text.toString()
                 )
             }
         }
@@ -73,7 +68,7 @@ class MarketSellFragment : Fragment() {
                 return@Observer
             }
             state.apply {
-                marketSellButton.isEnabled = state.isMarketDataValid
+                binding.marketSellButton.isEnabled = state.isMarketDataValid
                 //경고 관련 주석
                 //marketSellTitleTextInputLayout.error = state.titleError?.let { getString(it) }
                 //marketSellPriceTextInputLayout.error = state.priceError?.let { getString(it) }
@@ -89,7 +84,7 @@ class MarketSellFragment : Fragment() {
             AlertDialog.Builder(mActivity).apply {
                 setCancelable(false)
                 result.response?.let { response ->
-                    (response as MarketSellResponse).apply {
+                    (response as MarketCreateResponse).apply {
                         isSuccessPutItem?.let {
                             setTitle(getString(R.string.dialog_title_success))
                             setMessage(getString(R.string.dialog_message_writing_success))
@@ -128,11 +123,11 @@ class MarketSellFragment : Fragment() {
         mActivity.showLoading()
         viewModel.sell(
             viewModel.item.copy(
-                title = marketSellTitleTextInputEditText.text.toString(),
-                price = marketSellPriceTextInputEditText.text.toString(),
-                content = marketSellContentTextInputEditText.text.toString(),
-                negotiation = marketSellNegotiationCheckBox.isChecked,
-                category = marketSellCategorySpinner.selectedItem.toString()
+                title = binding.marketSellTitleTextInputEditText.text.toString(),
+                price = binding.marketSellPriceTextInputEditText.text.toString(),
+                content = binding.marketSellContentTextInputEditText.text.toString(),
+                negotiation = binding.marketSellNegotiationCheckBox.isChecked,
+                category = binding.marketSellCategorySpinner.selectedItem.toString()
             )
         )
     }
@@ -141,11 +136,11 @@ class MarketSellFragment : Fragment() {
         mActivity.showLoading()
         viewModel.modify(
             viewModel.item.copy(
-                title = marketSellTitleTextInputEditText.text.toString(),
-                price = marketSellPriceTextInputEditText.text.toString(),
-                content = marketSellContentTextInputEditText.text.toString(),
-                negotiation = marketSellNegotiationCheckBox.isChecked,
-                category = marketSellCategorySpinner.selectedItem.toString()
+                title = binding.marketSellTitleTextInputEditText.text.toString(),
+                price = binding.marketSellPriceTextInputEditText.text.toString(),
+                content = binding.marketSellContentTextInputEditText.text.toString(),
+                negotiation = binding.marketSellNegotiationCheckBox.isChecked,
+                category = binding.marketSellCategorySpinner.selectedItem.toString()
             )
         )
     }
@@ -164,17 +159,16 @@ class MarketSellFragment : Fragment() {
     }
 
     fun saveContent() {
-        viewModel.item.title = marketSellTitleTextInputEditText.text.toString()
-        viewModel.item.price = marketSellPriceTextInputEditText.text.toString()
-        viewModel.item.content = marketSellContentTextInputEditText.text.toString()
-        viewModel.item.negotiation = marketSellNegotiationCheckBox.isChecked
-        viewModel.item.category = marketSellCategorySpinner.selectedItem.toString()
+        viewModel.item.title = binding.marketSellTitleTextInputEditText.text.toString()
+        viewModel.item.price = binding.marketSellPriceTextInputEditText.text.toString()
+        viewModel.item.content = binding.marketSellContentTextInputEditText.text.toString()
+        viewModel.item.negotiation = binding.marketSellNegotiationCheckBox.isChecked
+        viewModel.item.category = binding.marketSellCategorySpinner.selectedItem.toString()
     }
 
     val PICTURE_REQUEST_CODE = 100
 
     fun imageAdd(view: View) {
-
         //글 내용을 저장
         saveContent()
         Intent(Intent.ACTION_GET_CONTENT).apply {
@@ -221,7 +215,7 @@ class MarketSellFragment : Fragment() {
 
     companion object {
         fun newInstance() =
-            MarketSellFragment().apply {
+            MarketCreateFragment().apply {
                 arguments = Bundle().apply {
                 }
             }

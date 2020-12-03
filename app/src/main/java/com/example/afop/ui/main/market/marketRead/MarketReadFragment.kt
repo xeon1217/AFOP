@@ -1,41 +1,33 @@
-package com.example.afop.ui.main.market.marketDetail
+package com.example.afop.ui.main.market.marketRead
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.size
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.afop.R
-import com.example.afop.data.Adapter.MarketListAdapter
-import com.example.afop.data.Adapter.ViewPagerAdapter
+import com.example.afop.ui.adapter.ViewPagerAdapter
 import com.example.afop.data.model.MarketDTO
-import com.example.afop.databinding.FragmentMarketDetailBinding
-import com.example.afop.ui.activity.MainActivity
+import com.example.afop.databinding.FragmentMarketReadBinding
 import com.example.afop.ui.activity.MarketActivity
-import com.example.afop.ui.main.market.marketList.MarketListFragment
-import com.example.afop.ui.main.market.marketList.MarketListResponse
-import com.example.afop.ui.main.market.marketList.MarketListViewModel
 import com.example.afop.util.ActivityExtendFunction
+import com.example.afop.util.Util
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.android.synthetic.main.fragment_market_detail.*
 
-class MarketDetailFragment : Fragment() {
-    private lateinit var binding: FragmentMarketDetailBinding
-    private lateinit var viewModel: MarketDetailViewModel
+class MarketReadFragment : Fragment() {
+    private lateinit var binding: FragmentMarketReadBinding
+    private lateinit var viewModel: MarketReadViewModel
     private lateinit var mActivity: ActivityExtendFunction
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_market_detail, container, false)
-        viewModel = ViewModelProvider(viewModelStore, MarketDetailViewModelFactory()).get(MarketDetailViewModel::class.java)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_market_read, container, false)
+        viewModel = ViewModelProvider(viewModelStore, MarketReadViewModelFactory()).get(MarketReadViewModel::class.java)
         mActivity = activity as ActivityExtendFunction
         mActivity.initToolbar(binding.toolbar)
         mActivity.showLoading()
@@ -46,7 +38,7 @@ class MarketDetailFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        arguments?.getLong("detail")?.let {
+        arguments?.getString(ActivityExtendFunction.ActivityType.READ.name)?.let {
             viewModel.getItem(it)
         }
     }
@@ -68,7 +60,7 @@ class MarketDetailFragment : Fragment() {
             AlertDialog.Builder(mActivity).apply {
                 setCancelable(false)
                 result.response?.let { response ->
-                    (response as MarketDetailResponse).apply {
+                    (response as MarketReadResponse).apply {
                         isSuccessGetItem?.let { success ->
                             binding.marketDetailStateSpinner.setSelection(viewModel.item.state)
                             viewPagerAdapter.submitList(viewModel.item.images)
@@ -96,8 +88,8 @@ class MarketDetailFragment : Fragment() {
     }
 
     fun modify(view: View) {
-        arguments?.getLong("detail")?.let {
-            mActivity.startActivity(Intent(context, MarketActivity::class.java).putExtra("modify", it))
+        arguments?.getString(ActivityExtendFunction.ActivityType.READ.name)?.let {
+            mActivity.startActivity(Intent(context, MarketActivity::class.java).putExtra(ActivityExtendFunction.ActivityType.UPDATE.name, it))
         }
     }
 
@@ -124,7 +116,7 @@ class MarketDetailFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() = MarketDetailFragment().apply {
+        fun newInstance() = MarketReadFragment().apply {
             arguments = Bundle().apply {
 
             }

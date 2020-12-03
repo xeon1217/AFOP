@@ -1,13 +1,13 @@
-package com.example.afop.ui.main.market.marketList
+package com.example.afop.ui.main.market
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.afop.data.model.MarketDTO
-import com.example.afop.util.UiViewModel
+import com.example.afop.util.CustomViewModel
 import com.example.afop.data.repository.MarketRepository
 import com.example.afop.data.response.Result
 
-class MarketListViewModel(private val repository: MarketRepository) : UiViewModel() {
+class MarketViewModel(private val repository: MarketRepository) : CustomViewModel() {
     val marketList: ArrayList<MarketDTO?> = ArrayList()
 
     private var _result = MutableLiveData<Result<ArrayList<MarketDTO?>>>()
@@ -23,10 +23,10 @@ class MarketListViewModel(private val repository: MarketRepository) : UiViewMode
             } else {
                 result.data?.let { list ->
                     if (list.size <= 0) {
-                        _result.postValue(result.copy(data = marketList, response = MarketListResponse(isSuccessGetList = result.response?.success)))
+                        _result.postValue(result.copy(data = marketList, response = MarketResponse(isSuccessGetList = result.response?.success)))
                     } else {
                         marketList.addAll(list)
-                        _result.postValue(result.copy(data = marketList, response = MarketListResponse(isSuccessGetList = result.response?.success)))
+                        _result.postValue(result.copy(data = marketList, response = MarketResponse(isSuccessGetList = result.response?.success)))
                     }
                 }
             }

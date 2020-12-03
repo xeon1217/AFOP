@@ -1,14 +1,14 @@
-package com.example.afop.ui.main.market.marketSell
+package com.example.afop.ui.main.market
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.afop.data.dataSource.DataSource
 import com.example.afop.data.repository.MarketRepository
 
-class MarketSellViewModelFactory : ViewModelProvider.Factory  {
+class MarketViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MarketSellViewModel::class.java)) {
-            return MarketSellViewModel(
+        if (modelClass.isAssignableFrom(MarketViewModel::class.java)) {
+            return MarketViewModel(
                 repository = MarketRepository(
                     dataSource = DataSource()
                 )
