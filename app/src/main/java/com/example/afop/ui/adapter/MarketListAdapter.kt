@@ -1,8 +1,7 @@
-package com.example.afop.data.Adapter
+package com.example.afop.ui.adapter
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -11,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.afop.ui.activity.MarketActivity
 import com.example.afop.data.model.MarketDTO
 import com.example.afop.databinding.ItemMarketSummaryBinding
+import com.example.afop.util.ActivityExtendFunction
+import com.example.afop.util.Util
 
 class MarketListAdapter(val context: Context?) :
     ListAdapter<MarketDTO, MarketListAdapter.ViewHolder>(MarketListDiffCallback()) {
@@ -43,10 +44,7 @@ class MarketListAdapter(val context: Context?) :
             binding.root.setOnClickListener {
                 context?.apply {
                     startActivity(
-                        Intent(this, MarketActivity::class.java).putExtra(
-                            "detail",
-                            _item.marketID
-                        )
+                        Intent(this, MarketActivity::class.java).putExtra(ActivityExtendFunction.ActivityType.READ.name, _item.id)
                     )
                 }
             }

@@ -9,11 +9,11 @@
 
         <variable
             name="viewModel"
-            type="com.example.afop.ui.main.market.marketDetail.MarketDetailViewModel" />
+            type="com.example.afop.ui.main.market.marketRead.MarketReadViewModel" />
 
         <variable
             name="fragment"
-            type="com.example.afop.ui.main.market.marketDetail.MarketDetailFragment" />
+            type="com.example.afop.ui.main.market.marketRead.MarketReadFragment" />
 
         <variable
             name="util"

@@ -10,7 +10,7 @@
 
         <variable
             name="fragment"
-            type="com.example.afop.ui.main.market.marketSell.MarketSellFragment" />
+            type="com.example.afop.ui.main.market.marketCreate.MarketCreateFragment" />
 
         <variable
             name="textWatcher"
@@ -18,7 +18,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.afop.ui.main.market.marketSell.MarketSellViewModel" />
+            type="com.example.afop.ui.main.market.marketCreate.MarketCreateViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

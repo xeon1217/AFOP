@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="dataSource"
+            type="com.example.afop.data.dataSource.DataSource" />
+
+        <variable
+            name="fragment"
+            type="com.example.afop.ui.main.market.MarketFragment" />
+
+        <variable
+            name="viewModel"
+            type="com.example.afop.ui.main.market.MarketViewModel" />
+    </data>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/windowBackground">
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/marketRefreshLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="@{viewModel.marketList.size > 0 ? View.VISIBLE : View.VISIBLE}">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/marketRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fadeScrollbars="false"
+                        android:scrollbarSize="10dp"
+                        android:scrollbars="vertical"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
+                        tools:listitem="@layout/item_market_summary">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_empty_data"
+                android:textSize="24sp"
+                android:visibility="@{viewModel.marketList.size > 0 ? View.GONE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/floatingButtonLinearLayout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="bottom|right"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/linearLayout4">
+
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/sellFloatingButton"
+                    android:layout_width="125dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center|center_horizontal"
+                    android:onClick="@{fragment::openSell}"
+                    android:padding="0dp"
+                    android:paddingStart="0dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="0dp"
+                    android:text="판매글 쓰기"
+                    android:visibility="@{fragment.isOpen ? View.VISIBLE : View.GONE}"
+                    app:backgroundTint="@color/textColorPrimary" />
+
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/keywordFloatingButton"
+                    android:layout_width="125dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center|center_horizontal"
+                    android:onClick="@{fragment::openKeyword}"
+                    android:padding="0dp"
+                    android:paddingStart="0dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="0dp"
+                    android:text="키워드 알림"
+                    android:visibility="@{fragment.isOpen ? View.VISIBLE : View.GONE}"
+                    app:backgroundTint="@color/textColorPrimary" />
+
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/favoriteFloatingButton"
+                    android:layout_width="125dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center|center_horizontal"
+                    android:onClick="@{fragment::openFavorite}"
+                    android:padding="0dp"
+                    android:paddingStart="0dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="0dp"
+                    android:text="찜한 목록"
+                    android:visibility="@{fragment.isOpen ? View.VISIBLE : View.GONE}"
+                    app:backgroundTint="@color/textColorPrimary" />
+
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/chatFloatingButton"
+                    android:layout_width="125dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center|center_horizontal"
+                    android:onClick="@{fragment::openChatting}"
+                    android:padding="0dp"
+                    android:paddingStart="0dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="0dp"
+                    android:text="채팅방"
+                    android:visibility="@{fragment.isOpen ? View.VISIBLE : View.GONE}"
+                    app:backgroundTint="@color/textColorPrimary" />
+
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/buyHistoryFloatingButton"
+                    android:layout_width="125dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center|center_horizontal"
+                    android:onClick="@{fragment::openBuyHistory}"
+                    android:padding="0dp"
+                    android:paddingStart="0dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="0dp"
+                    android:text="구매 내역"
+                    android:visibility="@{fragment.isOpen ? View.VISIBLE : View.GONE}"
+                    app:backgroundTint="@color/textColorPrimary" />
+
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/sellHistoryFloatingButton"
+                    android:layout_width="125dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center|center_horizontal"
+                    android:onClick="@{fragment::openSellHistory}"
+                    android:padding="0dp"
+                    android:paddingStart="0dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="0dp"
+                    android:text="판매 내역"
+                    android:visibility="@{fragment.isOpen ? View.VISIBLE : View.GONE}"
+                    app:backgroundTint="@color/textColorPrimary" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/openMenuFloatingButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:src="@drawable/ic_baseline_add"
+                    android:visibility="@{dataSource.Companion.login ? View.VISIBLE : View.GONE}" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
